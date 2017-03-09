@@ -8,7 +8,7 @@
 // also see that we included separate JavaScript files for these modules. Angular
 // has other core modules that you might want to use and explore when you go deeper
 // into developing Angular applications. For this lab, these two will suffice.
-var dinnerPlannerApp = angular.module('dinnerPlanner', ['ngRoute','ngResource','ngCookies']);
+var pokeBattleApp = angular.module('pokeBattle', ['ngRoute','ngResource','ngCookies', 'dialogs.main', 'ui.bootstrap']);
 
 
 // Here we configure our application module and more specifically our $routeProvider.
@@ -34,20 +34,23 @@ var dinnerPlannerApp = angular.module('dinnerPlanner', ['ngRoute','ngResource','
 // the path we use the ":" sign. For instance, our '/dish/:dishId' will be triggered when we access
 // 'http://localhost:8000/#/dish/12345'. The 12345 value will be stored in a dishId parameter, which we can
 // then access through $routeParams service. More information on this in the dishCtrl.js
-dinnerPlannerApp.config(['$routeProvider',
+pokeBattleApp.config(['$routeProvider',
 function($routeProvider) {
     $routeProvider.
     when('/home', {
-        templateUrl: 'partials/homePartial.html'
+        templateUrl: 'partials/homePartial.html',
+        controller: 'PokeCtrl'
     }).
-    when('/search', {
-        templateUrl: 'partials/searchPartial.html',
+    when('/choose', {
+        templateUrl: 'partials/choosePartial.html',
+        controller: 'ChooseCtrl'
     }).
     when('/details/:id', {
         templateUrl: 'partials/detailPartial.html',
     }).
-    when('/overview', {
-        templateUrl: 'partials/overviewPartial.html',
+    when('/battle', {
+        templateUrl: 'partials/battlePartial.html',
+        controller: 'BattleCtrl'
     }).
     when('/preparation', {
         templateUrl: 'partials/preparationPartial.html',
