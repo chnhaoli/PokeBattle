@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <!-- Notice the ng-app Angular directive. This tells Angular where the application starts and also
 which module to associate the app with. In app.js we create the "dinnerPlanner" module. -->
-<html lang="en" ng-app="dinnerPlanner">
+<html lang="en" ng-app="pokeBattle">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Homelette</title>
-
+    <title>PokéBattle</title>
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="style.css">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
     <!-- jQuery -->
@@ -22,9 +23,11 @@ which module to associate the app with. In app.js we create the "dinnerPlanner" 
 
     <!-- The application JavaScript code -->
     <script src="js/app.js"></script>
-    <script src="js/dinnerServiceModel.js"></script>
+    <script src="js/pokeBattleModel.js"></script>
     <script src="js/listCtrl.js"></script>
+    <script src="js/searchCtrl.js"></script>
 
+    <!-- For tooltips -->
     <style type="text/css">
     .tool {
         width: 270px;
@@ -48,36 +51,36 @@ which module to associate the app with. In app.js we create the "dinnerPlanner" 
     });
     </script>
 
+
 </head>
-<body style="background-image: url('bg.jpg'); height:100%; background-size: cover;" >
-    <!-- Heading panel {All pages} -->
-    <div>
-        <div id="headingPanel"  class="col-md-12" style="background-color: rgba(48,48,48,0.9);">
-            <div class="col-md-3 panel-body text-center" ><h1 style="color: white;">HOMELETTE</h1></div>
-            <div class="col-md-9 panel-body"><br></br><p><em style="color: white;">From the best chefs in the world directly into your kitchen</em></p></div>
-        </div>
+<body style="background-image: url('pics/bg.gif'); height:100%; background-size: cover;" >
+    <!-- background music -->
+    <audio id="myTune" src="bg.mp3" autoplay>
+        <p>If you are reading this, it is because your browser does not support the audio element.</p>
+    </audio>
+    <!-- backgroung play and stop icons -->
+    <div class="col-md-12 bgYellowColor" style="text-align: right;">
+        <img id="musicPlay" src="pics/musicPlay.png" height="40" size="40" onclick="document.getElementById('myTune').play()">
+        &nbsp;
+        <img id="musicStop" src="pics/musicStop.png" height="40" size="40" onclick="document.getElementById('myTune').pause()">
     </div>
-    <!-- <div>
-    <a href="#!/home" class="btn btn-warning">home</a>
-    <a href="#!/search" class="btn btn-warning">search</a>
-    <a href="#!/details/1" class="btn btn-warning">details</a>
-    <a href="#!/overview" class="btn btn-warning">overview</a>
-    <a href="#!/preparation" class="btn btn-warning">preparation</a>
-</div> -->
+    <!-- Shortcuts for developing usage. -->
+    <div>
+        <a href="#!/home" class="btn btn-info">home</a>
+        <a href="#!/preparation" class="btn btn-info">preparation</a>
+        <a href="#!/battle" class="btn btn-info">search</a>
+        <a href="#!/results" class="btn btn-info">details</a>
+    </div>
 
-<!-- Here in index.html you should put only the layout that is shared among all the screens (e.g. header
-,footer, etc.). The rest of the view specific layout will go into the html partials (check partials folder) -->
+    <div ng-view>
 
-<!-- ng-view Angular directive is where the partials will be loaded. app.js configures the $routingProvider
-where you specify which partial should be loaded when. -->
-<div ng-view>
+    </div>
 
-</div>
-<!-- Browser-sync scripts -->
-<script id="__bs_script__">
-//<![CDATA[
-document.write("<script async src='http://HOST:3000/browser-sync/browser-sync-client.js?v=2.17.0'><\/script>".replace("HOST", location.hostname));
-//]]>
-</script>
+    <!-- Browser-sync scripts -->
+    <script id="__bs_script__">
+    //<![CDATA[
+    document.write("<script async src='http://HOST:3000/browser-sync/browser-sync-client.js?v=2.17.0'><\/script>".replace("HOST", location.hostname));
+    //]]>
+    </script>
 </body>
 </html>
