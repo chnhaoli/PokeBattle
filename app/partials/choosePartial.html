@@ -51,7 +51,109 @@
 
 <div id="confirmedList">
   <h3>Confirmed Pokémon: </h3>
-  <span ng-repeat="pokemonName in team()">{{pokemonName}} </span>
+  <span ng-repeat="pokemonName in team()" dnd-draggable="pokemonName" dnd-effect-allowed="move">{{pokemonName}} </span>
+
+<!--
+  <div class="simpleDemo">
+      <div class="col-md-8">
+         <div class="row">
+             <div ng-repeat="(listName, list) in models.lists" class="col-md-6">
+                 <div class="panel panel-info">
+                     <div class="panel-heading">
+                         <h3 class="panel-title">List {{listName}}</h3>
+                     </div>
+
+                     <ul dnd-list="list">
+                       <img src="https://upload.wikimedia.org/wikipedia/en/3/39/Pokeball.PNG"
+                           ng-repeat="item in list"
+                           dnd-draggable="item"
+                           dnd-moved="list.splice($index, 1)"
+                           dnd-effect-allowed="move"
+                           dnd-selected="models.selected = item"
+                           ng-class="{'selected': models.selected === item}"
+                           width="150px"
+                           height="150px">
+                           {{item.label}}
+                       </img>
+                     </ul>
+
+
+                     <div class="panel-body" ng-include="'simple/simple.html'"></div>
+                 </div>
+             </div>
+         </div>
+
+         <div view-source="simple"></div>
+
+     </div>
+
+     <div class="col-md-4">
+         <div class="panel panel-default">
+             <div class="panel-heading">
+                 <h3 class="panel-title">Generated Model</h3>
+             </div>
+             <div class="panel-body">
+                 <pre class="code">{{modelAsJson}}</pre>
+             </div>
+         </div>
+     </div>
+  </div>
+-->
+
 </div>
+
+<div class="advancedDemo row">
+    <div ng-repeat="containers in model" class="col-md-6">
+
+        <div class="dropzone box box-yellow">
+        <h3>Dropzone {{$index + 1}}</h3>
+        <ul dnd-list="containers"
+            dnd-allowed-types="['container']"
+            dnd-external-sources="true"
+            dnd-dragover="dragoverCallback(index, external, type, callback)"
+            dnd-drop="dropCallback(index, item, external, type)">
+            <li ng-repeat="container in containers"
+                dnd-draggable="container"
+                dnd-type="'container'"
+                dnd-effect-allowed="copyMove"
+                dnd-moved="containers.splice($index, 1)"
+                dnd-callback="container.items.length">
+                <div class="container-element box box-blue">
+                    <h3>Container (effects allowed: {{container.effectAllowed}})</h3>
+                    <ul dnd-list="container.items"
+                        dnd-allowed-types="['item']"
+                        dnd-horizontal-list="true"
+                        dnd-external-sources="true"
+                        dnd-effect-allowed="{{container.effectAllowed}}"
+                        dnd-dragover="dragoverCallback(index, external, type)"
+                        dnd-drop="dropCallback(index, item, external, type)"
+                        dnd-inserted="logListEvent('inserted at', index, external, type)"
+                        class="itemlist">
+                        <li ng-repeat="item in container.items"
+                            dnd-draggable="item"
+                            dnd-type="'item'"
+                            dnd-effect-allowed="{{item.effectAllowed}}"
+                            dnd-dragstart="logEvent('Started to drag an item')"
+                            dnd-moved="container.items.splice($index, 1)"
+                            dnd-dragend="logEvent('Drag operation ended. Drop effect: ' + dropEffect)">
+                            {{item.label}}
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+            </li>
+        </ul>
+
+        </div>
+    </div>
+</div>
+
+<div view-source="advanced"></div>
+
+<h2>Generated Model</h2>
+<pre>{{modelAsJson}}</pre>
+
+<progress id="health" value="50" max="100"></progress>
+
 
 <a ng-href="#!/battle"><button class="btn btn-success">Go!</button></a>
