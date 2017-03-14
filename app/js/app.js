@@ -1,3 +1,5 @@
+
+
 // We setup the main Angular model that we will use for our application
 // Good Angular practice is to organize your code in different modules,
 // for instance, one module per feature. However, since our App is
@@ -60,3 +62,7 @@ function($routeProvider) {
         redirectTo: '/home'
     });
 }]);
+
+
+// Previous package.json start script:
+//"start": "http-server app/ -a 0.0.0.0 -p 8000"
