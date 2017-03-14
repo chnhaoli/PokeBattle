@@ -26,7 +26,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
         }
     });
 
-    this.GetAllPokemon = $resource('http://pokeapi.co/api/v2/pokemon', {}, {
+    this.GetAllPokemon = $resource('https://pokeapi.co/api/v2/pokemon', {}, {
       get: {
 
       }
