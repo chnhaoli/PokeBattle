@@ -36,6 +36,8 @@ var pokeBattleApp = angular.module('pokeBattle', ['ngRoute','ngResource','ngCook
 // the path we use the ":" sign. For instance, our '/dish/:dishId' will be triggered when we access
 // 'http://localhost:8000/#/dish/12345'. The 12345 value will be stored in a dishId parameter, which we can
 // then access through $routeParams service. More information on this in the dishCtrl.js
+
+// Router configuration.
 pokeBattleApp.config(['$routeProvider',
 function($routeProvider) {
     $routeProvider.
@@ -54,10 +56,6 @@ function($routeProvider) {
         templateUrl: 'partials/battlePartial.html',
         controller: 'BattleCtrl'
     }).
-    when('/preparation', {
-        templateUrl: 'partials/preparationPartial.html',
-    }).
-    // TODO in Lab 5: add more conditions for the last two screens (overview and preparation)
     otherwise({
         redirectTo: '/home'
     });

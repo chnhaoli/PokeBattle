@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!-- Notice the ng-app Angular directive. This tells Angular where the application starts and also
 which module to associate the app with. In app.js we create the "dinnerPlanner" module. -->
+
 <html lang="en" ng-app="pokeBattle" ng-controller="PokeCtrl">
 <head>
     <meta charset="utf-8">
@@ -8,12 +9,43 @@ which module to associate the app with. In app.js we create the "dinnerPlanner" 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>PokéBattle</title>
 
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="public/bootstrap.min.css">
     <!-- Own CSS -->
     <link rel="stylesheet" href="css/pokebattle.css">
     <link href="https://fonts.googleapis.com/css?family=Baloo+Bhaina" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+
+    <!-- For tooltips -->
+    <style type="text/css">
+    .tool {
+        width: 270px;
+        overflow:hidden;
+        white-space:nowrap;
+        text-overflow:ellipsis;
+        text-align: center;
+    }
+    </style>
+
+    <script type="text/javascript">
+    $(document).on('mouseenter', ".tool", function () {
+        var $this = $(this);
+        if (this.offsetWidth < this.scrollWidth && !$this.attr('title')) {
+            $this.tooltip({
+                title: $this.text(),
+                placement: "bottom"
+            });
+            $this.tooltip('show');
+        }
+    });
+    </script>
+
 
 </head>
 <body>
@@ -26,11 +58,9 @@ which module to associate the app with. In app.js we create the "dinnerPlanner" 
 <!-- Here in index.html you should put only the layout that is shared among all the screens (e.g. header
 ,footer, etc.). The rest of the view specific layout will go into the html partials (check partials folder) -->
 
-<!-- ng-view Angular directive is where the partials will be loaded. app.js configures the $routingProvider
-where you specify which partial should be loaded when. -->
-<div ng-view>
+    <div ng-view>
 
-</div>
+    </div>
 
 <!-- Footer -->
 <div class="footer">
@@ -68,5 +98,12 @@ where you specify which partial should be loaded when. -->
 <script src="js/chooseCtrl.js"></script>
 <script src="js/battleCtrl.js"></script>
 <!--<script src="js/modalCtrl.js"></script>-->
+
+    <!-- Browser-sync scripts -->
+    <script id="__bs_script__">
+    //<![CDATA[
+    document.write("<script async src='http://HOST:3000/browser-sync/browser-sync-client.js?v=2.17.0'><\/script>".replace("HOST", location.hostname));
+    //]]>
+    </script>
 </body>
 </html>
