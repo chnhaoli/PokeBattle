@@ -145,8 +145,21 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
   }
 
   // Carry out the calculations here and decrease the HP bar, as well as change HP value in view.
-  $scope.attack = function() {
-
+  $scope.attack = function(index) {
+    var power = $scope.teamDetails[0].movesUsed[index].power;
+    var accuracy = $scope.teamDetails[0].movesUsed[index].accuracy;
+    var level = 99;
+    // Get the following values from Pokémon data. Currently example values
+    var attack = 20;
+    var defense = 20;
+    var critical = 1.5;
+    var typeModifier = 1;
+    var modifier = critical * typeModifier;
+    // Use the power, attack, defense, and modifier to calculate the damage
+    var damage = ((((2 * level / 5 + 2) * power * attack / defense) / 50) + 2) * modifier;
+    console.log(damage);
+    // Use damage to hit opponent, changing their HP bar and HP value displayed
+    
   }
 
   $scope.back = function() {
