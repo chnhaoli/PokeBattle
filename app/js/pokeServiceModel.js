@@ -29,15 +29,15 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     // });
 
     this.GetPokemon = $resource('http://pokeapi.co/api/v2/pokemon/:pokemonNameOrId', {}, {
-      get: {
+        get: {
 
-      }
+        }
     });
 
     this.GetMove = $resource('http://pokeapi.co/api/v2/move/:moveId', {}, {
-      get: {
+        get: {
 
-      }
+        }
     })
 
     //Cookies
@@ -74,79 +74,184 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
 
     //Pokemon
     this.getAllPokemon = function(callback, errorCallback) {
-      this.GetPokemon.get({offset: offset}, function(data) {
-        offset += 20;
-        console.log(offset);
-        callback(data);
-      }, function(error) {
-        errorCallback(error);
-      })
+        this.GetPokemon.get({offset: offset}, function(data) {
+            offset += 20;
+            console.log(offset);
+            callback(data);
+        }, function(error) {
+            errorCallback(error);
+        })
     }
 
     this.clearOffset = function() {
-      offset = 0;
+        offset = 0;
     }
 
     this.getPokemon = function(pokemonNameOrId, callback, errorCallback) {
-      this.GetPokemon.get({pokemonNameOrId: pokemonNameOrId}, function(data) {
-        callback(data);
-      }, function(error) {
-        errorCallback(error)
-      })
+        this.GetPokemon.get({pokemonNameOrId: pokemonNameOrId}, function(data) {
+            callback(data);
+        }, function(error) {
+            errorCallback(error)
+        })
     }
 
     this.getMove = function(url, callback, errorCallback) {
-      this.GetMove.get({url: url}, function(data){
-        callback(data);
-      }, function(error) {
-        errorCallback(error);
-      })
+        this.GetMove.get({url: url}, function(data){
+            callback(data);
+        }, function(error) {
+            errorCallback(error);
+        })
     }
 
     this.setTeam = function(teamToSet) {
-      team = teamToSet;
-      console.log(team);
+        team = teamToSet;
+        console.log(team);
     }
 
     this.addToTeam = function(pokemonName) {
-      team.push(pokemonName);
-      console.log(team);
+        team.push(pokemonName);
+        console.log(team);
 
     }
 
     this.getTeam = function() {
-      return team;
+        return team;
     }
 
     // For all Pokémon names in team array, gets Pokémon details and passes that into an array teamDetails.
     // Special function in a function passing in key as index, called directly, ensuring the key gets updated from 0 to team.length-1.
     this.getTeamDetails = function(callback, errorCallback) {
-      for (var key in team) {
-        var pokemonName = team[key];
-        this.getPokemon(pokemonName, function(index) {
-          return function(data) {
-            teamDetails[index] = data;
-            callback(index, data);
-          }
-        }(key), function (error) {
-          errorCallback(error);
-        })
-      }
+        for (var key in team) {
+            var pokemonName = team[key];
+            this.getPokemon(pokemonName, function(index) {
+                return function(data) {
+                    teamDetails[index] = data;
+                    callback(index, data);
+                }
+            }(key), function (error) {
+                errorCallback(error);
+            })
+        }
     }
 
     // Gets a random opponent
     this.getRandomOpponent = function(callback, errorCallback) {
-      var randomNum = Math.floor(Math.random() * 150) + 1
-      this.getPokemon(randomNum, function(data) {
-        opponentDetails = data;
-        callback(data);
-      }, function(error) {
-        // TODO: display the error
-        console.log(error);
-        errorCallback(error);
-      })
+        var randomNum = Math.floor(Math.random() * 150) + 1
+        this.getPokemon(randomNum, function(data) {
+            opponentDetails = data;
+            callback(data);
+        }, function(error) {
+            // TODO: display the error
+            console.log(error);
+            errorCallback(error);
+        })
     }
 
+    //Battle damages (if a pokemon do not have type2, pass a 'undefined' or false)
+    //Get a randomized interger between 0 and max (default inclusive).
+    this.randomInt = function(max, exclusive){
+        return parseInt(Math.random() * (max + (exclusive ? 0 : 1)));
+    }
+    //If the move is on target (true) or miss (false)
+    this.isOnTarget = function(accuracy) {
+        return that.randomInt(100,true) < accuracy;
+    }
+    //Get the effectiveness
+    this.getEffectiveness = function(moveType, oppType1, oppType2){
+        var types = ['normal','fire','water','electric','grass','ice','fighting','poision','ground','flying','psychic','bug','rock','ghost','dragon','dark','steel','fairy'];
+        var effectivenessMatrix = [
+            [  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,0.5,  0,  1,  1,0.5,  1],
+            [  1,0.5,0.5,  1,  2,  2,  1,  1,  1,  1,  1,  2,0.5,  1,0.5,  1,  2,  1],
+            [  1,  2,0.5,  1,0.5,  1,  1,  1,  2,  1,  1,  1,  2,  1,0.5,  1,  1,  1],
+            [  1,  1,  2,0.5,0.5,  1,  1,  1,  0,  2,  1,  1,  1,  1,0.5,  1,  1,  1],
+            [  1,0.5,  2,  1,0.5,  1,  1,0.5,  2,0.5,  1,0.5,  2,  1,0.5,  1,0.5,  1],
+            [  1,0.5,0.5,  1,  2,0.5,  1,  1,  2,  2,  1,  1,  1,  1,  2,  1,0.5,  1],
+            [  2,  1,  1,  1,  1,  2,  1,0.5,  1,0.5,0.5,0.5,  2,  0,  1,  2,  2,0.5],
+            [  1,  1,  1,  1,  2,  1,  1,0.5,0.5,  1,  1,  1,0.5,0.5,  1,  1,  0,  2],
+            [  1,  2,  1,  2,0.5,  1,  1,  2,  1,  0,  1,0.5,  2,  1,  1,  1,  2,  1],
+            [  1,  1,  1,0.5,  2,  1,  2,  1,  1,  1,  1,  2,0.5,  1,  1,  1,0.5,  1],
+            [  1,  1,  1,  1,  1,  1,  2,  2,  1,  1,0.5,  1,  1,  1,  1,  0,0.5,  1],
+            [  1,0.5,  1,  1,  2,  1,0.5,0.5,  1,0.5,  2,  1,  1,0.5,  1,  2,0.5,0.5],
+            [  1,  2,  1,  1,  1,  2,0.5,  1,0.5,  2,  1,  2,  1,  1,  1,  1,0.5,  1],
+            [  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  1,  1,  2,  1,0.5,  1,  1],
+            [  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  1,0.5,  0],
+            [  1,  1,  1,  1,  1,  1,0.5,  1,  1,  1,  2,  1,  1,  2,  1,0.5,  1,0.5],
+            [  1,0.5,0.5,0.5,  1,  2,  1,  1,  1,  1,  1,  1,  2,  1,  1,  1,0.5,  2],
+            [  1,0.5,  1,  1,  1,  1,  2,0.5,  1,  1,  1,  1,  1,  1,  2,  2,0.5,  1],
+        ];
+        return effectivenessMatrix[types.indexOf(moveType)][typs.indexOf(oppType1)] * (oppType2 ? effectivenessMatrix[types.indexOf(moveType)][typs.indexOf(oppType2)] : 1);
+    }
+    this.tellEffectiveness = function(effectiveness){
+        switch(effectiveness) {
+            case 0:
+                return 'No effect.';
+            //break;
+            case 0.25:
+            case 0.5:
+                return 'Not effective.';
+            //break;
+            case 2:
+            case 4:
+                return 'Super effective.';
+            //break;
+            default:
+                return 'Normal effect.';
+        }
+    }
+    //Get the same type attack bonus: if pokemon type = move type, 1.5; if not, 1.
+    this.getSTAB = function(moveType, type1, type2) {
+        return (type1 == moveType || type2 == moveType) ? 1.5 : 1;
+    }
+    //Get the damage //(0.4*level+2) = 42 as level 100 assumed
+    this.getDamage = function(move, pokemon, oppPokemon){
+        if(move.damageClass == 'physical'){
+            atk = pokemon.attack;
+            def = oppPokemon.defense;
+        }
+        else if(move.damageClass == 'special'){
+            atk = pokemon.spAttack;
+            def = oppPokemon.spDefense;
+        }
+        else {
+            alert('Damage class error');
+        }
+        effectiveness = that.getEffectiveness(move.type, oppPokemon.type1, oppPokemon.type2);
+        stab = that.getSTAB(moveType, pokemon.type, pokemon.type2);
+        return parseInt((42*move.power*atk/def/50+2)*effectiveness*stab*(that.randomInt(15)+85)/100);
+    }
+    //Get the pokemon HP after the damages
+    this.poseDamage = function(hp, damage){
+        return (hp > damage) ? (hp - damage) : 0;
+    }
+    this.isDying = function(hp) {
+        return hp == 0;
+    }
+    this.performMove = function(pokemon, oppPokemon, move){
+        if(that.isOnTarget()){
+            //On target.
+            console.log(that.tellEffectiveness(that.getEffectiveness(move.type, oppPokemon.type1, oppPokemon.type2)));
+            //Should inform user about effectiveness.
+            tempHP = that.poseDamage(oppPokemon.hp, that.getDamage(move, pokemon, oppPokemon);
+            oppPokemon.hp = (tempHP > 0) ? tempHP : 0;
+            if(that.isDying){
+                //Dying.
+                if(/*Have alive pokemons*/){
+                    //Change pokemons here.
+                }
+                else {
+                    //Lose.
+                }
+            }
+            else {
+                //Next move.
+            }
+        }
+        else{
+            //Miss. Should inform user.
+            //Next move.
+        }
+        return true;
+    }
     //Guests
     var numberOfGuests = that.getCookie('num') ? that.getCookie('num') : 1;
 
