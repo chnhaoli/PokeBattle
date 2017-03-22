@@ -1,0 +1,171 @@
+<!-- Modal popup window -->
+<div class="modal-demo">
+    <script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modal-title">Confirm Pokémon</h3>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <!--<ul>
+                <li ng-repeat="item in $ctrl.items">
+                    <a href="#" ng-click="$event.preventDefault(); $ctrl.selected.item = item">{{ item }}</a>
+                </li>
+            </ul>
+            Selected: <b>{{ $ctrl.selected.item }}</b>-->
+            <p>Choose {{$ctrl.pokemonName}} to be on your team?</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
+            <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+        </div>
+    </script>
+
+    <!--<button type="button" class="btn btn-default" ng-click="open('sm')">Small modal</button>-->
+</div>
+
+
+<!-- Main -->
+<div>
+  <p>Choose 6 Pokémon to battle with</p>
+
+  <div class="inline alignCenter" ng-repeat="pokemonName in allPokemonNames">
+    <!--<img class="pokemonImg" ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName}}.png" ng-click="alert(pokemonName)"/>-->
+    <div class="modal-demo">
+      <img class="pokemonImg" ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName}}.png" ng-click="open('sm', pokemonName)"/>
+    </div>
+
+    <p>{{pokemonName}}</p>
+    <!--<div>
+      <img class="checkbox" src="../images/checkbox.png"/>
+    </div>-->
+  </div>
+
+  <div class="loadingGifDiv" ng-show="loading">
+    <img id="loadingGif" src="../images/PikaLoading.gif">
+  </div>
+
+
+  <div class="buttonsDiv">
+    <button class="btn btn-primary" ng-click="getAllPokemon()">More Pokémon</button>
+    <!--<button class="btn btn-info" ng-click="showConfirmed()">Show confirmed</button>-->
+  </div>
+
+
+  <div id="confirmedList">
+    <h3>Confirmed Pokémon: </h3>
+    <span ng-repeat="pokemonName in team()" dnd-draggable="pokemonName" dnd-effect-allowed="move">{{pokemonName}} </span>
+  </div>
+
+</div>
+
+
+
+
+<!-- Drag and drop testing -->
+<div class="simpleDemo row">
+
+    <div class="col-md-8">
+        <div class="row">
+            <div ng-repeat="(listName, list) in models.lists" class="col-md-6">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">List {{listName}}</h3>
+                    </div>
+                    <ul dnd-list="list">
+                    <!-- The dnd-draggable directive makes an element draggable and will
+                         transfer the object that was assigned to it. If an element was
+                         dragged away, you have to remove it from the original list
+                         yourself using the dnd-moved attribute -->
+                        <img ng-repeat="pokemonName in team()"
+                            ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName}}.png"
+                            dnd-draggable="pokemonName"
+                            dnd-moved="list.splice($index, 1)"
+                            dnd-effect-allowed="move"
+                            dnd-selected="models.selected = pokemonName"
+                            ng-class="{'selected': models.selected === pokemonName}"
+                            width="100px"
+                            height="100px"
+                            >
+                            {{pokemonName.label}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div view-source="simple"></div>
+
+    </div>
+
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Generated Model</h3>
+            </div>
+            <div class="panel-body">
+                <pre class="code">{{modelAsJson}}</pre>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<!--
+
+<div class="advancedDemo row">
+    <div ng-repeat="containers in model">
+
+        <div class="dropzone box box-yellow">
+        <h3>Dropzone {{$index + 1}}</h3>
+        <ul dnd-list="containers"
+            dnd-allowed-types="['container']"
+            dnd-external-sources="true"
+            dnd-dragover="dragoverCallback(index, external, type, callback)"
+            dnd-drop="dropCallback(index, item, external, type)">
+            <li ng-repeat="container in containers"
+                dnd-draggable="container"
+                dnd-type="'container'"
+                dnd-effect-allowed="copyMove"
+                dnd-moved="containers.splice($index, 1)"
+                dnd-callback="container.items.length">
+                <div class="container-element box box-blue">
+                    <h3>Container (effects allowed: {{container.effectAllowed}})</h3>
+                    <ul dnd-list="container.items"
+                        dnd-allowed-types="['item']"
+                        dnd-horizontal-list="true"
+                        dnd-external-sources="true"
+                        dnd-effect-allowed="{{container.effectAllowed}}"
+                        dnd-dragover="dragoverCallback(index, external, type)"
+                        dnd-drop="dropCallback(index, item, external, type)"
+                        dnd-inserted="logListEvent('inserted at', index, external, type)"
+                        class="itemlist">
+                        <img ng-repeat="item in team()"
+                            dnd-draggable="item"
+                            dnd-type="'item'"
+                            dnd-effect-allowed="{{item.effectAllowed}}"
+                            dnd-dragstart="logEvent('Started to drag an item')"
+                            dnd-moved="container.items.splice($index, 1)"
+                            dnd-dragend="logEvent('Drag operation ended. Drop effect: ' + dropEffect)"
+                            ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{item}}.png"
+                            width="150px"
+                            height="150px">
+                            {{item.label}}
+                        </img>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+            </li>
+        </ul>
+
+        </div>
+    </div>
+</div>
+
+<div view-source="advanced"></div>
+
+<h2>Generated Model</h2>
+<pre>{{modelAsJson}}</pre>
+-->
+
+<a ng-href="#!/battle"><button class="btn btn-success">Go!</button></a>
