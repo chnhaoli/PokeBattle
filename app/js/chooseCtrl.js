@@ -15,8 +15,8 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
     PokeModel.getAllPokemon(function(results) {
       for (key in results.results) {
         var pokemon = results.results[key];
+        // Using regex to remove "-" from nidoran-m and nidoran-f.
         $scope.allPokemonNames.push(pokemon.name.replace(/-/g, ""));
-        //console.log(pokemon.name.replace(/-/g, ""));
       }
       $scope.loading = false;
     }, function(error) {
@@ -25,7 +25,7 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
     })
   }
 
-
+  // Get all (20) pokemon upon page load.
   $scope.getAllPokemon();
 
   // Old Modal popup

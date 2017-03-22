@@ -1,11 +1,15 @@
 pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
 
+  // Team and opponent arrays of pokemon objects
   $scope.teamDetails = [];
   $scope.opponentDetails = [];
+
+  // Booleans to check if loading has finished
   $scope.getTeamDetailsFinished = false;
   $scope.getRandomOpponentFinished = false;
   $scope.loading = true;
 
+  // Booleans used to hide and show subviews
   $scope.mainOptions = true;
   $scope.changeOptions = false;
   $scope.attackOptions = false;
@@ -39,6 +43,7 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
   // TODO: Add a check so I can't add two of the save moves
   $scope.getMovesOfTeam = function(callback, errorCallback) {
     for (var key in $scope.teamDetails) {
+      // Create a new attribute called movesUsed in the Pokémon object.
       $scope.teamDetails[key].movesUsed = [];
       var pokemon = $scope.teamDetails[key];
 
@@ -47,6 +52,7 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
         for (var i = 0; i < 4; i++) {
           var moveIndex = Math.floor(Math.random() * correctPokemon.moves.length-1) + 1;
           var moveUrl = correctPokemon.moves[moveIndex].move.url;
+          // Extracting the move ID from the move's url so we can use it to call the moves API
           var moveId = moveUrl.match(/\/\d+/)[0].substring(1);
           PokeModel.GetMove.get({moveId: moveId}, function(data) {
             console.log(data);
@@ -74,11 +80,8 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
 
         // Get moves of whole team
         $scope.getMovesOfTeam(function(data) {
-
+          // If the last Pokémon on the team's moves have been filled, we have finished getting team details.
           if ($scope.teamDetails[$scope.teamDetails.length-1].movesUsed.length === 4) {
-
-            console.log($scope.teamDetails);
-
             $scope.getTeamDetailsFinished = true;
             if ($scope.getTeamDetailsFinished === true && $scope.getRandomOpponentFinished === true) {
               // Ready to rumble!
@@ -86,7 +89,7 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
             }
           }
         }, function(error) {
-
+          //TODO: display the error
         });
       }
 
@@ -128,6 +131,8 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
     $scope.mainOptions = false;
     $scope.changeOptions = true;
   }
+
+  // Switches the current Pokémon with the chosen Pokémon.
   $scope.changePokemon = function(index) {
     var temp = $scope.teamDetails[0];
     $scope.teamDetails[0] = $scope.teamDetails[index];
@@ -139,6 +144,7 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
     $scope.attackOptions = true;
   }
 
+  // Carry out the calculations here and decrease the HP bar, as well as change HP value in view.
   $scope.attack = function() {
 
   }
