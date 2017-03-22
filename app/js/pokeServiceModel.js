@@ -13,20 +13,20 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     var opponentDetails = [];
 
     //API calls
-    this.SearchDish = $resource('https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search',{},{
-        get: {
-            headers: {
-                'X-Mashape-Key': 'Qu9grxVNWpmshA4Kl9pTwyiJxVGUp1lKzrZjsnghQMkFkfA4LB'
-            }
-        }
-    });
-    this.GetDish = $resource('https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/:id/information',{},{
-        get: {
-            headers: {
-                'X-Mashape-Key': 'Qu9grxVNWpmshA4Kl9pTwyiJxVGUp1lKzrZjsnghQMkFkfA4LB'
-            }
-        }
-    });
+    // this.SearchDish = $resource('https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search',{},{
+    //     get: {
+    //         headers: {
+    //             'X-Mashape-Key': 'Qu9grxVNWpmshA4Kl9pTwyiJxVGUp1lKzrZjsnghQMkFkfA4LB'
+    //         }
+    //     }
+    // });
+    // this.GetDish = $resource('https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/:id/information',{},{
+    //     get: {
+    //         headers: {
+    //             'X-Mashape-Key': 'Qu9grxVNWpmshA4Kl9pTwyiJxVGUp1lKzrZjsnghQMkFkfA4LB'
+    //         }
+    //     }
+    // });
 
     this.GetPokemon = $resource('http://pokeapi.co/api/v2/pokemon/:pokemonNameOrId', {}, {
       get: {
@@ -49,7 +49,6 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     this.getCookie = function(id){
         return $cookieStore.get(id);
     }
-
 
     this.getDishFromCookie = function(menuInId){
         var menu = [];
@@ -147,16 +146,6 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
         errorCallback(error);
       })
     }
-
-
-
-
-
-
-
-
-
-
 
     //Guests
     var numberOfGuests = that.getCookie('num') ? that.getCookie('num') : 1;

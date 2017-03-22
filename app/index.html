@@ -45,59 +45,50 @@ which module to associate the app with. In app.js we create the "dinnerPlanner" 
         }
     });
     </script>
-
-
 </head>
 <body>
 
-  <!-- Header -->
-  <div class="header">
-    <a href="#/home"><div ng-click="clearOffset()"><h1 id="title">PokéBattle</h1></div></a>
-    <p id="subtitle">The number one Pokémon battle game on the web</p>
-  </div>
-<!-- Here in index.html you should put only the layout that is shared among all the screens (e.g. header
-,footer, etc.). The rest of the view specific layout will go into the html partials (check partials folder) -->
+    <!-- Header -->
+    <div class="header">
+        <a href="#/home"><div ng-click="clearOffset()"><h1 id="title">PokéBattle</h1></div></a>
+        <p id="subtitle">The number one Pokémon battle game on the web</p>
+    </div>
+    <!-- Here in index.html you should put only the layout that is shared among all the screens (e.g. header
+    ,footer, etc.). The rest of the view specific layout will go into the html partials (check partials folder) -->
 
     <div ng-view>
 
     </div>
 
-<!-- Footer -->
-<div class="footer">
-    <p>&copy; Beichen Chen, Jinwei Lin, Hao Li, Jingjing Xie 2017</p>
-</div>
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; Beichen Chen, Jinwei Lin, Hao Li, Jingjing Xie 2017</p>
+    </div>
 
 
+    <!-- jQuery -->
+    <script src="public/jquery.js"></script>
+    <!-- Bootstrap JavaScript, needed if you want for instance tabs, models, popovers etc. -->
+    <script src="public/bootstrap.min.js"></script>
+    <!-- Angular JavaScript including routing and resource modules  -->
+    <script src="public/angular.js"></script>
+    <script src="public/angular-route.js"></script>
+    <script src="public/angular-resource.js"></script>
+    <script src="public/angular-cookies.js"></script>
+    <script src="public/dialogs.js"></script>
+    <script src="public/dialogs.min.js"></script>
+    <script src="public/ui-bootstrap.js"></script>
+    <script src="public/ui-bootstrap-tpls.js"></script>
+    <script src="public/angular-sanitize.js"></script>
+    <script src="public/angular-drag-and-drop-lists.js"></script>
 
-
-
-
-
-
-
-<!-- jQuery -->
-<script src="public/jquery.js"></script>
-<!-- Bootstrap JavaScript, needed if you want for instance tabs, models, popovers etc. -->
-<script src="public/bootstrap.min.js"></script>
-<!-- Angular JavaScript including routing and resource modules  -->
-<script src="public/angular.js"></script>
-<script src="public/angular-route.js"></script>
-<script src="public/angular-resource.js"></script>
-<script src="public/angular-cookies.js"></script>
-<script src="public/dialogs.js"></script>
-<script src="public/dialogs.min.js"></script>
-<script src="public/ui-bootstrap.js"></script>
-<script src="public/ui-bootstrap-tpls.js"></script>
-<script src="public/angular-sanitize.js"></script>
-<script src="public/angular-drag-and-drop-lists.js"></script>
-
-<!-- The application JavaScript code -->
-<script src="js/app.js"></script>
-<script src="js/pokeServiceModel.js"></script>
-<script src="js/pokeCtrl.js"></script>
-<script src="js/chooseCtrl.js"></script>
-<script src="js/battleCtrl.js"></script>
-<!--<script src="js/modalCtrl.js"></script>-->
+    <!-- The application JavaScript code -->
+    <script src="js/app.js"></script>
+    <script src="js/pokeServiceModel.js"></script>
+    <script src="js/pokeCtrl.js"></script>
+    <script src="js/chooseCtrl.js"></script>
+    <script src="js/battleCtrl.js"></script>
+    <!--<script src="js/modalCtrl.js"></script>-->
 
     <!-- Browser-sync scripts -->
     <script id="__bs_script__">
