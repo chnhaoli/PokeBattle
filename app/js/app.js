@@ -62,7 +62,3 @@ function($routeProvider) {
         redirectTo: '/home'
     });
 }]);
-
-
-// Previous package.json start script:
-//"start": "http-server app/ -a 0.0.0.0 -p 8000"

@@ -1,13 +1,3 @@
-/*var http = require('http');
-
-http.createServer(function (req, res) {
-  res.writeHead(200, {
-    'Content-Type': 'text/plain'
-  });
-  res.send('it is running\n');
-}).listen(process.env.PORT || 8000);*/
-
-
 var express = require('express');
 var app = express();
 
@@ -24,3 +14,7 @@ app.all('/*', function(req, res, next) {
 });
 
 app.listen(process.env.PORT || 8000); //the port you want to use
+
+
+// Previous package.json start script:
+//"start": "http-server app/ -a 0.0.0.0 -p 8000"

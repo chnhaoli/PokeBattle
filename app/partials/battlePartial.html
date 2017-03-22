@@ -1,4 +1,62 @@
-<h2>Gotta beat 'em all!</h2>
+<div class="loadingGifDiv" ng-show="loading">
+  <img id="loadingGif" src="../images/PikaLoading.gif">
+</div>
+
+<div class="row">
+  <div class="col-lg-6" id="firstPokemon">
+
+    <div class="healthBarDiv">
+      <div id="healthBar">
+      </div>
+    </div>
+
+    <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{teamDetails[0].name}}.png"></img>
+    <p>{{teamDetails[0].name}}</p>
+  </div>
+  <div class="col-lg-6" id="secondPokemon">
+
+    <div class="healthBarDiv">
+      <div id="healthBar2">
+      </div>
+    </div>
+
+    <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{opponentDetails[0].name}}.png"></img>
+
+    <p>{{opponentDetails[0].name}}</p>
+  </div>
+</div>
+
+<div class="buttons" ng-show="mainOptions">
+  <button class="btn btn-primary" ng-click="goToAttack()">Attack</button>
+  <button class="btn btn-primary" ng-click="goToItem()">Use Item</button>
+  <button class="btn btn-primary" ng-click="goToChange()">Change Pokémon</button>
+  <button class="btn btn-primary" ng-click="run()">Run Away</button>
+</div>
+
+<!-- I need the moves to be randomized, how do I do this? Can I pass in a random number from 0 to moves.length-1?
+Or do I have to manually update the object in teamDetails[0] to make the moves array only have 4 randomly chosen moves?-->
+<div class="buttons" ng-show="attackOptions">
+  <button class="btn btn-primary" ng-click="hit()">{{teamDetails[0].movesUsed[0].name}}</button>
+  <button class="btn btn-primary" ng-click="hit()">{{teamDetails[0].movesUsed[1].name}}</button>
+  <button class="btn btn-primary" ng-click="hit()">{{teamDetails[0].movesUsed[2].name}}</button>
+  <button class="btn btn-primary" ng-click="hit()">{{teamDetails[0].movesUsed[3].name}}</button>
+  <button class="btn btn-primary" ng-click="back()">Back</button>
+</div>
+
+<div class="buttons" ng-show="itemOptions">
+  <button class="btn btn-primary" ng-click="changePokemon(1)">{{teamDetails[1].name}}</button>
+  <button class="btn btn-primary" ng-click="changePokemon(2)">{{teamDetails[2].name}}</button>
+  <button class="btn btn-primary" ng-click="changePokemon(3)">{{teamDetails[3].name}}</button>
+  <button class="btn btn-primary" ng-click="changePokemon(3)">{{teamDetails[3].name}}</button>
+  <button class="btn btn-primary" ng-click="back()">Back</button>
+</div>
+
+<div class="buttons" ng-show="changeOptions">
+  <button class="btn btn-primary" ng-click="changePokemon(1)">{{teamDetails[1].name}}</button>
+  <button class="btn btn-primary" ng-click="changePokemon(2)">{{teamDetails[2].name}}</button>
+  <button class="btn btn-primary" ng-click="changePokemon(3)">{{teamDetails[3].name}}</button>
+  <button class="btn btn-primary" ng-click="back()">Back</button>
+</div>
 
 <div id="confirmedList">
   <h3>Team: </h3>

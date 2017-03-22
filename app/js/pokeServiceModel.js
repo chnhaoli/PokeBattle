@@ -9,6 +9,8 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     // Global variables
     var offset = 0;
     var team = [];
+    var teamDetails = [];
+    var opponentDetails = [];
 
     //API calls
     this.SearchDish = $resource('https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search',{},{
@@ -26,11 +28,17 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
         }
     });
 
-    this.GetAllPokemon = $resource('https://pokeapi.co/api/v2/pokemon', {}, {
+    this.GetPokemon = $resource('http://pokeapi.co/api/v2/pokemon/:pokemonNameOrId', {}, {
       get: {
 
       }
     });
+
+    this.GetMove = $resource('http://pokeapi.co/api/v2/move/:moveId', {}, {
+      get: {
+
+      }
+    })
 
     //Cookies
     this.storeCookie = function(id, content){
@@ -67,17 +75,33 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
 
     //Pokemon
     this.getAllPokemon = function(callback, errorCallback) {
-      this.GetAllPokemon.get({offset: offset}, function(data) {
+      this.GetPokemon.get({offset: offset}, function(data) {
         offset += 20;
         console.log(offset);
         callback(data);
-      }, function(data) {
-        errorCallback(data);
+      }, function(error) {
+        errorCallback(error);
       })
     }
 
     this.clearOffset = function() {
       offset = 0;
+    }
+
+    this.getPokemon = function(pokemonNameOrId, callback, errorCallback) {
+      this.GetPokemon.get({pokemonNameOrId: pokemonNameOrId}, function(data) {
+        callback(data);
+      }, function(error) {
+        errorCallback(error)
+      })
+    }
+
+    this.getMove = function(url, callback, errorCallback) {
+      this.GetMove.get({url: url}, function(data){
+        callback(data);
+      }, function(error) {
+        errorCallback(error);
+      })
     }
 
     this.setTeam = function(teamToSet) {
@@ -86,13 +110,42 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     }
 
     this.addToTeam = function(pokemonName) {
+      team.push(pokemonName);
       console.log(team);
 
-      team.push(pokemonName);
     }
 
     this.getTeam = function() {
       return team;
+    }
+
+    // For all Pokémon names in team array, gets Pokémon details and passes that into an array teamDetails.
+    // Special function in a function passing in key as index, called directly, ensuring the key gets updated from 0 to team.length-1.
+    this.getTeamDetails = function(callback, errorCallback) {
+      for (var key in team) {
+        var pokemonName = team[key];
+        this.getPokemon(pokemonName, function(index) {
+          return function(data) {
+            teamDetails[index] = data;
+            callback(index, data);
+          }
+        }(key), function (error) {
+          errorCallback(error);
+        })
+      }
+    }
+
+    // Gets a random opponent
+    this.getRandomOpponent = function(callback, errorCallback) {
+      var randomNum = Math.floor(Math.random() * 150) + 1
+      this.getPokemon(randomNum, function(data) {
+        opponentDetails = data;
+        callback(data);
+      }, function(error) {
+        // TODO: display the error
+        console.log(error);
+        errorCallback(error);
+      })
     }
 
 

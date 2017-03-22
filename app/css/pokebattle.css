@@ -3,6 +3,11 @@
   src: url("../fonts/PokemonSolid.ttf");
 }
 
+@font-face {
+  font-family: "pixel";
+  src: url("../fonts/Pixeled.ttf");
+}
+
 a {
   color: inherit;
 }
@@ -65,6 +70,20 @@ p {
 
 }
 
+.healthBarDiv {
+  text-align: left;
+}
+
+/*.homeView {
+  background: url("../images/HomepageView2.jpg");
+  background-size: 100% 100%;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}*/
+
 .inline {
   display: inline-block;
 }
@@ -75,6 +94,53 @@ p {
 
 #confirmedList {
   margin-bottom: 50px;
+}
+
+
+#healthBar {
+  background-color: green;
+  height: 10px;
+  width: 250px;
+  margin-top: 40px;
+  margin-left: 200px;
+  transition: width 1s, background-color 0.5s;
+}
+
+
+#healthBar2 {
+  background-color: green;
+  height: 10px;
+  width: 250px;
+  margin-top: 40px;
+  margin-left: 200px;
+  transition: width 1s, background-color 0.5s;
+}
+
+
+#highscore {
+  font-family: pixel;
+  font-size: 35px;
+  color: #3ec46c;
+  position: absolute;
+  top: 50%;
+  left: 67%;
+}
+
+#homepageBy {
+  font-family: pixel;
+  color: #000000;
+  position: absolute;
+  top: 60%;
+  left: 6%;
+}
+
+#homepageTitle {
+  font-family: pixel;
+  font-size: 50px;
+  color: #319b55;
+  position: absolute;
+  top: 35%;
+  left: 10%;
 }
 
 #loadingGif {
@@ -90,6 +156,15 @@ p {
 #subtitle {
   font-family: 'Baloo Bhaina', cursive;
   color: #a5a5a5;
+}
+
+#start {
+  font-family: pixel;
+  font-size: 35px;
+  color: #3ec46c;
+  position: absolute;
+  top: 35%;
+  left: 71%;
 }
 
 #title {
@@ -181,7 +256,8 @@ p {
  * operation.
  */
 .advancedDemo .dropzone .dndDraggingSource {
-    opacity: 0.5;
+    /*opacity: 0.5;*/
+    display: none;
 }
 
 /**
