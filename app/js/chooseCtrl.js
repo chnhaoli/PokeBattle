@@ -26,7 +26,7 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
   ];
 
   $scope.type = '1';
-
+  $scope.filter = '';
   $scope.pokeByType =' ';
 
   $scope.loading = true;

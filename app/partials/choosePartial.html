@@ -130,7 +130,7 @@
 
 <!-- type -->
 <div class="col-md-2 panel-body">
-        <select ng-model="type"  name="typeField" class="form-control" ng-change="getPokeByType(type)">
+        <select ng-model="type"  name="typeField" class="form-control" ng-change="searchPoke(filter, type)">
             <option ng-repeat="r in types" value="{{r.id}}">
                 {{r.name}}
             </option>
