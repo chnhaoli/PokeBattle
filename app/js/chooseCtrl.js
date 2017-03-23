@@ -126,6 +126,36 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
   }
 
 
+  $scope.searchPoke = function(filter, type){
+    var searchresult = [];
+    if(filter === ''){
+      $scope.getPokeByType($scope.type);
+    }
+    else{     
+    PokeModel.GetPokeByType.get({typeId: type}, function(data){
+      for (i in data.pokemon){
+        console.log(data.pokemon[i].pokemon.name);
+        if(filter === data.pokemon[i].pokemon.name){
+          console.log("hahaahahahqusiba");
+          searchresult.push(data.pokemon[i]);
+        }}
+        $scope.pokeByType = searchresult; 
+    },function(data){
+      console.log("Something went wrong");
+    });
+    }}
+    // $scope.isLoading = true;
+    // $scope.isError = false;
+    // PokeModel.GetPokemon.get({pokemonNameOrId:$scope.filter},function(data){
+    //   console.log("hellohahahaha");
+    //   console.log(data);
+    //   $scope.isLoading = false;
+    // },function(data){
+    //   $scope.isLoading = false;
+    //   $scope.isError = true;
+    // });
+  
+
   // Old Modal popup
   /*$scope.alert = function(pokemonName) {
     var dialog = dialogs.confirm("Confirm choice", "Choose " + pokemonName + " to be on your team?");
@@ -212,6 +242,49 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
    }, true);*/
 
 
+<<<<<<< HEAD
+=======
+  // Modal popup - testing
+
+  //search bar function 
+
+
+
+  var $ctrl = this;
+
+  $ctrl.animationsEnabled = true;
+
+  $scope.open = function (size, pokemonName, parentSelector) {
+    console.log("open");
+      //Get specific pokemon's info
+      var parentElem = parentSelector ? angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
+      var modalInstance = $uibModal.open({
+        animation: $ctrl.animationsEnabled,
+        ariaLabelledBy: 'modal-title',
+        ariaDescribedBy: 'modal-body',
+        templateUrl: 'myModalContent.html',
+        controller: 'ModalInstanceCtrl',
+        controllerAs: '$ctrl',
+        size: size,
+        appendTo: parentElem,
+        resolve: {
+          items: function () {
+            return $ctrl.items;
+          },
+          pokemonName: function() {
+            console.log($scope.selectedPokemonDetail.forms.name);
+            return $scope.selectedPokemonDetailS;
+          }
+        }
+      });
+
+      modalInstance.result.then(function (selectedItem) {
+        $ctrl.selected = selectedItem;
+      }, function () {
+        $log.info('Modal dismissed at: ' + new Date());
+      });
+    };
+>>>>>>> edcdc586f9ce1da894cd1c73067e3cf37ba1e335
 
 
   })

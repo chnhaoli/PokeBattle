@@ -13,21 +13,6 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     var opponentDetails = [];
 
     //API calls
-    this.SearchDish = $resource('https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search',{},{
-        get: {
-            headers: {
-                'X-Mashape-Key': 'Qu9grxVNWpmshA4Kl9pTwyiJxVGUp1lKzrZjsnghQMkFkfA4LB'
-            }
-        }
-    });
-    this.GetDish = $resource('https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/:id/information',{},{
-        get: {
-            headers: {
-                'X-Mashape-Key': 'Qu9grxVNWpmshA4Kl9pTwyiJxVGUp1lKzrZjsnghQMkFkfA4LB'
-            }
-        }
-    });
-
     this.GetPokemon = $resource('http://pokeapi.co/api/v2/pokemon/:pokemonNameOrId', {}, {
       get: {
 
@@ -54,29 +39,6 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
 
     this.getCookie = function(id){
         return $cookieStore.get(id);
-    }
-
-
-    this.getDishFromCookie = function(menuInId){
-        var menu = [];
-        var dish = {};
-        for(idFlag = 0; idFlag < menuInId.length; idFlag++) {
-            that.GetDish.get({id:menuInId[idFlag]},function(data){
-                dish = {};
-                dish.id = data.id;
-                dish.title = data.title;
-                dish.image = data.image;
-                dish.price = 0;
-                for(ingredient = 0; ingredient < data.extendedIngredients.length; ingredient++){
-                    dish.price += data.extendedIngredients[ingredient].amount;
-                }
-                dish.price = dish.price;
-                dish.preparation = data.instructions;
-                menu.push(dish);
-            },function(data){
-            });
-        }
-        return menu;
     }
 
     //Pokemon
