@@ -76,8 +76,6 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
     $scope.isLoading = true;
     $scope.isError = false;
     PokeModel.GetPokemon.get({pokemonNameOrId:pokemonName},function(data){
-      console.log(request);
-      console.log(data);
       $scope.selectedPokemonDetail = data;
       console.log($scope.selectedPokemonDetail);
       $scope.isLoading = false;
@@ -198,7 +196,7 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
             return $ctrl.items;
           },
           pokemonName: function() {
-            console.log($scope.selectedPokemonDetail);
+            console.log($scope.selectedPokemonDetail.forms.name);
             return $scope.selectedPokemonDetailS;
           }
         }
