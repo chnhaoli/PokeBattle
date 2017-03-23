@@ -160,6 +160,7 @@
                 <a ng-click="getPokemonDetail(pokemonName.pokemon.name)" class="btn btn-default">
                     <div class="panel-body">
                         <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName.pokemon.name}}.png"
+                        onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'"
                         alt="{{pokemonName.pokemon.name}}"
                         class="img-responsive"
                         style="width: 260px ; height:260px margin-left: auto; margin-right: auto;/>
