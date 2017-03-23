@@ -88,6 +88,36 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
   }
 
 
+  $scope.searchPoke = function(filter, type){
+    var searchresult = [];
+    if(filter === ''){
+      $scope.getPokeByType($scope.type);
+    }
+    else{     
+    PokeModel.GetPokeByType.get({typeId: type}, function(data){
+      for (i in data.pokemon){
+        console.log(data.pokemon[i].pokemon.name);
+        if(filter === data.pokemon[i].pokemon.name){
+          console.log("hahaahahahqusiba");
+          searchresult.push(data.pokemon[i]);
+        }}
+        $scope.pokeByType = searchresult; 
+    },function(data){
+      console.log("Something went wrong");
+    });
+    }}
+    // $scope.isLoading = true;
+    // $scope.isError = false;
+    // PokeModel.GetPokemon.get({pokemonNameOrId:$scope.filter},function(data){
+    //   console.log("hellohahahaha");
+    //   console.log(data);
+    //   $scope.isLoading = false;
+    // },function(data){
+    //   $scope.isLoading = false;
+    //   $scope.isError = true;
+    // });
+  
+
   // Old Modal popup
   /*$scope.alert = function(pokemonName) {
     var dialog = dialogs.confirm("Confirm choice", "Choose " + pokemonName + " to be on your team?");
@@ -175,6 +205,10 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
 
 
   // Modal popup - testing
+
+  //search bar function 
+
+
 
   var $ctrl = this;
 

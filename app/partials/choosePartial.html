@@ -106,10 +106,10 @@
 <!-- search -->
 <div>
     <form class="col-md-4 panel-body" name="filterField" ng-submit="filterField.$valid && setFilter(input)">
-        <input class="form-control" type="text" placeholder="Enter key words to search" ng-model="search.filter">
+        <input class="form-control" type="text" placeholder="Enter key words to search" ng-model="filter">
     </form>
     <div class="col-md-1 panel-body" style="text-align: center;">
-        <button type="button" class="btn btn-default" ng-click="searchDish(search.filter, search.type)">Search</button>
+        <button type="button" class="btn btn-default" ng-click="searchPoke(filter, type)">Search</button>
     </div>
 </div>
 
