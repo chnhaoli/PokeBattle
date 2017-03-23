@@ -11,9 +11,45 @@
                 </li>
             </ul>
             Selected: <b>{{ $ctrl.selected.item }}</b>-->
-            <p>Choose {{pokemonName}} to be on your team?</p>
-            <div>
-                <p>haha</p>
+            <h4>Choose {{$ctrl.pokemonName.name}} to be on your team?</h4>
+            <div ng-controller="ProgressDemoCtrl" class="panel-body">
+                <div class="col-md-12" style="text-align: right;">
+                    <div class="col-md-4"><h4>HP</h4></div>
+                    <div class="col-md-8"><uib-progressbar class="progress-striped active" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>  
+                    </div>
+                </div>
+
+                <div class="col-md-12" style="text-align: right;">
+                    <div class="col-md-4"><h4>Attack</h4></div>
+                    <div class="col-md-8"><uib-progressbar class="progress-striped active" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>  
+                    </div>
+                </div>
+
+                <div class="col-md-12" style="text-align: right;">
+                    <div class="col-md-4"><h4>Defense</h4></div>
+                    <div class="col-md-8"><uib-progressbar class="progress-striped active" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>  
+                    </div>
+                </div>
+
+                <div class="col-md-12" style="text-align: right;">
+                    <div class="col-md-4"><h4>Special Attack</h4></div>
+                    <div class="col-md-8"><uib-progressbar class="progress-striped active" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>  
+                    </div>
+                </div>
+
+                <div class="col-md-12" style="text-align: right;">
+                    <div class="col-md-4"><h4>Special Defense</h4></div>
+                    <div class="col-md-8"><uib-progressbar class="progress-striped active" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>  
+                    </div>
+                </div>
+
+                <div class="col-md-12" style="text-align: right;">
+                    <div class="col-md-4"><h4>Speed</h4></div>
+                    <div class="col-md-8"><uib-progressbar class="progress-striped active" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>  
+                    </div> 
+                </div>
+                
+                <p ng-repeat = "type in $ctrl.pokemonName.types.object.type.name">{{type}}</p>
             </div>
         </div>
         <div class="modal-footer">
@@ -34,7 +70,8 @@
                 <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName}}.png" class="teamImg" alt="{{pokemonName}}">
             </div>
         </div>
-        <div class="col-md-12" style="text-align: center;"><a href="#!/overview" type="button" class="btn btn-primary gradient">Go!</a></div>
+        <div class="col-md-6" style="text-align: right;"><a href="#!/overview" type="button" class="btn btn-primary gradient">Random Team!</a></div>
+        <div class="col-md-6" style="text-align: left;"><a href="#!/overview" type="button" class="btn btn-primary gradient">Go!</a></div>
         <!-- Button here to confirm the dinner menu. -->
 
             <!-- <a ng-show="selectedMenu.length > 0" id="confirmDinnerButton" href="#!/overview" type="button" class="btn btn-warning btn-md col-md-2">Battle</a>
@@ -120,7 +157,7 @@
         <!-- Where the search results locates. -->
         <div ng-repeat="pokemonName in pokeByType" class="col-md-3 panel-body">
             <!-- <button class="panel"> -->
-                <a ng-click="getPokemonDetail(pokemonName.pokemon.name); open('sm', pokemonName.pokemon.name)" class="btn btn-default">
+                <a ng-click="getPokemonDetail(pokemonName.pokemon.name)" class="btn btn-default">
                     <div class="panel-body">
                         <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName.pokemon.name}}.png"
                         alt="{{pokemonName.pokemon.name}}"
