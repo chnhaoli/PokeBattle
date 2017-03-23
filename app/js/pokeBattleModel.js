@@ -53,6 +53,11 @@ this.GetPokedex = $resource('http://pokeapi.co/api/v2/pokedex/:id',{},{
     }
 });
 
+
+
+
+
+
 //Cookies
 this.storeCookie = function(id, content){
     $cookieStore.put(id, '');
@@ -62,6 +67,13 @@ this.storeCookie = function(id, content){
 this.getCookie = function(id){
     return $cookieStore.get(id);
 }
+
+
+
+
+
+
+
 
 this.getDishFromCookie = function(menuInId){
     var menu = [];

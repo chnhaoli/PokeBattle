@@ -5,74 +5,101 @@
 // the next time.
 pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     var that = this;
-
+    var isLoading = false;
     // Global variables
     var offset = 0;
     var team = [];
-    var teamDetails = [];
-    var opponentDetails = [];
+    var opponentDetails = {};
 
-    //API calls
-    // this.SearchDish = $resource('https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search',{},{
-    //     get: {
-    //         headers: {
-    //             'X-Mashape-Key': 'Qu9grxVNWpmshA4Kl9pTwyiJxVGUp1lKzrZjsnghQMkFkfA4LB'
-    //         }
-    //     }
-    // });
-    // this.GetDish = $resource('https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/:id/information',{},{
-    //     get: {
-    //         headers: {
-    //             'X-Mashape-Key': 'Qu9grxVNWpmshA4Kl9pTwyiJxVGUp1lKzrZjsnghQMkFkfA4LB'
-    //         }
-    //     }
-    // });
+    var teamDetails = [
+        {
+            name : 'balbasaur',
+            type : ['grass', 'poison'],
+            // baseHP : 35,
+            // baseAttack: 44,
+            // baseDefense: 44,
+            // baseSpAttack: 44,
+            // baseSpDefense: 44,
+            stats : {maxHP : null,
+                attack : null,
+                defense : null,
+                spAttack : null,
+                spDefense : null,
+                HP : null
+            },
+            moves : [/*{},{}*/],
+            movesUsed : [{name, type, damageClass, accuracy, power},{},{},{}]
+        },
+        {name : 'charmander'},
+        {name : 'haunter'},
+        {name : 'dragonite'}
+    ];
+    //Cache of all the pokemons in context.
+    // var pokemonCache = [];
+    //Cache of all the skills of chosen pokemons.
+    //{}
 
+    //Get a randomized interger between 0 and max (default inclusive).
+    this.randomInt = function(max, exclusive){
+        return Math.round(Math.random() * (max + (exclusive ? 0 : 1)));
+    }
+
+    //Calculate the stats as level 100 assumed
+    this.clacStats = function (baseHP, baseAttack, baseDefense, baseSpAttack, baseSpDefense){
+        var atkIV = that.randomInt(15);
+        var defIV = that.randomInt(15);
+        var spIV = that.randomInt(15);
+        var hpIV = atkIV%2==1?8:0 + defIV%2==1?4:0 + randomInt(1)*2 + spIV%2==1?1:0;
+        var stats = {};
+        stats.maxHP = Math.round((baseHP + hpIV) * 2 + 110);
+        stats.attack = Math.round((baseAttack + atkIV) * 2 + 5);
+        stats.defense = Math.round((baseDefense + defIV) * 2 + 5);
+        stats.spAttack = Math.round((baseSpAttack + spIV) * 2 + 5);
+        stats.spDefense = Math.round((baseSpDefense + spIV) * 2 + 5);
+        stats.HP = stats.maxHP;
+        return stats;
+    }
+    //API: move;
+    this.GetMove = $resource('http://pokeapi.co/api/v2/move/:moveId', {}, {
+        get: {
+
+        }
+    });
+    //GET: Get 4 random moves for a pokemon;
+    this.getMoves = function(pokemon){
+        for (var i = 0; i < 4; i++){
+            that.GetMove.get({moveId : pokemon.moves[that.randomInt(pokemon.moves.length)].name)}, function(data){
+                //pokemon.movesUsed.x = xxxxx;
+            })
+        }
+    }
+    //API: pokemon;
     this.GetPokemon = $resource('http://pokeapi.co/api/v2/pokemon/:pokemonNameOrId', {}, {
         get: {
 
         }
     });
-
-    this.GetMove = $resource('http://pokeapi.co/api/v2/move/:moveId', {}, {
-        get: {
-
-        }
-    })
-
-    //Cookies
-    this.storeCookie = function(id, content){
-        $cookieStore.put(id, '');
-        $cookieStore.put(id, content);
-    }
-
-    this.getCookie = function(id){
-        return $cookieStore.get(id);
-    }
-
-    this.getDishFromCookie = function(menuInId){
-        var menu = [];
-        var dish = {};
-        for(idFlag = 0; idFlag < menuInId.length; idFlag++) {
-            that.GetDish.get({id:menuInId[idFlag]},function(data){
-                dish = {};
-                dish.id = data.id;
-                dish.title = data.title;
-                dish.image = data.image;
-                dish.price = 0;
-                for(ingredient = 0; ingredient < data.extendedIngredients.length; ingredient++){
-                    dish.price += data.extendedIngredients[ingredient].amount;
+    // GET: For all Pokémon names in team array, gets Pokémon details and passes that into an array teamDetails.
+    // Special function in a function passing in key as index, called directly, ensuring the key gets updated from 0 to team.length-1.
+    this.writeTeamDetails = function() {
+        for (var key in team) {
+            var pokemonName = team[key];
+            that.getPokemon(pokemonName, function(index) {
+                return function(data) {
+                    teamDetails[index] = data;
+                    //*******
+                    that.getMoves(teamDetails[index]);
                 }
-                dish.price = dish.price;
-                dish.preparation = data.instructions;
-                menu.push(dish);
-            },function(data){
-            });
+            }(key), function (error) {
+                errorCallback(error);
+            })
         }
-        return menu;
     }
-
-    //Pokemon
+    //Returns the team details;
+    this.getTeamDetails = function() {
+        return teamDetails;
+    }
+    //GET: pokemon for choosing;
     this.getAllPokemon = function(callback, errorCallback) {
         this.GetPokemon.get({offset: offset}, function(data) {
             offset += 20;
@@ -82,81 +109,48 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
             errorCallback(error);
         })
     }
-
+    //Clear the offset;
     this.clearOffset = function() {
         offset = 0;
     }
-
+    //GET: Get pokemon for searching;
     this.getPokemon = function(pokemonNameOrId, callback, errorCallback) {
         this.GetPokemon.get({pokemonNameOrId: pokemonNameOrId}, function(data) {
-            callback(data);
-        }, function(error) {
-            errorCallback(error)
-        })
-    }
-
-    this.getMove = function(url, callback, errorCallback) {
-        this.GetMove.get({url: url}, function(data){
             callback(data);
         }, function(error) {
             errorCallback(error);
         })
     }
-
-    this.setTeam = function(teamToSet) {
-        team = teamToSet;
-        console.log(team);
-    }
-
+    //Adds pokemon to selected team;
     this.addToTeam = function(pokemonName) {
         team.push(pokemonName);
         console.log(team);
 
     }
-
+    //Returns the selected team;
     this.getTeam = function() {
         return team;
     }
-
-    // For all Pokémon names in team array, gets Pokémon details and passes that into an array teamDetails.
-    // Special function in a function passing in key as index, called directly, ensuring the key gets updated from 0 to team.length-1.
-    this.getTeamDetails = function(callback, errorCallback) {
-        for (var key in team) {
-            var pokemonName = team[key];
-            this.getPokemon(pokemonName, function(index) {
-                return function(data) {
-                    teamDetails[index] = data;
-                    callback(index, data);
-                }
-            }(key), function (error) {
-                errorCallback(error);
-            })
-        }
-    }
-
-    // Gets a random opponent
-    this.getRandomOpponent = function(callback, errorCallback) {
+    //GET: Get a random opponent;
+    this.getRandomOpponent = function() {
         var randomNum = Math.floor(Math.random() * 150) + 1
         this.getPokemon(randomNum, function(data) {
+            opponentDetails = {};
             opponentDetails = data;
-            callback(data);
+            that.getMoves(opponentDetails);
         }, function(error) {
-            // TODO: display the error
             console.log(error);
-            errorCallback(error);
         })
     }
 
-    //Battle damages (if a pokemon do not have type2, pass a 'undefined' or false)
-    //Get a randomized interger between 0 and max (default inclusive).
-    this.randomInt = function(max, exclusive){
-        return parseInt(Math.random() * (max + (exclusive ? 0 : 1)));
-    }
-    //If the move is on target (true) or miss (false)
+    /************ Battle damages **********/
+    /************ If a pokemon do not have type2, pass a 'undefined' or false **********/
+
+    //If the move is on target (true) or miss (false);
     this.isOnTarget = function(accuracy) {
-        return that.randomInt(100,true) < accuracy;
+        return accuracy ? (that.randomInt(100,true) < accuracy) : true;
     }
-    //Get the effectiveness
+    //Get the effectiveness;
     this.getEffectiveness = function(moveType, oppType1, oppType2){
         var types = ['normal','fire','water','electric','grass','ice','fighting','poision','ground','flying','psychic','bug','rock','ghost','dragon','dark','steel','fairy'];
         var effectivenessMatrix = [
@@ -181,21 +175,22 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
         ];
         return effectivenessMatrix[types.indexOf(moveType)][typs.indexOf(oppType1)] * (oppType2 ? effectivenessMatrix[types.indexOf(moveType)][typs.indexOf(oppType2)] : 1);
     }
+    //Tell the description of effectiveness;
     this.tellEffectiveness = function(effectiveness){
         switch(effectiveness) {
             case 0:
-                return 'No effect.';
+            return 'It seems no effect.';
             //break;
             case 0.25:
             case 0.5:
-                return 'Not effective.';
+            return 'It seems not so effective.';
             //break;
             case 2:
             case 4:
-                return 'Super effective.';
+            return 'Super effective.';
             //break;
             default:
-                return 'Normal effect.';
+            return '';
         }
     }
     //Get the same type attack bonus: if pokemon type = move type, 1.5; if not, 1.
@@ -217,129 +212,63 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
         }
         effectiveness = that.getEffectiveness(move.type, oppPokemon.type1, oppPokemon.type2);
         stab = that.getSTAB(moveType, pokemon.type, pokemon.type2);
-        return parseInt((42*move.power*atk/def/50+2)*effectiveness*stab*(that.randomInt(15)+85)/100);
+        return Math.round((42*move.power*atk/def/50+2)*effectiveness*stab*(that.randomInt(15)+85)/100);
     }
     //Get the pokemon HP after the damages
     this.poseDamage = function(hp, damage){
         return (hp > damage) ? (hp - damage) : 0;
     }
-    this.isDying = function(hp) {
-        return hp == 0;
+    //If the pokemon is dying.
+    this.isDying = function(pokemon) {
+        return pokemon.hp == 0;
     }
-    this.performMove = function(pokemon, oppPokemon, move){
+    //Perform the attack, callbacks the effectiveness category and if it is dying; or the miss status;
+    this.performMove = function(pokemon, oppPokemon, move, callbackHit, callbackMiss){
         if(that.isOnTarget()){
-            //On target.
-            console.log(that.tellEffectiveness(that.getEffectiveness(move.type, oppPokemon.type1, oppPokemon.type2)));
-            //Should inform user about effectiveness.
+            //On target;
             tempHP = that.poseDamage(oppPokemon.hp, that.getDamage(move, pokemon, oppPokemon);
             oppPokemon.hp = (tempHP > 0) ? tempHP : 0;
-            if(that.isDying){
-                //Dying.
-                if(/*Have alive pokemons*/){
-                    //Change pokemons here.
-                }
-                else {
-                    //Lose.
-                }
-            }
-            else {
-                //Next move.
-            }
+            callbackHit(that.tellEffectiveness(that.getEffectiveness(move.type, oppPokemon.type1, oppPokemon.type2)), that.isDying(oppPokemon));
         }
         else{
-            //Miss. Should inform user.
-            //Next move.
+            //Missed;
+            callbackMiss('The attack missed.');
         }
         return true;
     }
-    //Guests
-    var numberOfGuests = that.getCookie('num') ? that.getCookie('num') : 1;
 
-    //Writes the number of guests
-    this.setNumberOfGuests = function(num) {
-        if(num != numberOfGuests){
-            numberOfGuests = num >= 1 ? num : 1;
-            this.storeCookie('num', num);
-        }
-    }
 
-    //Returns the current number of guests
-    this.getNumberOfGuests = function() {
-        return numberOfGuests;
-    }
-
-    //Current dish
-    var currentDish = {};
-
-    //Writes the current dish
-    this.setCurrentDish = function(data){
-        currentDish = {};
-        currentDish.id = data.id;
-        currentDish.title = data.title;
-        currentDish.image = data.image;
-        currentDish.price = 0;
-        for(ingredient = 0; ingredient < data.extendedIngredients.length; ingredient++){
-            currentDish.price += data.extendedIngredients[ingredient].amount;
-        }
-        currentDish.price = currentDish.price;
-        currentDish.preparation = data.instructions;
-    }
-
-    this.getCurrentDish = function(){
-        return currentDish;
-    }
-
-    //Selected menu
-    var selectedMenu = that.getCookie('menu') ? that.getDishFromCookie(that.getCookie('menu')) : [];
-
-    //Returns the selected menu
-    this.getSelectedMenu = function(){
-        return selectedMenu;
-    }
-
-    this.getTotalPrice = function(){
-        totalPrice = 0;
-        for(dishFlagK = 0; dishFlagK < selectedMenu.length; dishFlagK++){
-            totalPrice += selectedMenu[dishFlagK].price;
-        }
-        return totalPrice;
-    }
-
-    this.addDish = function(id){
-        if(id == currentDish.id){
-            selectedMenu.push(currentDish);
-        }
-        that.storeCookie('menu', that.getAllId(selectedMenu));
-    }
-
-    this.removeDish = function(id){
-        for(dishFlagI = 0; dishFlagI < selectedMenu.length; dishFlagI++){
-            if(id == selectedMenu[dishFlagI].id){
-                selectedMenu.splice(dishFlagI, 1);
-                break;
-            }
-        }
-        that.storeCookie('menu', that.getAllId(selectedMenu));
-    }
-
-    this.isOnMenu = function(id){
-        var is = false;
-        for(dishFlagJ = 0; dishFlagJ < selectedMenu.length; dishFlagJ++ ){
-            if(id == selectedMenu[dishFlagJ].id){
-                is = true;
-                break;
-            }
-        }
-        return is;
-    }
-
-    this.getAllId = function(menu){
-        var allId = [];
-        for (key in menu){
-            allId.push(menu[key].id);
-        }
-        return allId;
-    }
+    //Cookies
+    // this.storeCookie = function(id, content){
+    //     $cookieStore.put(id, '');
+    //     $cookieStore.put(id, content);
+    // }
+    //
+    // this.getCookie = function(id){
+    //     return $cookieStore.get(id);
+    // }
+    //
+    // this.getDishFromCookie = function(menuInId){
+    //     var menu = [];
+    //     var dish = {};
+    //     for(idFlag = 0; idFlag < menuInId.length; idFlag++) {
+    //         that.GetDish.get({id:menuInId[idFlag]},function(data){
+    //             dish = {};
+    //             dish.id = data.id;
+    //             dish.title = data.title;
+    //             dish.image = data.image;
+    //             dish.price = 0;
+    //             for(ingredient = 0; ingredient < data.extendedIngredients.length; ingredient++){
+    //                 dish.price += data.extendedIngredients[ingredient].amount;
+    //             }
+    //             dish.price = dish.price;
+    //             dish.preparation = data.instructions;
+    //             menu.push(dish);
+    //         },function(data){
+    //         });
+    //     }
+    //     return menu;
+    // }
 
     // Angular service needs to return an object that has all the
     // methods created in it. You can consider that this is instead
