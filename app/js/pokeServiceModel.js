@@ -40,6 +40,12 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
       }
     })
 
+    this.GetPokeByType = $resource('http://pokeapi.co/api/v2/type/:typeId', {}, {
+      get: {
+
+      }
+    })
+
     //Cookies
     this.storeCookie = function(id, content){
         $cookieStore.put(id, '');

@@ -11,7 +11,10 @@
                 </li>
             </ul>
             Selected: <b>{{ $ctrl.selected.item }}</b>-->
-            <p>Choose {{$ctrl.pokemonName}} to be on your team?</p>
+            <p>Choose {{pokemonName}} to be on your team?</p>
+            <div>
+                <p>haha</p>
+            </div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
@@ -22,42 +25,21 @@
     <!--<button type="button" class="btn btn-default" ng-click="open('sm')">Small modal</button>-->
 </div>
 
+<h4>Choose 4 Pokémon to battle with</h4>
 
-<!-- Main -->
-<div>
-  <p>Choose 6 Pokémon to battle with</p>
+<!-- my team -->
+<div class="col-md-12 panel-body">
+        <div class="col-md-12 panel-body" style="text-align: center;">
+            <div class="col-md-3" ng-repeat="pokemonName in team()">
+                <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName}}.png" class="teamImg" alt="{{pokemonName}}">
+            </div>
+        </div>
+        <div class="col-md-12" style="text-align: center;"><a href="#!/overview" type="button" class="btn btn-primary gradient">Go!</a></div>
+        <!-- Button here to confirm the dinner menu. -->
 
-  <div class="inline alignCenter" ng-repeat="pokemonName in allPokemonNames">
-    <!--<img class="pokemonImg" ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName}}.png" ng-click="alert(pokemonName)"/>-->
-    <div class="modal-demo">
-      <img class="pokemonImg" ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName}}.png" ng-click="open('sm', pokemonName)"/>
-    </div>
-
-    <p>{{pokemonName}}</p>
-    <!--<div>
-      <img class="checkbox" src="../images/checkbox.png"/>
-    </div>-->
-  </div>
-
-  <div class="loadingGifDiv" ng-show="loading">
-    <img id="loadingGif" src="../images/PikaLoading.gif">
-  </div>
-
-
-  <div class="buttonsDiv">
-    <button class="btn btn-primary" ng-click="getAllPokemon()">More Pokémon</button>
-    <!--<button class="btn btn-info" ng-click="showConfirmed()">Show confirmed</button>-->
-  </div>
-
-
-  <div id="confirmedList">
-    <h3>Confirmed Pokémon: </h3>
-    <span ng-repeat="pokemonName in team()" dnd-draggable="pokemonName" dnd-effect-allowed="move">{{pokemonName}} </span>
-  </div>
-
+            <!-- <a ng-show="selectedMenu.length > 0" id="confirmDinnerButton" href="#!/overview" type="button" class="btn btn-warning btn-md col-md-2">Battle</a>
+            <a ng-show="selectedMenu.length == 0" ng-disabled="true" type="button" class="btn btn-warning btn-disabled btn-md col-md-2">Battle!</a> -->
 </div>
-
-
 
 
 <!-- Drag and drop testing -->
@@ -84,7 +66,7 @@
                             ng-class="{'selected': models.selected === pokemonName}"
                             width="100px"
                             height="100px"
-                            >
+                            />
                             {{pokemonName.label}}
                         </li>
                     </ul>
@@ -109,6 +91,72 @@
 
 </div>
 
+<!-- type -->
+<div class="col-md-2 panel-body">
+        <select ng-model="type"  name="typeField" class="form-control" ng-change="getPokeByType(type)">
+            <option ng-repeat="r in types" value="{{r.id}}">
+                {{r.name}}
+            </option>
+        </select>
+</div>
+
+<!-- space --> 
+<div class="col-md-5 panel-body"></div>
+
+<!-- search -->
+<div>
+    <form class="col-md-4 panel-body" name="filterField" ng-submit="filterField.$valid && setFilter(input)">
+        <input class="form-control" type="text" placeholder="Enter key words to search" ng-model="search.filter">
+    </form>
+    <div class="col-md-1 panel-body" style="text-align: center;">
+        <button type="button" class="btn btn-default" ng-click="searchDish(search.filter, search.type)">Search</button>
+    </div>
+</div>
+
+
+<!-- Main -->
+<div class="panel-body">
+  <div class="row" style="max-height: 625px; width: 100%;">
+        <!-- Where the search results locates. -->
+        <div ng-repeat="pokemonName in pokeByType" class="col-md-3 panel-body">
+            <!-- <button class="panel"> -->
+                <a ng-click="getPokemonDetail(pokemonName.pokemon.name); open('sm', pokemonName.pokemon.name)" class="btn btn-default">
+                    <div class="panel-body">
+                        <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName.pokemon.name}}.png"
+                        alt="{{pokemonName.pokemon.name}}"
+                        class="img-responsive"
+                        style="width:100%; height:200px margin-left: auto; margin-right: auto;/>
+                    </div>
+                    <div class="tool panel-heading">
+                        <h4>{{pokemonName.pokemon.name}}</h4>
+                    </div>
+                    <!-- <div class="panel-footer">
+                        {{dish.readyInMinutes}} mins
+                    </div> -->
+                </a>
+            <!-- </button> -->
+        </div>
+    </div>
+</div>
+
+
+  <div class="loadingGifDiv" ng-show="loading">
+    <img id="loadingGif" src="../images/PikaLoading.gif">
+  </div>
+
+
+  <div class="buttonsDiv">
+    <button class="btn btn-primary" ng-click="getAllPokemon()">More Pokémon</button>
+    <!--<button class="btn btn-info" ng-click="showConfirmed()">Show confirmed</button>-->
+  </div>
+
+
+  <div id="confirmedList">
+    <h3>Confirmed Pokémon: </h3>
+    <span ng-repeat="pokemonName in team()" dnd-draggable="pokemonName" dnd-effect-allowed="move">{{pokemonName}} </span>
+  </div>
+
+</div>
 
 
 <!--

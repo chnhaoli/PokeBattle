@@ -1,7 +1,35 @@
 pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialogs, PokeModel) {
 
   // Initial scope values
-  $scope.allPokemonNames = []
+  $scope.allPokemonNames = [];
+  $scope.selectedPokemonDetail = [];
+
+  $scope.types = [
+  {id:'1', name:'Normal'},
+  {id:'2', name:'Fighting'},
+  {id:'3', name:'Flying'},
+  {id:'4', name:'Poison'},
+  {id:'5', name:'Ground'},
+  {id:'6', name:'Rock'},
+  {id:'7', name:'Bug'},
+  {id:'8', name:'Ghost'},
+  {id:'9', name:'Steel'},
+  {id:'10', name:'Fire'},
+  {id:'11', name:'water'},
+  {id:'12', name:'Flying'},
+  {id:'13', name:'Grass'},
+  {id:'14', name:'Electric'},
+  {id:'15', name:'Psychic'},
+  {id:'16', name:'Ice'},
+  {id:'17', name:'Dragon'},
+  {id:'18', name:'Dark'},
+  {id:'19', name:'Fairy'}
+  ];
+
+  $scope.type = '1';
+
+  $scope.pokeByType =' ';
+
   $scope.loading = true;
 
   //Pokemon
@@ -10,23 +38,55 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
     return PokeModel.getTeam();
   };
 
-  $scope.getAllPokemon = function() {
-    $scope.loading = true;
-    PokeModel.getAllPokemon(function(results) {
-      for (key in results.results) {
-        var pokemon = results.results[key];
-        $scope.allPokemonNames.push(pokemon.name.replace(/-/g, ""));
-        //console.log(pokemon.name.replace(/-/g, ""));
-      }
-      $scope.loading = false;
-    }, function(error) {
-      console.log(error);
-      // TODO: implement error message on view
-    })
+  // $scope.getAllPokemon = function() {
+  //   $scope.loading = true;
+  //   PokeModel.getAllPokemon(function(results) {
+  //     for (key in results.results) {
+  //       var pokemon = results.results[key];
+  //       $scope.allPokemonNames.push(pokemon.name.replace(/-/g, ""));
+  //       //console.log(pokemon.name.replace(/-/g, ""));
+  //     }
+  //     $scope.loading = false;
+  //   }, function(error) {
+  //     console.log(error);
+  //     // TODO: implement error message on view
+  //   })
+  // }
+
+
+  // $scope.getAllPokemon();
+
+
+  $scope.getPokeByType = function(id) {
+    $scope.isLoading = true;
+    $scope.isError = false;
+    PokeModel.GetPokeByType.get({typeId:id},function(data){
+      $scope.pokeByType = data.pokemon;
+      $scope.isLoading = false;
+    },function(data){
+      $scope.isLoading = false;
+      $scope.isError = true;
+    });
+    console.log("exit");
   }
 
+  $scope.getPokeByType($scope.type);
 
-  $scope.getAllPokemon();
+  $scope.getPokemonDetail = function(pokemonName) {
+    $scope.isLoading = true;
+    $scope.isError = false;
+    PokeModel.GetPokemon.get({pokemonNameOrId:pokemonName},function(data){
+      console.log(request);
+      console.log(data);
+      $scope.selectedPokemonDetail = data;
+      console.log($scope.selectedPokemonDetail);
+      $scope.isLoading = false;
+    },function(data){
+     $scope.isLoading = false;
+     $scope.isError = true;
+   });
+  }
+
 
   // Old Modal popup
   /*$scope.alert = function(pokemonName) {
@@ -43,21 +103,21 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
 
   // Simple
   $scope.models = {
-       selected: null,
-       lists: {"A": [], "B": []}
-   };
+   selected: null,
+   lists: {"A": [], "B": []}
+ };
 
 
    // Generate initial model
-   for (var i = 1; i <= 3; ++i) {
-       $scope.models.lists.A.push({label: "Item A" + i});
-       $scope.models.lists.B.push({label: "Item B" + i});
+   for (var i = 0; i <= 3; ++i) {
+     $scope.models.lists.A.push({label: "Item A" + i});
+     $scope.models.lists.B.push({label: "Item B" + i});
    }
 
 
    // Model to JSON for demo purpose
    $scope.$watch('models', function(model) {
-       $scope.modelAsJson = angular.toJson(model, true);
+     $scope.modelAsJson = angular.toJson(model, true);
    }, true);
 
    // Advanced
@@ -85,7 +145,7 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
       var message = external ? 'External ' : '';
       message += type + ' element was ' + action + ' position ' + index;
       console.log(message);
-   };*/
+    };*/
 
    // Initialize model
    /*$scope.model = [[], []];
@@ -122,39 +182,40 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
 
   $scope.open = function (size, pokemonName, parentSelector) {
     console.log("open");
-    var parentElem = parentSelector ?
-      angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
-    var modalInstance = $uibModal.open({
-      animation: $ctrl.animationsEnabled,
-      ariaLabelledBy: 'modal-title',
-      ariaDescribedBy: 'modal-body',
-      templateUrl: 'myModalContent.html',
-      controller: 'ModalInstanceCtrl',
-      controllerAs: '$ctrl',
-      size: size,
-      appendTo: parentElem,
-      resolve: {
-        items: function () {
-          return $ctrl.items;
-        },
-        pokemonName: function() {
-          return pokemonName;
+      //Get specific pokemon's info
+      var parentElem = parentSelector ? angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
+      var modalInstance = $uibModal.open({
+        animation: $ctrl.animationsEnabled,
+        ariaLabelledBy: 'modal-title',
+        ariaDescribedBy: 'modal-body',
+        templateUrl: 'myModalContent.html',
+        controller: 'ModalInstanceCtrl',
+        controllerAs: '$ctrl',
+        size: size,
+        appendTo: parentElem,
+        resolve: {
+          items: function () {
+            return $ctrl.items;
+          },
+          pokemonName: function() {
+            console.log($scope.selectedPokemonDetail);
+            return $scope.selectedPokemonDetailS;
+          }
         }
-      }
-    });
+      });
 
-    modalInstance.result.then(function (selectedItem) {
-      $ctrl.selected = selectedItem;
-    }, function () {
-      $log.info('Modal dismissed at: ' + new Date());
-    });
-  };
+      modalInstance.result.then(function (selectedItem) {
+        $ctrl.selected = selectedItem;
+      }, function () {
+        $log.info('Modal dismissed at: ' + new Date());
+      });
+    };
 
-  $ctrl.toggleAnimation = function () {
-    $ctrl.animationsEnabled = !$ctrl.animationsEnabled;
-  };
+    $ctrl.toggleAnimation = function () {
+      $ctrl.animationsEnabled = !$ctrl.animationsEnabled;
+    };
 
-})
+  })
 
 // Please note that $uibModalInstance represents a modal window (instance) dependency.
 // It is not the same as the $uibModal service used above.

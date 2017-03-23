@@ -2,6 +2,9 @@
 	background-color:rgba(255,203,5,0.1);
 }
 
+.bgSearchColor{
+	background-color:rgba(52,102,175,0.1);
+}
 
 .btn-primary.gradient {
 	background: -moz-linear-gradient(top,  #3466af 50%, #3a5da8 50%); /* FF3.6+ */
@@ -39,9 +42,20 @@
 	text-size: x-large;
 }
 
+.tool {
+        width: 270px;
+        overflow:hidden;
+        white-space:nowrap;
+        text-overflow:ellipsis;
+        text-align: center;
+ }
+
+.teamImg {
+	width: 150px;
+	height: 150px;
+}
 /*.homeButton{
-	background-color: #3466af; 3a5da8
+	background-color: #3466af;
 	color: #ffcb05; 
 	width: 200px;
-}
-*/
+}*/
