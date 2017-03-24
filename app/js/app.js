@@ -60,3 +60,8 @@ function($routeProvider) {
         redirectTo: '/home'
     });
 }]);
+
+pokeBattleApp.controller('AudioController', function($scope) {
+ $scope.musicControl = function(){
+    $scope.show ? $scope.show = false : $scope.show = true;
+}});
