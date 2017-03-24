@@ -164,7 +164,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
                 return function(data) {
                     teamDetails[index] = data;
                     //teamDetails[index].level = null;
-                    teamDetails[index].statsUsed = that.calcStats(data.stats);
+                    teamDetails[index].battleStats = that.calcStats(data.stats);
                     teamDetails[index].type = that.restructureTypes(data.types);
                     that.getMoves(teamDetails[index]);
                     if (teamDetails[index].movesUsed[3].damageClass && teamDetails[3].type[0]){
@@ -184,7 +184,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     this.getOppDetails = function() {
       return opponentDetails;
     }
-    
+
     //Adds pokemon to selected team;
     this.addToTeam = function(pokemonName) {
         team.push(pokemonName);
@@ -202,7 +202,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
         this.GetPokemon.get(randomNum, function(data) {
             opponentDetails = {};
             opponentDetails = data;
-            opponentDetails.statsUsed = that.calcStats(data.stats);
+            opponentDetails.battleStats = that.calcStats(data.stats);
             opponentDetails.type = that.restructureTypes(data.types);
             that.getMoves(opponentDetails);
             if (opponentDetails.movesUsed[3].damageClass && opponentDetails.type[0]){
