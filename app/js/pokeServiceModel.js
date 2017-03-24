@@ -5,34 +5,51 @@
 // the next time.
 pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     var that = this;
+    //For loading widget;
     var isLoading = false;
-    // Global variables
-    var offset = 0;
+    //Team in pokemon name;
     var team = [];
+    //Detailed opponent;
     var opponentDetails = {};
-
+    //Detailed pokemons for whole team;
     var teamDetails = [
-        {
-            name : 'balbasaur',
-            type : ['grass', 'poison'],
-            // baseHP : 35,
-            // baseAttack: 44,
-            // baseDefense: 44,
-            // baseSpAttack: 44,
-            // baseSpDefense: 44,
-            stats : {maxHP : null,
-                attack : null,
-                defense : null,
-                spAttack : null,
-                spDefense : null,
-                HP : null
-            },
-            moves : [/*{},{}*/],
-            movesUsed : [{name, type, damageClass, accuracy, power},{},{},{}]
-        },
-        {name : 'charmander'},
-        {name : 'haunter'},
-        {name : 'dragonite'}
+        // {
+        //     name : 'balbasaur',
+        //     types : [
+        //     {
+        //       "slot": 2,
+        //       "type": {
+        //         "url": "http://pokeapi.co/api/v2/type/4/",
+        //         "name": "poison"
+        //       }
+        //     },
+        //     {
+        //       "slot": 1,
+        //       "type": {
+        //         "url": "http://pokeapi.co/api/v2/type/12/",
+        //         "name": "grass"
+        //       }
+        //     }
+        //   ],
+        //    type : [],
+        //     // baseHP : 35,
+        //     // baseAttack: 44,
+        //     // baseDefense: 44,
+        //     // baseSpAttack: 44,
+        //     // baseSpDefense: 44,
+        //     battleStats : {maxHP : null,
+        //         attack : null,
+        //         defense : null,
+        //         spAttack : null,
+        //         spDefense : null,
+        //         HP : null
+        //     },
+        //     moves : [/*{},{}*/],
+        //     movesUsed : [{name, type, damageClass, accuracy, power},{},{},{}]
+        // },
+        // {name : 'charmander'},
+        // {name : 'haunter'},
+        // {name : 'dragonite'}
     ];
     //Cache of all the pokemons in context.
     // var pokemonCache = [];
@@ -41,23 +58,41 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
 
     //Get a randomized interger between 0 and max (default inclusive).
     this.randomInt = function(max, exclusive){
-        return Math.round(Math.random() * (max + (exclusive ? 0 : 1)));
+        return Math.floor(Math.random() * (max + (exclusive ? 0 : 1)));
     }
 
     //Calculate the stats as level 100 assumed
-    this.clacStats = function (baseHP, baseAttack, baseDefense, baseSpAttack, baseSpDefense){
+    this.calcStats = function (pokemon){
         var atkIV = that.randomInt(15);
         var defIV = that.randomInt(15);
+        var spdIV = that.randomInt(15);
         var spIV = that.randomInt(15);
-        var hpIV = atkIV%2==1?8:0 + defIV%2==1?4:0 + randomInt(1)*2 + spIV%2==1?1:0;
-        var stats = {};
-        stats.maxHP = Math.round((baseHP + hpIV) * 2 + 110);
-        stats.attack = Math.round((baseAttack + atkIV) * 2 + 5);
-        stats.defense = Math.round((baseDefense + defIV) * 2 + 5);
-        stats.spAttack = Math.round((baseSpAttack + spIV) * 2 + 5);
-        stats.spDefense = Math.round((baseSpDefense + spIV) * 2 + 5);
-        stats.HP = stats.maxHP;
+        var hpIV = atkIV%2==1?8:0 + defIV%2==1?4:0 + spdIV%2==1?2:0 + spIV%2==1?1:0;
+        var statsUsed = {};
+        var level = pokemon.level ? pokemon.level : 100;
+        statsUsed.maxHP     = Math.round((pokemon.stats[5].base_stat + hpIV ) * 2 * level / 100 + 110);
+        statsUsed.attack    = Math.round((pokemon.stats[4].base_stat + atkIV) * 2 * level / 100 + 5);
+        statsUsed.defense   = Math.round((pokemon.stats[3].base_stat + defIV) * 2 * level / 100 + 5);
+        statsUsed.spAttack  = Math.round((pokemon.stats[2].base_stat + spIV ) * 2 * level / 100 + 5);
+        statsUsed.spDefense = Math.round((pokemon.stats[1].base_stat + spIV ) * 2 * level / 100 + 5);
+        statsUsed.speed = Math.round((pokemon.stats[0].base_stat + spIV ) * 2 * level / 100 + 5);
+        statsUsed.HP = stats.maxHP;
         return stats;
+    }
+    //Store types as pokemon.type = [type1, type2];
+    this.restructureTypes = function(types){
+        var type = [];
+        if (types.length == 1){
+            type[0] = types[0].type.name;
+        }
+        else if(types.length == 2){
+            type[0] = types[1].type.name;
+            type[1] = types[0].type.name;
+        }
+        else{
+            alert('Pokemon type error');
+        }
+        return type;
     }
     //API: move;
     this.GetMove = $resource('http://pokeapi.co/api/v2/move/:moveId', {}, {
@@ -67,10 +102,18 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     });
     //GET: Get 4 random moves for a pokemon;
     this.getMoves = function(pokemon){
+        pokemon.movesUsed = [];
         for (var i = 0; i < 4; i++){
-            that.GetMove.get({moveId : pokemon.moves[that.randomInt(pokemon.moves.length)].name)}, function(data){
-                //pokemon.movesUsed.x = xxxxx;
-            })
+            that.GetMove.get({moveId : pokemon.moves[that.randomInt(pokemon.moves.length)].name)}, function(index) {
+                return function(data) {
+                    pokemon.movesUsed[index] = {};
+                    pokemon.movesUsed[index].name = data.name;
+                    pokemon.movesUsed[index].type = data.type.name;
+                    pokemon.movesUsed[index].power = data.power;
+                    pokemon.movesUsed[index].accuracy = data.accuracy;
+                    pokemon.movesUsed[index].damageClass = data.damage_class.name;
+                }
+            }(i))
         }
     }
     //API: pokemon;
@@ -87,7 +130,9 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
             that.getPokemon(pokemonName, function(index) {
                 return function(data) {
                     teamDetails[index] = data;
-                    //*******
+                    //teamDetails[index].level = null;
+                    teamDetails[index].statsUsed = that.calcStats(data.stats);
+                    teamDetails[index].type = that.restructureTypes(data.types);
                     that.getMoves(teamDetails[index]);
                 }
             }(key), function (error) {
@@ -99,6 +144,8 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     this.getTeamDetails = function() {
         return teamDetails;
     }
+    //Offset for listing pokemons;
+    var offset = 0;
     //GET: pokemon for choosing;
     this.getAllPokemon = function(callback, errorCallback) {
         this.GetPokemon.get({offset: offset}, function(data) {
@@ -137,6 +184,8 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
         this.getPokemon(randomNum, function(data) {
             opponentDetails = {};
             opponentDetails = data;
+            opponentDetails.statsUsed = that.calcStats(data.stats);
+            opponentDetails.type = that.restructureTypes(data.types);
             that.getMoves(opponentDetails);
         }, function(error) {
             console.log(error);
@@ -203,16 +252,18 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
             atk = pokemon.attack;
             def = oppPokemon.defense;
         }
-        else if(move.damageClass == 'special'){
+        //Use status as special;
+        else if(move.damageClass == 'special' || move.damageClass == 'status'){
             atk = pokemon.spAttack;
             def = oppPokemon.spDefense;
         }
         else {
             alert('Damage class error');
         }
-        effectiveness = that.getEffectiveness(move.type, oppPokemon.type1, oppPokemon.type2);
-        stab = that.getSTAB(moveType, pokemon.type, pokemon.type2);
-        return Math.round((42*move.power*atk/def/50+2)*effectiveness*stab*(that.randomInt(15)+85)/100);
+        var effectiveness = that.getEffectiveness(move.type, oppPokemon.type[0], oppPokemon.type[1]);
+        var stab = that.getSTAB(moveType, pokemon.type[0], pokemon.type[1]);
+        var level = pokemon.level ? pokemon.level : 100;
+        return Math.round(((0.4*level+2)*move.power*atk/def/50+2)*effectiveness*stab*(that.randomInt(15)+85)/100);
     }
     //Get the pokemon HP after the damages
     this.poseDamage = function(hp, damage){
@@ -220,15 +271,14 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     }
     //If the pokemon is dying.
     this.isDying = function(pokemon) {
-        return pokemon.hp == 0;
+        return pokemon.HP == 0;
     }
     //Perform the attack, callbacks the effectiveness category and if it is dying; or the miss status;
     this.performMove = function(pokemon, oppPokemon, move, callbackHit, callbackMiss){
         if(that.isOnTarget()){
             //On target;
-            tempHP = that.poseDamage(oppPokemon.hp, that.getDamage(move, pokemon, oppPokemon);
-            oppPokemon.hp = (tempHP > 0) ? tempHP : 0;
-            callbackHit(that.tellEffectiveness(that.getEffectiveness(move.type, oppPokemon.type1, oppPokemon.type2)), that.isDying(oppPokemon));
+            oppPokemon.HP = that.poseDamage(oppPokemon.HP, that.getDamage(move, pokemon, oppPokemon);
+            callbackHit(that.tellEffectiveness(that.getEffectiveness(move.type, oppPokemon.type[0], oppPokemon.type[1])), that.isDying(oppPokemon));
         }
         else{
             //Missed;
