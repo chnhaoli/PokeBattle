@@ -36,13 +36,19 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
 
   // Randomly hit the health bar - testing
   $scope.hit = function(user) {
+
+
     // How to do this without document.getElementById?
     var healthBarUser = document.getElementById("healthBarUser");
     var healthBarOpp = document.getElementById("healthBarOpp");
 
-    var fraction = user ? $scope.teamDetails()[0].battleStats.HP / $scope.teamDetails()[0].battleStats.maxHP : $scope.opponentDetails().battleStats.HP / $scope.opponentDetails().battleStats.maxHP;
+    var fraction = user ? $scope.opponentDetails().battleStats.HP / $scope.opponentDetails().battleStats.maxHP : $scope.teamDetails()[0].battleStats.HP / $scope.teamDetails()[0].battleStats.maxHP;
 
     if (user) {
+      console.log("opp maxHP " + $scope.opponentDetails().battleStats.maxHP);
+      console.log("opp HP " + $scope.opponentDetails().battleStats.HP);
+      console.log(fraction);
+
       healthBarOpp.style.width = (fraction * 250)+"px";
 
       if (fraction > 0.5) {
@@ -55,6 +61,10 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
     }
 
     else {
+      console.log("user maxHP " + $scope.teamDetails()[0].battleStats.maxHP);
+      console.log("user HP " + $scope.teamDetails()[0].battleStats.HP);
+      console.log(fraction);
+
       healthBarUser.style.width = (fraction * 250)+"px";
 
       if (fraction > 0.5) {
@@ -186,6 +196,9 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
     //TODO: Change status message
 
     //TODO: show next button
+
+    //TODO: update HP bar
+  
   }
 
   $scope.goToAttack = function() {
@@ -212,6 +225,12 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
     // Show main options
     $scope.nextShow = false;
     $scope.mainOptions = true;
+
+    // TODO: if opponent's HP is zero, display fainted message, switch opponent Pokémon.
+    if ($scope.teamDetails()[0].battleStats.HP === 0) {
+      $scope.faintedMsg = $scope.teamDetails()[0].name + " fainted!";
+      // Display popup
+    }
   }
 
   // Carry out the calculations here and decrease the HP bar, as well as change HP value in view.
@@ -220,23 +239,26 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
 
     // TODO: Perform user move
     PokeModel.performMove($scope.teamDetails()[0], $scope.opponentDetails(), $scope.teamDetails()[0].movesUsed[index], function(effectiveness) {
+      console.log("eff: " + effectiveness);
       $scope.effectivenessMsg = effectiveness;
     }, function(missed) {
+      console.log("missed: " + missed);
       $scope.effectivenessMsg = missed;
     })
 
     // TODO: Use damage to hit opponent, changing their HP bar and HP value displayed. HP is under stats in Pokémon object
     $scope.hit(true);
 
-    // TODO: Change status message
+    // Change status message
     $scope.attackMsg = $scope.teamDetails()[0].name + " used " + $scope.teamDetails()[0].movesUsed[index].name + "!";
 
-    // TODO: Show next button
+    // Show next button and hide attacks
     $scope.nextShow = true;
+    $scope.attackOptions = false;
 
     // TODO: if opponent's HP is zero, display fainted message, switch opponent Pokémon.
     if ($scope.opponentDetails().battleStats.HP === 0) {
-      $scope.faintedMsg = $scope.opponentDetails.name + " fainted!";
+      $scope.faintedMsg = $scope.opponentDetails().name + " fainted!";
       // Display popup
     }
 

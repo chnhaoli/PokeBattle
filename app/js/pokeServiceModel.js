@@ -226,7 +226,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     }
     //Get the effectiveness;
     this.getEffectiveness = function(moveType, oppType1, oppType2){
-        var types = ['normal','fire','water','electric','grass','ice','fighting','poision','ground','flying','psychic','bug','rock','ghost','dragon','dark','steel','fairy'];
+        var types = ['normal','fire','water','electric','grass','ice','fighting','poison','ground','flying','psychic','bug','rock','ghost','dragon','dark','steel','fairy'];
         var effectivenessMatrix = [
             [  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,0.5,  0,  1,  1,0.5,  1],
             [  1,0.5,0.5,  1,  2,  2,  1,  1,  1,  1,  1,  2,0.5,  1,0.5,  1,  2,  1],
@@ -247,7 +247,14 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
             [  1,0.5,0.5,0.5,  1,  2,  1,  1,  1,  1,  1,  1,  2,  1,  1,  1,0.5,  2],
             [  1,0.5,  1,  1,  1,  1,  2,0.5,  1,  1,  1,  1,  1,  1,  2,  2,0.5,  1],
         ];
-        return effectivenessMatrix[types.indexOf(moveType)][types.indexOf(oppType1)] * (oppType2 ? effectivenessMatrix[types.indexOf(moveType)][types.indexOf(oppType2)] : 1);
+
+        var eff1 = effectivenessMatrix[types.indexOf(moveType)][types.indexOf(oppType1)];
+
+        var eff2 = oppType2 ? effectivenessMatrix[types.indexOf(moveType)][types.indexOf(oppType2)] : 1;
+
+        console.log("eff1 " + eff1);
+        console.log("eff2 " + eff2);
+        return eff1 * eff2;
     }
     //Tell the description of effectiveness;
     this.tellEffectiveness = function(effectiveness){
@@ -274,21 +281,36 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     //Get the damage //(0.4*level+2) = 42 as level 100 assumed
     this.getDamage = function(move, pokemon, oppPokemon){
         if(move.damageClass == 'physical'){
-            atk = pokemon.attack;
-            def = oppPokemon.defense;
+            atk = pokemon.battleStats.attack;
+            def = oppPokemon.battleStats.defense;
         }
         //Use status as special;
         else if(move.damageClass == 'special' || move.damageClass == 'status'){
-            atk = pokemon.spAttack;
-            def = oppPokemon.spDefense;
+            atk = pokemon.battleStats.spAttack;
+            def = oppPokemon.battleStats.spDefense;
         }
         else {
             alert('Damage class error');
         }
+
+        console.log("move type " + move.type);
+        console.log("opp type1 " + oppPokemon.type[0]);
+        console.log("opp type2 " + oppPokemon.type[1]);
+
+
         var effectiveness = that.getEffectiveness(move.type, oppPokemon.type[0], oppPokemon.type[1]);
+
         var stab = that.getSTAB(move.type, pokemon.type[0], pokemon.type[1]);
+
+        console.log("stab " + stab);
+        console.log("atk " + atk);
+        console.log("def " + def);
+        console.log("effectiveness " + effectiveness);
+
         var level = pokemon.level ? pokemon.level : 100;
-        return Math.round(((0.4*level+2)*move.power*atk/def/50+2)*effectiveness*stab*(that.randomInt(15)+85)/100);
+        var damage = Math.round(((0.4 * level + 2) * move.power * atk / def / 50 + 2) * effectiveness * stab * (that.randomInt(15)+85)/100);
+        console.log(damage);
+        return damage
     }
     //Get the pokemon HP after the damages
     this.poseDamage = function(hp, damage){
@@ -302,7 +324,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     this.performMove = function(pokemon, oppPokemon, move, callbackHit, callbackMiss){
         if(that.isOnTarget()){
             //On target;
-            oppPokemon.HP = that.poseDamage(oppPokemon.HP, that.getDamage(move, pokemon, oppPokemon));
+            oppPokemon.battleStats.HP = that.poseDamage(oppPokemon.battleStats.HP, that.getDamage(move, pokemon, oppPokemon));
 
             callbackHit(that.tellEffectiveness(that.getEffectiveness(move.type, oppPokemon.type[0], oppPokemon.type[1])), that.isDying(oppPokemon));
         }
