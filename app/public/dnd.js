@@ -69,7 +69,6 @@ var cols = document.querySelectorAll('#columns .column');
 var dragSrcEl = null;
 
 function handleDragStart(e) {
-  console.log(e);
   // Target (this) element is the source node.
   this.style.opacity = '0.4';
 

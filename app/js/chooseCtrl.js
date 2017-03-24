@@ -28,6 +28,7 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
   $scope.filter = '';
   $scope.pokeByType =' ';
   $scope.isSelected = true;
+  $scope.pokemonName=false
 
   $scope.loading = true;
 
@@ -36,8 +37,19 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
     return PokeModel.getTeam();
   };
 
+  $scope.isInList = function(name) {
+    var team = $scope.team();
+    for(var i = 0; i < team.length; ++i) {
+      if(name == team[i]) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   $scope.addToTeam = function(pokemonName){
     PokeModel.addToTeam(pokemonName);
+   // $scope.pokemonName.pokemon.name = false;
     $scope.isSelected = false;
   }
 

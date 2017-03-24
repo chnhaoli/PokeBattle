@@ -177,9 +177,12 @@
                         {{dish.readyInMinutes}} mins
                     </div> -->
                 </a>
-                <div ng-show="isSelected"><a ng-click="addToTeam(pokemonName.pokemon.name)"><img src="images/select.png" style="float: right;" /></a></div>
-                <div ng-show="!isSelected"><a ng-click="deleteFromTeam(pokemonName.pokemon.name)"><img src="images/selected.png" style="float: right;" /></a>
+                <div ng-if="!isInList(pokemonName.pokemon.name)"><a ng-click="addToTeam(pokemonName.pokemon.name)"><img src="images/select.png" style="float: right;" /></a></div>
+                <div ng-if="isInList(pokemonName.pokemon.name)"><a ng-click="deleteFromTeam(pokemonName.pokemon.name)"><img src="images/selected.png" style="float: right;" /></a>
                 </div>
+                <!--<div ng-show="isSelect"><a ng-click="addToTeam(pokemonName.pokemon.name)"><img src="images/select.png" style="float: right;" /></a></div>
+                <div ng-show="!isSelected"><a ng-click="deleteFromTeam(pokemonName.pokemon.name)"><img src="images/selected.png" style="float: right;" /></a>
+                </div>-->
             <!-- </button> -->
         </div>
     </div>
