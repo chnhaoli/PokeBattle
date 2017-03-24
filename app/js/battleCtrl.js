@@ -14,6 +14,12 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
   $scope.changeOptions = false;
   $scope.attackOptions = false;
   $scope.itemOptions = false;
+  $scope.error = false;
+
+  // Status messages
+  $scope.attackMsg = "";
+  $scope.damageMsg = "";
+  $scope.faintedMsg = "";
 
   // Getting the team array with only Pokémon names (will we need to this here later?)
   $scope.team = function() {
@@ -61,6 +67,8 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
           }, function(error) {
             errorCallback(error);
             // TODO: display the error
+            $scope.loading = false;
+            $scope.error = true;
           })
         }
 
@@ -68,14 +76,17 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
     }
   }
 
+
   // Load the details of each Pokémon on the team so they are available to use in the scope.
   $scope.getTeamDetails = function() {
     if ($scope.teamLength === 0) {
       $scope.getTeamDetailsFinished = true;
     }
 
+
     PokeModel.getTeamDetails(function(index, data) {
       $scope.teamDetails[index] = data;
+      // If teamDetails has the same number of Pokémons as team, then all Pokémon have been loaded. Proceed with getting moves.
       if ($scope.teamDetails.length === $scope.teamLength) {
 
         // Get moves of whole team
@@ -90,12 +101,17 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
           }
         }, function(error) {
           //TODO: display the error
+          $scope.loading = false;
+          $scope.error = true;
+
         });
       }
 
     }, function(error) {
       console.log(error);
       // TODO: display the error
+      $scope.loading = false;
+      $scope.error = true;
     });
   }
 
@@ -117,6 +133,8 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
     }, function(error) {
       console.log(error)
       //TODO: display the error
+      $scope.loading = false;
+      $scope.error = true;
     })
   }
 
@@ -134,9 +152,14 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
 
   // Switches the current Pokémon with the chosen Pokémon.
   $scope.changePokemon = function(index) {
+    //TODO: change so that I directly change the teamDetails in the model.
     var temp = $scope.teamDetails[0];
     $scope.teamDetails[0] = $scope.teamDetails[index];
     $scope.teamDetails[index] = temp;
+
+    //TODO: Change status message
+
+    //TODO: show next button
   }
 
   $scope.goToAttack = function() {
@@ -144,21 +167,32 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
     $scope.attackOptions = true;
   }
 
+  //TODO: this function is called when next button is clicked.
+  $scope.next = function() {
+    // Perform opponent move
+    PokeModel.performMove();
+    // Show main options
+  }
+
   // Carry out the calculations here and decrease the HP bar, as well as change HP value in view.
   $scope.attack = function(index) {
-    var power = $scope.teamDetails[0].movesUsed[index].power;
-    var accuracy = $scope.teamDetails[0].movesUsed[index].accuracy;
-    var level = 99;
-    // Get the following values from Pokémon data. Currently example values
-    var attack = 20;
-    var defense = 20;
-    var critical = 1.5;
-    var typeModifier = 1;
-    var modifier = critical * typeModifier;
-    // Use the power, attack, defense, and modifier to calculate the damage
-    var damage = ((((2 * level / 5 + 2) * power * attack / defense) / 50) + 2) * modifier;
-    console.log(damage);
-    // Use damage to hit opponent, changing their HP bar and HP value displayed
+
+
+    // TODO: Perform user move
+    PokeModel.performMove($scope.teamDetails[0], $scope.opponentDetails[0], $scope.teamDetails[0].movesUsed[index], function(effectiveness) {
+      $scope.effectivenessMsg = effectiveness;
+    })
+    // TODO: Show next button
+
+
+    // TODO: Use damage to hit opponent, changing their HP bar and HP value displayed. HP is under stats in Pokémon object
+
+
+    // TODO: Change status message
+    $scope.attackMsg = $scope.teamDetails[0].name + " used " + $scope.teamDetails[0].movesUsed[index].name + "!";
+    $scope.damageMsg = "The attack did " + damage + " damage!";
+
+    // TODO: if opponent's HP is zero, display fainted message
 
   }
 
@@ -177,5 +211,6 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
     }
 
   }
+
 
 })
