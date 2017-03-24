@@ -1,5 +1,8 @@
-<div class="loadingGifDiv" ng-show="loading">
-  <img id="loadingGif" src="../images/PikaLoading.gif">
+<div class="loadingGif" ng-show="loading">
+</div>
+
+<div class="error" ng-show="error">
+  <p>There was an error in loading the data. Please try again</p>
 </div>
 
 <div class="row">
@@ -24,6 +27,12 @@
 
     <p>{{opponentDetails[0].name}}</p>
   </div>
+</div>
+
+<div class="statusMsg">
+  <p>{{attackMsg}}</p>
+  <p>{{damageMsg}}</p>
+  <p>{{faintedMsg}}</p>
 </div>
 
 <div class="buttons" ng-show="mainOptions">
