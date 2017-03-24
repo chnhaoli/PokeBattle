@@ -1,25 +1,38 @@
 pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
 
+  // Call writeTeamDetails and getRandomOpponent upon page load
+  PokeModel.writeTeamDetails();
+  PokeModel.getRandomOpponent();
+
   // Team and opponent arrays of pokemon objects
-  $scope.teamDetails = [];
-  $scope.opponentDetails = [];
+  $scope.teamDetails = function() {
+    return PokeModel.getTeamDetails();
+  };
+
+  $scope.opponentDetails = function() {
+    return PokeModel.getOppDetails();
+  };
 
   // Booleans to check if loading has finished
   $scope.getTeamDetailsFinished = false;
   $scope.getRandomOpponentFinished = false;
-  $scope.loading = true;
+  $scope.loading = function() {
+    return PokeModel.getIsLoading();
+  }
 
   // Booleans used to hide and show subviews
   $scope.mainOptions = true;
   $scope.changeOptions = false;
   $scope.attackOptions = false;
   $scope.itemOptions = false;
+  $scope.nextShow = false;
   $scope.error = false;
 
   // Status messages
   $scope.attackMsg = "";
   $scope.damageMsg = "";
   $scope.faintedMsg = "";
+  $scope.effectivenessMsg = "";
 
   // Getting the team array with only Pokémon names (will we need to this here later?)
   $scope.team = function() {
@@ -30,23 +43,44 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
   $scope.teamLength = PokeModel.getTeam().length;
 
   // Randomly hit the health bar - testing
-  $scope.hit = function() {
+  $scope.hit = function(user) {
     // How to do this without document.getElementById?
-    var healthBar = document.getElementById("healthBar");
-    var randomNum = Math.random();
-    healthBar.style.width = (randomNum * 250)+"px";
+    var healthBarUser = document.getElementById("healthBarUser");
+    var healthBarOpp = document.getElementById("healthBarOpp");
 
-    if (randomNum > 0.5) {
-      healthBar.style["background-color"] = "green";
-    } else if (randomNum < 0.5 && randomNum > 0.2) {
-      healthBar.style["background-color"] = "orange";
-    } else if (randomNum < 0.2) {
-      healthBar.style["background-color"] = "red";
+    var fraction = user ? $scope.teamDetails[0].battleStats.HP / $scope.teamDetails[0].battleStats.maxHP : $scope.opponentDetails.battleStats.HP / $scope.opponentDetails.battleStats.maxHP;
+
+    if (user) {
+      healthBarOpp.style.width = (fraction * 250)+"px";
+
+      if (fraction > 0.5) {
+        healthBarOpp.style["background-color"] = "green";
+      } else if (fraction < 0.5 && fraction > 0.2) {
+        healthBarOpp.style["background-color"] = "orange";
+      } else if (fraction < 0.2) {
+        healthBarOpp.style["background-color"] = "red";
+      }
+    }
+
+    else {
+      healthBarUser.style.width = (fraction * 250)+"px";
+
+      if (fraction > 0.5) {
+        healthBarUser.style["background-color"] = "green";
+      } else if (fraction < 0.5 && fraction > 0.2) {
+        healthBarUser.style["background-color"] = "orange";
+      } else if (fraction < 0.2) {
+        healthBarUser.style["background-color"] = "red";
+      }
+
     }
   }
 
+
   // Load details of each Pokémon move used, for each Pokémon in the team. We will have to call 16 different API endpoints...
   // TODO: Add a check so I can't add two of the save moves
+  /*
+
   $scope.getMovesOfTeam = function(callback, errorCallback) {
     for (var key in $scope.teamDetails) {
       // Create a new attribute called movesUsed in the Pokémon object.
@@ -141,7 +175,7 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
   // Call getRandomOpponent() on page start
   $scope.getRandomOpponent();
 
-
+  */
 
 
   // Options menu showing and hiding, and executing user commands
@@ -170,8 +204,22 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
   //TODO: this function is called when next button is clicked.
   $scope.next = function() {
     // Perform opponent move
-    PokeModel.performMove();
+    var randomNum = Math.floor(Math.random() * 4);
+    PokeModel.performMove($scope.opponentDetails, $scope.teamDetails[0], $scope.opponentDetails.movesUsed[randomNum], function(effectiveness) {
+      $scope.effectivenessMsg = effectiveness;
+    }, function(missed) {
+      $scope.effectivenessMsg = missed;
+    });
+
+    // TODO: Change status message
+    $scope.attackMsg = $scope.opponentDetails.name + " used " + $scope.opponentDetails.movesUsed[randomNum].name + "!";
+
+    // TODO: Use damage to hit opponent, changing their HP bar and HP value displayed. HP is under stats in Pokémon object
+    $scope.hit(false);
+
     // Show main options
+    $scope.nextShow = false;
+    $scope.mainOptions = true;
   }
 
   // Carry out the calculations here and decrease the HP bar, as well as change HP value in view.
@@ -179,20 +227,26 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
 
 
     // TODO: Perform user move
-    PokeModel.performMove($scope.teamDetails[0], $scope.opponentDetails[0], $scope.teamDetails[0].movesUsed[index], function(effectiveness) {
+    PokeModel.performMove($scope.teamDetails[0], $scope.opponentDetails, $scope.teamDetails[0].movesUsed[index], function(effectiveness) {
       $scope.effectivenessMsg = effectiveness;
+    }, function(missed) {
+      $scope.effectivenessMsg = missed;
     })
-    // TODO: Show next button
-
 
     // TODO: Use damage to hit opponent, changing their HP bar and HP value displayed. HP is under stats in Pokémon object
-
+    $scope.hit(true);
 
     // TODO: Change status message
     $scope.attackMsg = $scope.teamDetails[0].name + " used " + $scope.teamDetails[0].movesUsed[index].name + "!";
-    $scope.damageMsg = "The attack did " + damage + " damage!";
 
-    // TODO: if opponent's HP is zero, display fainted message
+    // TODO: Show next button
+    $scope.nextShow = true;
+
+    // TODO: if opponent's HP is zero, display fainted message, switch opponent Pokémon.
+    if ($scope.opponentDetails.battleStats.HP === 0) {
+      $scope.faintedMsg = $scope.opponentDetails.name + " fainted!";
+      // Display popup
+    }
 
   }
 

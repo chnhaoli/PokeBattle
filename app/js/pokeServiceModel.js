@@ -64,6 +64,10 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
 
         }
     });
+
+    this.getIsLoading = function() {
+      return isLoading;
+    }
     //GET: pokemon for choosing;
     this.getAllPokemon = function(callback, errorCallback) {
         isLoading = true;
@@ -137,7 +141,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     this.getMoves = function(pokemon){
         pokemon.movesUsed = [];
         for (var i = 0; i < 4; i++){
-            that.GetMove.get({moveId : pokemon.moves[that.randomInt(pokemon.moves.length)].name)}, function(index) {
+            that.GetMove.get({moveId : pokemon.moves[that.randomInt(pokemon.moves.length)].name}, function(index) {
                 return function(data) {
                     pokemon.movesUsed[index] = {};
                     pokemon.movesUsed[index].name = data.name;
@@ -176,6 +180,11 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     this.getTeamDetails = function() {
         return teamDetails;
     }
+
+    this.getOppDetails = function() {
+      return opponentDetails;
+    }
+    
     //Adds pokemon to selected team;
     this.addToTeam = function(pokemonName) {
         team.push(pokemonName);
@@ -289,7 +298,8 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     this.performMove = function(pokemon, oppPokemon, move, callbackHit, callbackMiss){
         if(that.isOnTarget()){
             //On target;
-            oppPokemon.HP = that.poseDamage(oppPokemon.HP, that.getDamage(move, pokemon, oppPokemon);
+            oppPokemon.HP = that.poseDamage(oppPokemon.HP, that.getDamage(move, pokemon, oppPokemon));
+
             callbackHit(that.tellEffectiveness(that.getEffectiveness(move.type, oppPokemon.type[0], oppPokemon.type[1])), that.isDying(oppPokemon));
         }
         else{
