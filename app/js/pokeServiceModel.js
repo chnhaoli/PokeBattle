@@ -137,7 +137,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     this.getMoves = function(pokemon){
         pokemon.movesUsed = [];
         for (var i = 0; i < 4; i++){
-            that.GetMove.get({moveId : pokemon.moves[that.randomInt(pokemon.moves.length)].name)}, function(index) {
+            that.GetMove.get({moveId : pokemon.moves[that.randomInt(pokemon.moves.length)].name}, function(index) {
                 return function(data) {
                     pokemon.movesUsed[index] = {};
                     pokemon.movesUsed[index].name = data.name;
@@ -160,7 +160,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
                 return function(data) {
                     teamDetails[index] = data;
                     //teamDetails[index].level = null;
-                    teamDetails[index].statsUsed = that.calcStats(data.stats);
+                    teamDetails[index].battleStats = that.calcStats(data.stats);
                     teamDetails[index].type = that.restructureTypes(data.types);
                     that.getMoves(teamDetails[index]);
                     if (teamDetails[index].movesUsed[3].damageClass && teamDetails[3].type[0]){
@@ -193,7 +193,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
         this.GetPokemon.get(randomNum, function(data) {
             opponentDetails = {};
             opponentDetails = data;
-            opponentDetails.statsUsed = that.calcStats(data.stats);
+            opponentDetails.battleStats = that.calcStats(data.stats);
             opponentDetails.type = that.restructureTypes(data.types);
             that.getMoves(opponentDetails);
             if (opponentDetails.movesUsed[3].damageClass && opponentDetails.type[0]){
@@ -289,7 +289,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     this.performMove = function(pokemon, oppPokemon, move, callbackHit, callbackMiss){
         if(that.isOnTarget()){
             //On target;
-            oppPokemon.HP = that.poseDamage(oppPokemon.HP, that.getDamage(move, pokemon, oppPokemon);
+            oppPokemon.HP = that.poseDamage(oppPokemon.HP, that.getDamage(move, pokemon, oppPokemon));
             callbackHit(that.tellEffectiveness(that.getEffectiveness(move.type, oppPokemon.type[0], oppPokemon.type[1])), that.isDying(oppPokemon));
         }
         else{
