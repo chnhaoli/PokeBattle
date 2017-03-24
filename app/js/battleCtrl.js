@@ -34,21 +34,13 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
   $scope.faintedMsg = "";
   $scope.effectivenessMsg = "";
 
-  // Getting the team array with only Pokémon names (will we need to this here later?)
-  $scope.team = function() {
-    return PokeModel.getTeam();
-  }
-
-  // Getting the length of the team array with only Pokémon names.
-  $scope.teamLength = PokeModel.getTeam().length;
-
   // Randomly hit the health bar - testing
   $scope.hit = function(user) {
     // How to do this without document.getElementById?
     var healthBarUser = document.getElementById("healthBarUser");
     var healthBarOpp = document.getElementById("healthBarOpp");
 
-    var fraction = user ? $scope.teamDetails[0].battleStats.HP / $scope.teamDetails[0].battleStats.maxHP : $scope.opponentDetails.battleStats.HP / $scope.opponentDetails.battleStats.maxHP;
+    var fraction = user ? $scope.teamDetails()[0].battleStats.HP / $scope.teamDetails()[0].battleStats.maxHP : $scope.opponentDetails().battleStats.HP / $scope.opponentDetails().battleStats.maxHP;
 
     if (user) {
       healthBarOpp.style.width = (fraction * 250)+"px";
@@ -187,9 +179,9 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
   // Switches the current Pokémon with the chosen Pokémon.
   $scope.changePokemon = function(index) {
     //TODO: change so that I directly change the teamDetails in the model.
-    var temp = $scope.teamDetails[0];
-    $scope.teamDetails[0] = $scope.teamDetails[index];
-    $scope.teamDetails[index] = temp;
+    var temp = $scope.teamDetails()[0];
+    $scope.teamDetails()[0] = $scope.teamDetails()[index];
+    $scope.teamDetails()[index] = temp;
 
     //TODO: Change status message
 
@@ -205,14 +197,14 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
   $scope.next = function() {
     // Perform opponent move
     var randomNum = Math.floor(Math.random() * 4);
-    PokeModel.performMove($scope.opponentDetails, $scope.teamDetails[0], $scope.opponentDetails.movesUsed[randomNum], function(effectiveness) {
+    PokeModel.performMove($scope.opponentDetails(), $scope.teamDetails()[0], $scope.opponentDetails().movesUsed[randomNum], function(effectiveness) {
       $scope.effectivenessMsg = effectiveness;
     }, function(missed) {
       $scope.effectivenessMsg = missed;
     });
 
     // TODO: Change status message
-    $scope.attackMsg = $scope.opponentDetails.name + " used " + $scope.opponentDetails.movesUsed[randomNum].name + "!";
+    $scope.attackMsg = $scope.opponentDetails().name + " used " + $scope.opponentDetails().movesUsed[randomNum].name + "!";
 
     // TODO: Use damage to hit opponent, changing their HP bar and HP value displayed. HP is under stats in Pokémon object
     $scope.hit(false);
@@ -227,7 +219,7 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
 
 
     // TODO: Perform user move
-    PokeModel.performMove($scope.teamDetails[0], $scope.opponentDetails, $scope.teamDetails[0].movesUsed[index], function(effectiveness) {
+    PokeModel.performMove($scope.teamDetails()[0], $scope.opponentDetails(), $scope.teamDetails()[0].movesUsed[index], function(effectiveness) {
       $scope.effectivenessMsg = effectiveness;
     }, function(missed) {
       $scope.effectivenessMsg = missed;
@@ -237,13 +229,13 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
     $scope.hit(true);
 
     // TODO: Change status message
-    $scope.attackMsg = $scope.teamDetails[0].name + " used " + $scope.teamDetails[0].movesUsed[index].name + "!";
+    $scope.attackMsg = $scope.teamDetails()[0].name + " used " + $scope.teamDetails()[0].movesUsed[index].name + "!";
 
     // TODO: Show next button
     $scope.nextShow = true;
 
     // TODO: if opponent's HP is zero, display fainted message, switch opponent Pokémon.
-    if ($scope.opponentDetails.battleStats.HP === 0) {
+    if ($scope.opponentDetails().battleStats.HP === 0) {
       $scope.faintedMsg = $scope.opponentDetails.name + " fainted!";
       // Display popup
     }
