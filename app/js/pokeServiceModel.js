@@ -56,11 +56,44 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     //Cache of all the skills of chosen pokemons.
     //{}
 
+    //Offset for listing pokemons;
+    var offset = 0;
+    //API: pokemon;
+    this.GetPokemon = $resource('http://pokeapi.co/api/v2/pokemon/:pokemonNameOrId', {}, {
+        get: {
+
+        }
+    });
+    //GET: pokemon for choosing;
+    this.getAllPokemon = function(callback, errorCallback) {
+        isLoading = true;
+        this.GetPokemon.get({offset: offset}, function(data) {
+            offset += 20;
+            console.log(offset);
+            isLoading = false;
+            callback(data);
+        }, function(error) {
+            errorCallback(error);
+        })
+    }
+    //Clear the offset;
+    this.clearOffset = function() {
+        offset = 0;
+    }
+    //GET: Get pokemon for searching;
+    this.getPokemon = function(pokemonNameOrId, callback, errorCallback) {
+        isLoding = true;
+        this.GetPokemon.get({pokemonNameOrId: pokemonNameOrId}, function(data) {
+            isLoading = false;
+            callback(data);
+        }, function(error) {
+            errorCallback(error);
+        })
+    }
     //Get a randomized interger between 0 and max (default inclusive).
     this.randomInt = function(max, exclusive){
         return Math.floor(Math.random() * (max + (exclusive ? 0 : 1)));
     }
-
     //Calculate the stats as level 100 assumed
     this.calcStats = function (pokemon){
         var atkIV = that.randomInt(15);
@@ -112,28 +145,27 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
                     pokemon.movesUsed[index].power = data.power;
                     pokemon.movesUsed[index].accuracy = data.accuracy;
                     pokemon.movesUsed[index].damageClass = data.damage_class.name;
+
                 }
-            }(i))
+            }(i));
         }
     }
-    //API: pokemon;
-    this.GetPokemon = $resource('http://pokeapi.co/api/v2/pokemon/:pokemonNameOrId', {}, {
-        get: {
-
-        }
-    });
     // GET: For all Pokémon names in team array, gets Pokémon details and passes that into an array teamDetails.
     // Special function in a function passing in key as index, called directly, ensuring the key gets updated from 0 to team.length-1.
     this.writeTeamDetails = function() {
+        isLoading = true;
         for (var key in team) {
-            var pokemonName = team[key];
-            that.getPokemon(pokemonName, function(index) {
+            var pokemonName = team[key].name;
+            that.GetPokemon.get(pokemonName, function(index) {
                 return function(data) {
                     teamDetails[index] = data;
                     //teamDetails[index].level = null;
                     teamDetails[index].statsUsed = that.calcStats(data.stats);
                     teamDetails[index].type = that.restructureTypes(data.types);
                     that.getMoves(teamDetails[index]);
+                    if (teamDetails[index].movesUsed[3].damageClass && teamDetails[3].type[0]){
+                        isLoading = false;
+                    }
                 }
             }(key), function (error) {
                 errorCallback(error);
@@ -143,30 +175,6 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     //Returns the team details;
     this.getTeamDetails = function() {
         return teamDetails;
-    }
-    //Offset for listing pokemons;
-    var offset = 0;
-    //GET: pokemon for choosing;
-    this.getAllPokemon = function(callback, errorCallback) {
-        this.GetPokemon.get({offset: offset}, function(data) {
-            offset += 20;
-            console.log(offset);
-            callback(data);
-        }, function(error) {
-            errorCallback(error);
-        })
-    }
-    //Clear the offset;
-    this.clearOffset = function() {
-        offset = 0;
-    }
-    //GET: Get pokemon for searching;
-    this.getPokemon = function(pokemonNameOrId, callback, errorCallback) {
-        this.GetPokemon.get({pokemonNameOrId: pokemonNameOrId}, function(data) {
-            callback(data);
-        }, function(error) {
-            errorCallback(error);
-        })
     }
     //Adds pokemon to selected team;
     this.addToTeam = function(pokemonName) {
@@ -180,13 +188,17 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     }
     //GET: Get a random opponent;
     this.getRandomOpponent = function() {
+        isLoading = false;
         var randomNum = Math.floor(Math.random() * 150) + 1
-        this.getPokemon(randomNum, function(data) {
+        this.GetPokemon.get(randomNum, function(data) {
             opponentDetails = {};
             opponentDetails = data;
             opponentDetails.statsUsed = that.calcStats(data.stats);
             opponentDetails.type = that.restructureTypes(data.types);
             that.getMoves(opponentDetails);
+            if (opponentDetails.movesUsed[3].damageClass && opponentDetails.type[0]){
+                isLoading = false;
+            }
         }, function(error) {
             console.log(error);
         })
