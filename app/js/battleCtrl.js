@@ -177,6 +177,7 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
   // Carry out the calculations here and decrease the HP bar, as well as change HP value in view.
   $scope.attack = function(index) {
 
+
     // TODO: Perform user move
     PokeModel.performMove($scope.teamDetails[0], $scope.opponentDetails[0], $scope.teamDetails[0].movesUsed[index], function(effectiveness) {
       $scope.effectivenessMsg = effectiveness;
@@ -192,8 +193,6 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
     $scope.damageMsg = "The attack did " + damage + " damage!";
 
     // TODO: if opponent's HP is zero, display fainted message
-
-
 
   }
 
