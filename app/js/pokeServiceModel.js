@@ -83,6 +83,16 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
 
     }
 
+    this.deleteFromTeam = function(pokemonName) {
+      for(key in team){
+        if(pokemonName == team[key]){
+            team.splice(key,1);
+        }
+        break;
+      }
+    }
+
+
     this.getTeam = function() {
       return team;
     }

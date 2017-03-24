@@ -1,7 +1,6 @@
 pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialogs, PokeModel) {
 
   // Initial scope values
-  $scope.allPokemonNames = [];
   $scope.selectedPokemonDetail = [];
 
   $scope.types = [
@@ -28,39 +27,30 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
   $scope.type = '1';
   $scope.filter = '';
   $scope.pokeByType =' ';
+  $scope.isSelected = true;
 
   $scope.loading = true;
 
   //Pokemon
-
   $scope.team = function() {
     return PokeModel.getTeam();
   };
 
-  // $scope.getAllPokemon = function() {
-  //   $scope.loading = true;
-  //   PokeModel.getAllPokemon(function(results) {
-  //     for (key in results.results) {
-  //       var pokemon = results.results[key];
-  //       $scope.allPokemonNames.push(pokemon.name.replace(/-/g, ""));
-  //       //console.log(pokemon.name.replace(/-/g, ""));
-  //     }
-  //     $scope.loading = false;
-  //   }, function(error) {
-  //     console.log(error);
-  //     // TODO: implement error message on view
-  //   })
-  // }
+  $scope.addToTeam = function(pokemonName){
+    PokeModel.addToTeam(pokemonName);
+    $scope.isSelected = false;
+  }
+
+  $scope.deleteFromTeam = function(pokemonName){
+    PokeModel.deleteFromTeam(pokemonName);
+    PokeModel.getTeam();
+    $scope.isSelected = true;
+  }
 
 
-  // $scope.getAllPokemon();
-
-  // Modal popup - testing
-
+  //Message box
   var $ctrl = this;
-
   $ctrl.animationsEnabled = true;
-
   $scope.open = function (size, pokemonName, parentSelector) {
     console.log("open");
       //Get specific pokemon's info
@@ -96,6 +86,16 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
       $ctrl.animationsEnabled = !$ctrl.animationsEnabled;
     };
 
+
+    // $ctrl.ok = function () {
+    //   $scope.isSelected = false;
+    // //$uibModalInstance.close($ctrl.selected.item);
+    //   $uibModalInstance.close();
+    //   PokeModel.addToTeam($ctrl.pokemonName.name);
+    // };
+
+
+    //get pokemon by type
     $scope.getPokeByType = function(id) {
       $scope.isLoading = true;
       $scope.isError = false;
@@ -106,11 +106,12 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
         $scope.isLoading = false;
         $scope.isError = true;
       });
-      console.log("exit");
     }
 
     $scope.getPokeByType($scope.type);
 
+
+    //get detail information of a pokemon
     $scope.getPokemonDetail = function(pokemonName) {
       $scope.isLoading = true;
       $scope.isError = false;
@@ -126,6 +127,7 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
     }
 
 
+    // Search pokemon with type and filter
     $scope.searchPoke = function(filter, type){
       var searchresult = [];
       if(filter === ''){
@@ -134,9 +136,7 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
       else{     
         PokeModel.GetPokeByType.get({typeId: type}, function(data){
           for (i in data.pokemon){
-            console.log(data.pokemon[i].pokemon.name);
             if(filter === data.pokemon[i].pokemon.name){
-              console.log("hahaahahahqusiba");
               searchresult.push(data.pokemon[i]);
             }}
             $scope.pokeByType = searchresult; 
@@ -144,27 +144,6 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
             console.log("Something went wrong");
           });
       }}
-    // $scope.isLoading = true;
-    // $scope.isError = false;
-    // PokeModel.GetPokemon.get({pokemonNameOrId:$scope.filter},function(data){
-    //   console.log("hellohahahaha");
-    //   console.log(data);
-    //   $scope.isLoading = false;
-    // },function(data){
-    //   $scope.isLoading = false;
-    //   $scope.isError = true;
-    // });
-
-
-  // Old Modal popup
-  /*$scope.alert = function(pokemonName) {
-    var dialog = dialogs.confirm("Confirm choice", "Choose " + pokemonName + " to be on your team?");
-    dialog.result.then(function(btn) {
-      $scope.team.push(pokemonName);
-    }, function(btn) {
-      // Do nothing
-    })
-  }*/
 
 
   // Drag and drop - testing
@@ -246,46 +225,11 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
   //search bar function 
 
 
+});
 
-  var $ctrl = this;
-
-  $ctrl.animationsEnabled = true;
-
-  $scope.open = function (size, pokemonName, parentSelector) {
-    console.log("open");
-      //Get specific pokemon's info
-      var parentElem = parentSelector ? angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
-      var modalInstance = $uibModal.open({
-        animation: $ctrl.animationsEnabled,
-        ariaLabelledBy: 'modal-title',
-        ariaDescribedBy: 'modal-body',
-        templateUrl: 'myModalContent.html',
-        controller: 'ModalInstanceCtrl',
-        controllerAs: '$ctrl',
-        size: size,
-        appendTo: parentElem,
-        resolve: {
-          items: function () {
-            return $ctrl.items;
-          },
-          pokemonName: function() {
-            console.log($scope.selectedPokemonDetail.forms.name);
-            return $scope.selectedPokemonDetailS;
-          }
-        }
-      });
-
-      modalInstance.result.then(function (selectedItem) {
-        $ctrl.selected = selectedItem;
-      }, function () {
-        $log.info('Modal dismissed at: ' + new Date());
-      });
-    };
-  })
 
 // Please note that $uibModalInstance represents a modal window (instance) dependency.
 // It is not the same as the $uibModal service used above.
-
 pokeBattleApp.controller('ModalInstanceCtrl', function ($uibModalInstance, pokemonName, PokeModel) {
 
   var $ctrl = this;
@@ -303,8 +247,7 @@ pokeBattleApp.controller('ModalInstanceCtrl', function ($uibModalInstance, pokem
 });
 
 
-
-//progressbar
+//progressbar controller
 pokeBattleApp.controller('ProgressDemoCtrl', function ($scope) {
   $scope.max = 200;
 
