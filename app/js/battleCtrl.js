@@ -89,6 +89,8 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
 
   // Switches the current Pokémon with the chosen Pokémon.
   $scope.changePokemon = function(index) {
+    // Reset backDisabled
+    $scope.backDisabled = false;
     // Change Pokémon if HP != 0
     if ($scope.teamDetails()[index].battleStats.HP === 0) {
       $scope.resetMessages();
