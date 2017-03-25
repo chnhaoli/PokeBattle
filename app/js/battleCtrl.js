@@ -14,8 +14,6 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
   };
 
   // Booleans to check if loading has finished
-  $scope.getTeamDetailsFinished = false;
-  $scope.getRandomOpponentFinished = false;
   $scope.loading = function() {
     return PokeModel.getIsLoading();
   }
@@ -26,159 +24,62 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
   $scope.attackOptions = false;
   $scope.itemOptions = false;
   $scope.nextShow = false;
+  $scope.nextOppShow = false;
   $scope.error = false;
+  $scope.backDisabled = false;
 
   // Status messages
-  $scope.attackMsg = "";
-  $scope.damageMsg = "";
-  $scope.faintedMsg = "";
-  $scope.effectivenessMsg = "";
+  $scope.resetMessages = function() {
+    $scope.changeMsg = "";
+    $scope.attackMsg = "";
+    $scope.damageMsg = "";
+    $scope.faintedMsg = "";
+    $scope.effectivenessMsg = "";
+    $scope.promptMsg = "";
+  }
+  // Initiating messages
+  $scope.resetMessages();
 
-  // Randomly hit the health bar - testing
-  $scope.hit = function(user) {
+  // Update user's health bar if user = true, else update opponent's health bar.
+  $scope.updateHealthBar = function(user) {
 
+    var oppRatio = $scope.opponentDetails().battleStats.HP / $scope.opponentDetails().battleStats.maxHP;
+
+    var userRatio = $scope.teamDetails()[0].battleStats.HP / $scope.teamDetails()[0].battleStats.maxHP;
+
+    var fraction = user ? userRatio : oppRatio;
 
     // How to do this without document.getElementById?
-    var healthBarUser = document.getElementById("healthBarUser");
-    var healthBarOpp = document.getElementById("healthBarOpp");
+    var healthBar = user ? document.getElementById("healthBarUser") : document.getElementById("healthBarOpp");
 
-    var fraction = user ? $scope.opponentDetails().battleStats.HP / $scope.opponentDetails().battleStats.maxHP : $scope.teamDetails()[0].battleStats.HP / $scope.teamDetails()[0].battleStats.maxHP;
+    healthBar.style.width = (fraction * 250)+"px";
 
-    if (user) {
-      console.log("opp maxHP " + $scope.opponentDetails().battleStats.maxHP);
-      console.log("opp HP " + $scope.opponentDetails().battleStats.HP);
-      console.log(fraction);
-
-      healthBarOpp.style.width = (fraction * 250)+"px";
-
-      if (fraction > 0.5) {
-        healthBarOpp.style["background-color"] = "green";
-      } else if (fraction < 0.5 && fraction > 0.2) {
-        healthBarOpp.style["background-color"] = "orange";
-      } else if (fraction < 0.2) {
-        healthBarOpp.style["background-color"] = "red";
-      }
+    if (fraction > 0.5) {
+      healthBar.style["background-color"] = "green";
+    } else if (fraction < 0.5 && fraction > 0.2) {
+      healthBar.style["background-color"] = "orange";
+    } else if (fraction < 0.2) {
+      healthBar.style["background-color"] = "red";
     }
 
-    else {
-      console.log("user maxHP " + $scope.teamDetails()[0].battleStats.maxHP);
-      console.log("user HP " + $scope.teamDetails()[0].battleStats.HP);
-      console.log(fraction);
-
-      healthBarUser.style.width = (fraction * 250)+"px";
-
-      if (fraction > 0.5) {
-        healthBarUser.style["background-color"] = "green";
-      } else if (fraction < 0.5 && fraction > 0.2) {
-        healthBarUser.style["background-color"] = "orange";
-      } else if (fraction < 0.2) {
-        healthBarUser.style["background-color"] = "red";
-      }
-
-    }
   }
 
+  // The user's turn if userTurn = true, else opponent's turn. The user's action was to change Pokémon if changedPokemon = true, else the user's action was to attack.
+  $scope.updateHP = function(userTurn, changedPokemon) {
 
-  // Load details of each Pokémon move used, for each Pokémon in the team. We will have to call 16 different API endpoints...
-  // TODO: Add a check so I can't add two of the save moves
-  /*
-
-  $scope.getMovesOfTeam = function(callback, errorCallback) {
-    for (var key in $scope.teamDetails) {
-      // Create a new attribute called movesUsed in the Pokémon object.
-      $scope.teamDetails[key].movesUsed = [];
-      var pokemon = $scope.teamDetails[key];
-
-      var iterating = function(correctPokemon) {
-
-        for (var i = 0; i < 4; i++) {
-          var moveIndex = Math.floor(Math.random() * correctPokemon.moves.length-1) + 1;
-          var moveUrl = correctPokemon.moves[moveIndex].move.url;
-          // Extracting the move ID from the move's url so we can use it to call the moves API
-          var moveId = moveUrl.match(/\/\d+/)[0].substring(1);
-          PokeModel.GetMove.get({moveId: moveId}, function(data) {
-            console.log(data);
-            correctPokemon.movesUsed.push(data);
-            callback(data);
-          }, function(error) {
-            errorCallback(error);
-            // TODO: display the error
-            $scope.loading = false;
-            $scope.error = true;
-          })
-        }
-
-      }(pokemon)
-    }
-  }
-
-
-  // Load the details of each Pokémon on the team so they are available to use in the scope.
-  $scope.getTeamDetails = function() {
-    if ($scope.teamLength === 0) {
-      $scope.getTeamDetailsFinished = true;
+    // 1. User's turn and user changes Pokémon
+    // 2. Opponent's turn and opponent attacks
+    if ((userTurn && changedPokemon) || (!userTurn && !changedPokemon)) {
+      $scope.updateHealthBar(true);
     }
 
-
-    PokeModel.getTeamDetails(function(index, data) {
-      $scope.teamDetails[index] = data;
-      // If teamDetails has the same number of Pokémons as team, then all Pokémon have been loaded. Proceed with getting moves.
-      if ($scope.teamDetails.length === $scope.teamLength) {
-
-        // Get moves of whole team
-        $scope.getMovesOfTeam(function(data) {
-          // If the last Pokémon on the team's moves have been filled, we have finished getting team details.
-          if ($scope.teamDetails[$scope.teamDetails.length-1].movesUsed.length === 4) {
-            $scope.getTeamDetailsFinished = true;
-            if ($scope.getTeamDetailsFinished === true && $scope.getRandomOpponentFinished === true) {
-              // Ready to rumble!
-              $scope.loading = false;
-            }
-          }
-        }, function(error) {
-          //TODO: display the error
-          $scope.loading = false;
-          $scope.error = true;
-
-        });
-      }
-
-    }, function(error) {
-      console.log(error);
-      // TODO: display the error
-      $scope.loading = false;
-      $scope.error = true;
-    });
+    // 1. User's turn and user attacks
+    // 2. Opponent's turn and opponent changes Pokémon
+    else if ((userTurn && !changedPokemon) || (!userTurn && changedPokemon)) {
+      console.log("hello");
+      $scope.updateHealthBar(false);
+    }
   }
-
-  // Call getTeamDetails() on page start
-  $scope.getTeamDetails();
-
-  // Generate a random opponent
-  $scope.getRandomOpponent = function() {
-    PokeModel.getRandomOpponent(function(data) {
-      // Always save to the 0th index, new opponenets will take place of old ones.
-      $scope.opponentDetails[0] = data;
-      $scope.getRandomOpponentFinished = true;
-
-      if ($scope.getTeamDetailsFinished === true && $scope.getRandomOpponentFinished === true) {
-        // Ready to rumble!
-        $scope.loading = false;
-      }
-
-    }, function(error) {
-      console.log(error)
-      //TODO: display the error
-      $scope.loading = false;
-      $scope.error = true;
-    })
-  }
-
-  // Call getRandomOpponent() on page start
-  $scope.getRandomOpponent();
-
-  */
-
 
   // Options menu showing and hiding, and executing user commands
   $scope.goToChange = function() {
@@ -188,17 +89,23 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
 
   // Switches the current Pokémon with the chosen Pokémon.
   $scope.changePokemon = function(index) {
-    //TODO: change so that I directly change the teamDetails in the model.
-    var temp = $scope.teamDetails()[0];
-    $scope.teamDetails()[0] = $scope.teamDetails()[index];
-    $scope.teamDetails()[index] = temp;
+    // Change Pokémon if HP != 0
+    if ($scope.teamDetails()[index].battleStats.HP === 0) {
+      $scope.resetMessages();
+      $scope.changeMsg = "You cannot call out " + $scope.teamDetails()[index].name + " because it has no HP left.";
+    } else {
+      PokeModel.changePokemon(index);
+      $scope.resetMessages();
+      $scope.changeMsg = "You called out " + $scope.teamDetails()[0].name + "!";
 
-    //TODO: Change status message
+      //show next button
+      $scope.nextShow = true;
+      $scope.changeOptions = false;
 
-    //TODO: show next button
+      //update HP bar
+      $scope.updateHP(true, true);
+    }
 
-    //TODO: update HP bar
-  
   }
 
   $scope.goToAttack = function() {
@@ -206,8 +113,8 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
     $scope.attackOptions = true;
   }
 
-  //TODO: this function is called when next button is clicked.
-  $scope.next = function() {
+  //Called when next button is clicked.
+  $scope.nextTurn = function() {
     // Perform opponent move
     var randomNum = Math.floor(Math.random() * 4);
     PokeModel.performMove($scope.opponentDetails(), $scope.teamDetails()[0], $scope.opponentDetails().movesUsed[randomNum], function(effectiveness) {
@@ -216,21 +123,35 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
       $scope.effectivenessMsg = missed;
     });
 
-    // TODO: Change status message
+    // Change status message
     $scope.attackMsg = $scope.opponentDetails().name + " used " + $scope.opponentDetails().movesUsed[randomNum].name + "!";
 
-    // TODO: Use damage to hit opponent, changing their HP bar and HP value displayed. HP is under stats in Pokémon object
-    $scope.hit(false);
+    // Use damage to hit user, changing their HP bar and HP value displayed. HP is under stats in Pokémon object
+    $scope.updateHP(false, false);
 
     // Show main options
     $scope.nextShow = false;
     $scope.mainOptions = true;
 
-    // TODO: if opponent's HP is zero, display fainted message, switch opponent Pokémon.
+    // if user's HP is zero, display fainted message, switch user Pokémon.
     if ($scope.teamDetails()[0].battleStats.HP === 0) {
       $scope.faintedMsg = $scope.teamDetails()[0].name + " fainted!";
-      // Display popup
+      // Display popup - is it needed?
+      $scope.changeMsg = "Choose which Pokémon to call out:";
+      $scope.changeOptions = true;
+      $scope.mainOptions = false;
+      $scope.backDisabled = true;
     }
+  }
+
+  $scope.nextOpponent = function() {
+    $scope.resetMessages();
+    $scope.promptMsg = "What will you do?"
+    $scope.nextOppShow = false;
+    $scope.mainOptions = true;
+    PokeModel.getRandomOpponent(function() {
+      $scope.updateHP(true, false);
+    });
   }
 
   // Carry out the calculations here and decrease the HP bar, as well as change HP value in view.
@@ -247,7 +168,7 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
     })
 
     // TODO: Use damage to hit opponent, changing their HP bar and HP value displayed. HP is under stats in Pokémon object
-    $scope.hit(true);
+    $scope.updateHP(true, false);
 
     // Change status message
     $scope.attackMsg = $scope.teamDetails()[0].name + " used " + $scope.teamDetails()[0].movesUsed[index].name + "!";
@@ -259,26 +180,97 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
     // TODO: if opponent's HP is zero, display fainted message, switch opponent Pokémon.
     if ($scope.opponentDetails().battleStats.HP === 0) {
       $scope.faintedMsg = $scope.opponentDetails().name + " fainted!";
-      // Display popup
+      // Display popup - do we need to?
+      //$scope.open('sm', $scope.opponentDetails.name, false);
+      $scope.nextShow = false;
+      $scope.nextOppShow = true;
     }
 
   }
 
   $scope.back = function() {
-    $scope.mainOptions = true;
-    if ($scope.changeOptions) {
-      $scope.changeOptions = false;
-    }
+    if ($scope.backDisabled) {
+      $scope.promptMsg = "You cannot go back.";
+    } else {
+      $scope.mainOptions = true;
+      if ($scope.changeOptions) {
+        $scope.changeOptions = false;
+      }
 
-    if ($scope.attackOptions) {
-      $scope.attackOptions = false;
-    }
+      if ($scope.attackOptions) {
+        $scope.attackOptions = false;
+      }
 
-    if ($scope.itemOptions) {
-      $scope.itemOptions = false;
+      if ($scope.itemOptions) {
+        $scope.itemOptions = false;
+      }
     }
 
   }
 
 
+  // Modal popup - testing
+
+  /*var $ctrl = this;
+
+  $ctrl.animationsEnabled = true;
+
+  // user: If user's Pokémon fainted, then true, else if opponent's Pokémon fainted, then false.
+  $scope.open = function (size, pokemonName, isUser, parentSelector) {
+    console.log("open");
+    var parentElem = parentSelector ?
+      angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
+    var modalInstance = $uibModal.open({
+      animation: $ctrl.animationsEnabled,
+      ariaLabelledBy: 'modal-title',
+      ariaDescribedBy: 'modal-body',
+      templateUrl: 'myModalContent.html',
+      controller: 'ModalInstanceCtrl',
+      controllerAs: '$ctrl',
+      size: size,
+      appendTo: parentElem,
+      resolve: {
+        isUser: function() {
+          return isUser;
+        },
+        pokemonName: function() {
+          return pokemonName;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (selectedItem) {
+      $ctrl.selected = selectedItem;
+    }, function () {
+      $log.info('Modal dismissed at: ' + new Date());
+    });
+  };
+
+  $ctrl.toggleAnimation = function () {
+    $ctrl.animationsEnabled = !$ctrl.animationsEnabled;
+  };
+  */
+
 })
+
+
+// Please note that $uibModalInstance represents a modal window (instance) dependency.
+// It is not the same as the $uibModal service used above.
+
+/*pokeBattleApp.controller('ModalInstanceCtrl', function ($uibModalInstance, pokemonName, isUser, PokeModel) {
+
+  var $ctrl = this;
+  $ctrl.pokemonName = pokemonName;
+  $ctrl.title = isUser ? pokemonName + " fainted!";
+
+  $ctrl.ok = function () {
+    $uibModalInstance.close();
+    if (!user) {
+      PokeModel.getRandomOpponent();
+    }
+  };
+
+  $ctrl.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+  };
+}); */

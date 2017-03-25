@@ -168,7 +168,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
                     teamDetails[index].battleStats = that.calcStats(data);
                     teamDetails[index].type = that.restructureTypes(data.types);
                     that.getMoves(teamDetails[index], function(){
-                        if (teamDetails[index].movesUsed[3].damageClass && teamDetails[3].type[0]){
+                        if (teamDetails[index].movesUsed.length === 4){
                             isLoading = false;
                             console.log(teamDetails[index]);
                         }
@@ -197,7 +197,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
         return team;
     }
     //GET: Get a random opponent;
-    this.getRandomOpponent = function() {
+    this.getRandomOpponent = function(callback) {
         isLoading = true;
         var randomNum = Math.floor(Math.random() * 150) + 1;
         this.GetPokemon.get({pokemonNameOrId: randomNum}, function(data) {
@@ -206,8 +206,11 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
             opponentDetails = data;
             opponentDetails.battleStats = that.calcStats(data);
             opponentDetails.type = that.restructureTypes(data.types);
-            that.getMoves(opponentDetails, function(){
-                if (opponentDetails.movesUsed[3].damageClass && opponentDetails.type[0]){
+            if (callback !== undefined) {
+              callback();
+            }
+            that.getMoves(opponentDetails, function() {
+                if (opponentDetails.movesUsed.length === 4) {
                     isLoading = false;
                     console.log(opponentDetails);
                 }
@@ -333,6 +336,12 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
             callbackMiss('The attack missed.');
         }
         return true;
+    }
+
+    this.changePokemon = function(index) {
+      var temp = teamDetails[0];
+      teamDetails[0] = teamDetails[index];
+      teamDetails[index] = temp;
     }
 
 
