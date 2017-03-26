@@ -7,20 +7,24 @@
 
 <!-- Modal popup window -->
 
-<!--<div class="modal-demo">
+<div class="modal-demo">
     <script type="text/ng-template" id="myModalContent.html">
         <div class="modal-header">
-            <h3 class="modal-title" id="modal-title">{{$ctrl.title}}</h3>
+            <h3 class="modal-title" id="modal-title">Game Over!</h3>
         </div>
         <div class="modal-body" id="modal-body">
-            <p>Choose {{$ctrl.pokemonName}} to be on your team?</p>
+            <p>All your Pokémons have fainted!</p>
+            <p>Your score: {{$ctrl.score()}}</p>
         </div>
+        <input placeholder="Your name"></input>
         <div class="modal-footer">
-            <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
-            <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+            <!-- Question: why doesn't ng-href work here? -->
+            <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()" ng-href="#!/highscore">Submit score</button>
         </div>
     </script>
-</div>-->
+</div>
+
+<h3>Score: {{score()}}</h3>
 
 <div class="row">
   <div class="col-lg-6" id="firstPokemon">

@@ -56,6 +56,8 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     //Cache of all the skills of chosen pokemons.
     //{}
 
+    var score = 0;
+
     //Offset for listing pokemons;
     var offset = 0;
     //API: pokemon;
@@ -94,6 +96,15 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
             errorCallback(error);
         })
     }
+
+    this.increaseScore = function() {
+      score += 1;
+    }
+
+    this.getScore = function() {
+      return score;
+    }
+
     //Get a randomized interger between 0 and max (default inclusive).
     this.randomInt = function(max){
         return Math.floor(Math.random() * (max + 1));
@@ -166,6 +177,11 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
                     teamDetails[index] = data;
                     //teamDetails[index].level = null;
                     teamDetails[index].battleStats = that.calcStats(data);
+
+                    // TODO: !!!!!!!! Starting data for testing - remove later
+                    teamDetails[index].battleStats.HP = 1;
+                    console.log(teamDetails[index].battleStats);
+
                     teamDetails[index].type = that.restructureTypes(data.types);
                     that.getMoves(teamDetails[index], function(){
                         if (teamDetails[index].movesUsed.length === 4){
@@ -182,6 +198,12 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     //Returns the team details;
     this.getTeamDetails = function() {
         return teamDetails;
+    }
+
+    this.swapTwoPokemon = function(index1, index2) {
+      var temp = team[index1];
+      team[index1] = team[index2];
+      team[index2] = temp;
     }
 
     this.getOppDetails = function() {

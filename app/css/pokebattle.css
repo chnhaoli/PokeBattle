@@ -55,6 +55,10 @@ p {
   width: 5%;
 }
 
+.dragging {
+  opacity: 0.4;
+}
+
 .footer {
     background-color: #fff2f2;
     color: #a5a5a5;
@@ -103,6 +107,10 @@ p {
 
 .pokemonImg {
   width: 40%
+}
+
+#chosenPokemon: -moz-drag-over {
+  border: 1px solid black;
 }
 
 #confirmedList {

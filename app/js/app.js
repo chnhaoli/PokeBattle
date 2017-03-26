@@ -56,7 +56,121 @@ function($routeProvider) {
         templateUrl: 'partials/battlePartial.html',
         controller: 'BattleCtrl'
     }).
+    when('/highscore', {
+        templateUrl: 'partials/highscorePartial.html',
+    }).
     otherwise({
         redirectTo: '/home'
     });
 }]);
+
+// Testing with directives
+
+pokeBattleApp.directive('dndElement', function() {
+  return {
+    replace: 'true',
+    template: '<img class="chosenPokemon" ng-src="https://img.pokemondb.net/artwork/{{pokemonName}}.jpg" index="{{$index}}">',
+    link: function(scope, elem, attr) {
+      var dragSrcEl = null;
+
+      elem.attr('draggable', 'true');
+
+      elem.on('dragstart', function(e) {
+        $('.ui-draggable-dragging').addClass('dragging');
+        e.target.style.opacity = '0.4';  // this / e.target is the source node.
+        //elem.css('opacity', '0.4');
+
+
+        //console.log(attr.index);
+        //console.log(scope.team());
+        var firstPokemon = scope.team()[attr.index];
+        var firstPokemonIndex = attr.index;
+
+        //e.originalEvent.dataTransfer.setData("firstElement", e.target);
+        e.originalEvent.dataTransfer.setData("firstPokemon", firstPokemon);
+        e.originalEvent.dataTransfer.setData("firstPokemonIndex", firstPokemonIndex);
+
+
+        dragSrcEl = e.target;
+        console.log(dragSrcEl);
+
+        /*e.originalEvent.dataTransfer.effectAllowed = "move";
+        e.originalEvent.dataTransfer.setData("text/html", e.target.innerHTML);*/
+      })
+
+
+      elem.on('dragover', function(e) {
+        if (e.preventDefault) {
+          e.preventDefault(); // Necessary. Allows us to drop.
+        }
+
+        e.originalEvent.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
+
+        return false;
+      })
+
+      elem.on('dragenter', function(e) {
+        // Add stuff here
+      })
+
+      elem.on('dragleave', function(e) {
+        // Add stuff here
+      })
+
+      elem.on('drop', function(e) {
+        // this / e.target is current target element.
+
+        if (e.stopPropagation) {
+          e.stopPropagation(); // stops the browser from redirecting.
+        }
+
+        var secondPokemon = scope.team()[attr.index];
+        var secondPokemonIndex = attr.index;
+        //var firstElement = e.originalEvent.dataTransfer.getData("firstElement");
+        var firstPokemon = e.originalEvent.dataTransfer.getData("firstPokemon");
+        var firstPokemonIndex = e.originalEvent.dataTransfer.getData("firstPokemonIndex");
+        //console.log(firstElement);
+
+        if (firstPokemon != secondPokemon) {
+          scope.swapTwoPokemon(firstPokemonIndex, secondPokemonIndex);
+          scope.$apply();
+        }
+        //console.log($('.ui-draggable-dragging'));
+        //$('.ui-draggable-dragging').removeClass('dragging');
+        //$('.ui-draggable-dragging').classList.remove('over');
+
+        //firstElement.style.opacity = '1';
+        //firstElement.classList.remove('over');
+        //e.target.classList.remove('over');
+
+
+        /*if (dragSrcEl != e.target) {
+          console.log(dragSrcEl);
+          console.log(e.target);
+          dragSrcEl.innerHTML = e.target.innerHTML;
+          e.target.innerHTML = e.originalEvent.dataTransfer.getData("text/html");
+        }*/
+
+        // Why is dragSrcEl null?
+        console.log(dragSrcEl);
+
+        dragSrcEl.style.opacity = '1';
+        dragSrcEl.classList.remove('over');  // this / e.target is previous target element.
+        e.target.classList.remove('over');  // this / e.target is previous target element.
+
+
+        return false;
+      })
+
+      /*elem.on('dragend', function(e) {
+        // this/e.target is the source node.
+
+        [].forEach.call(cols, function (col) {
+          col.classList.remove('over');
+        });
+      })*/
+
+
+    }
+  }
+})

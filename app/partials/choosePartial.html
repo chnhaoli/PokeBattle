@@ -22,7 +22,6 @@
     <!--<button type="button" class="btn btn-default" ng-click="open('sm')">Small modal</button>-->
 </div>
 
-
 <!-- Main -->
 <div>
   <p>Choose 6 Pokémon to battle with</p>
@@ -30,7 +29,7 @@
   <div class="inline alignCenter" ng-repeat="pokemonName in allPokemonNames">
     <!--<img class="pokemonImg" ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName}}.png" ng-click="alert(pokemonName)"/>-->
     <div class="modal-demo">
-      <img class="pokemonImg" ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName}}.png" ng-click="open('sm', pokemonName)"/>
+      <img class="pokemonImg" ng-src="https://img.pokemondb.net/artwork/{{pokemonName}}.jpg" ng-click="open('sm', pokemonName)"/>
     </div>
 
     <p>{{pokemonName}}</p>
@@ -52,7 +51,13 @@
 
   <div id="confirmedList">
     <h3>Confirmed Pokémon: </h3>
-    <span ng-repeat="pokemonName in team()" dnd-draggable="pokemonName" dnd-effect-allowed="move">{{pokemonName}} </span>
+    <span ng-repeat="pokemonName in team()">
+
+      <div class="dndPokemon" dnd-element>
+      </div>
+
+      {{pokemonName}}
+    </span>
   </div>
 
 </div>

@@ -10,6 +10,10 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
     return PokeModel.getTeam();
   };
 
+  $scope.swapTwoPokemon = function(index1, index2) {
+    PokeModel.swapTwoPokemon(index1, index2);
+  }
+
   $scope.getAllPokemon = function() {
     $scope.loading = true;
     PokeModel.getAllPokemon(function(results) {

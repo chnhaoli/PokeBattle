@@ -1,4 +1,4 @@
-pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
+pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $log, dialogs, PokeModel) {
 
   // Call writeTeamDetails and getRandomOpponent upon page load
   PokeModel.writeTeamDetails();
@@ -39,6 +39,10 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
   }
   // Initiating messages
   $scope.resetMessages();
+
+  $scope.score = function() {
+    return PokeModel.getScore();
+  }
 
   // Update user's health bar if user = true, else update opponent's health bar.
   $scope.updateHealthBar = function(user) {
@@ -89,13 +93,14 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
 
   // Switches the current Pokémon with the chosen Pokémon.
   $scope.changePokemon = function(index) {
-    // Reset backDisabled
-    $scope.backDisabled = false;
     // Change Pokémon if HP != 0
     if ($scope.teamDetails()[index].battleStats.HP === 0) {
       $scope.resetMessages();
       $scope.changeMsg = "You cannot call out " + $scope.teamDetails()[index].name + " because it has no HP left.";
     } else {
+      // Reset backDisabled
+      $scope.backDisabled = false;
+
       PokeModel.changePokemon(index);
       $scope.resetMessages();
       $scope.changeMsg = "You called out " + $scope.teamDetails()[0].name + "!";
@@ -117,6 +122,9 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
 
   //Called when next button is clicked.
   $scope.nextTurn = function() {
+
+    $scope.resetMessages();
+
     // Perform opponent move
     var randomNum = Math.floor(Math.random() * 4);
     PokeModel.performMove($scope.opponentDetails(), $scope.teamDetails()[0], $scope.opponentDetails().movesUsed[randomNum], function(effectiveness) {
@@ -138,11 +146,26 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
     // if user's HP is zero, display fainted message, switch user Pokémon.
     if ($scope.teamDetails()[0].battleStats.HP === 0) {
       $scope.faintedMsg = $scope.teamDetails()[0].name + " fainted!";
-      // Display popup - is it needed?
-      $scope.changeMsg = "Choose which Pokémon to call out:";
-      $scope.changeOptions = true;
-      $scope.mainOptions = false;
-      $scope.backDisabled = true;
+
+      var countFainted = 1;
+      for (var i = 1; i < 4; i++) {
+        if ($scope.teamDetails()[i].battleStats.HP === 0) {
+          countFainted += 1;
+        } else {
+          break;
+        }
+      }
+
+      if (countFainted === 4) {
+        setTimeout(function() {
+          $scope.open("sm");
+        }, 1000);
+      } else {
+        $scope.changeMsg = "Choose which Pokémon to call out:";
+        $scope.changeOptions = true;
+        $scope.mainOptions = false;
+        $scope.backDisabled = true;
+      }
     }
   }
 
@@ -159,6 +182,7 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
   // Carry out the calculations here and decrease the HP bar, as well as change HP value in view.
   $scope.attack = function(index) {
 
+    $scope.resetMessages();
 
     // TODO: Perform user move
     PokeModel.performMove($scope.teamDetails()[0], $scope.opponentDetails(), $scope.teamDetails()[0].movesUsed[index], function(effectiveness) {
@@ -179,8 +203,9 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
     $scope.nextShow = true;
     $scope.attackOptions = false;
 
-    // TODO: if opponent's HP is zero, display fainted message, switch opponent Pokémon.
+    // TODO: if opponent's HP is zero, display fainted message, increase score, switch opponent Pokémon.
     if ($scope.opponentDetails().battleStats.HP === 0) {
+      PokeModel.increaseScore();
       $scope.faintedMsg = $scope.opponentDetails().name + " fainted!";
       // Display popup - do we need to?
       //$scope.open('sm', $scope.opponentDetails.name, false);
@@ -191,10 +216,13 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
   }
 
   $scope.back = function() {
+    $scope.resetMessages();
+
     if ($scope.backDisabled) {
       $scope.promptMsg = "You cannot go back.";
     } else {
       $scope.mainOptions = true;
+      $scope.promptMsg = "What will you do?";
       if ($scope.changeOptions) {
         $scope.changeOptions = false;
       }
@@ -211,14 +239,13 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
   }
 
 
-  // Modal popup - testing
+  // Modal popup - testing - question: can I reuse this code so I don't have to have it in both battleCtrl and chooseCtrl? It seems hard because they display different things
 
-  /*var $ctrl = this;
+  var $ctrl = this;
 
   $ctrl.animationsEnabled = true;
 
-  // user: If user's Pokémon fainted, then true, else if opponent's Pokémon fainted, then false.
-  $scope.open = function (size, pokemonName, isUser, parentSelector) {
+  $scope.open = function (size, parentSelector) {
     console.log("open");
     var parentElem = parentSelector ?
       angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
@@ -226,17 +253,15 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
       animation: $ctrl.animationsEnabled,
       ariaLabelledBy: 'modal-title',
       ariaDescribedBy: 'modal-body',
+      backdrop: 'static',
       templateUrl: 'myModalContent.html',
-      controller: 'ModalInstanceCtrl',
+      controller: 'BattleModalInstanceCtrl',
       controllerAs: '$ctrl',
       size: size,
       appendTo: parentElem,
       resolve: {
-        isUser: function() {
-          return isUser;
-        },
-        pokemonName: function() {
-          return pokemonName;
+        score: function() {
+          return $scope.score;
         }
       }
     });
@@ -251,7 +276,7 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
   $ctrl.toggleAnimation = function () {
     $ctrl.animationsEnabled = !$ctrl.animationsEnabled;
   };
-  */
+
 
 })
 
@@ -259,20 +284,22 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, dialogs, PokeModel) {
 // Please note that $uibModalInstance represents a modal window (instance) dependency.
 // It is not the same as the $uibModal service used above.
 
-/*pokeBattleApp.controller('ModalInstanceCtrl', function ($uibModalInstance, pokemonName, isUser, PokeModel) {
+pokeBattleApp.controller('BattleModalInstanceCtrl', function ($uibModalInstance, score, $location) {
 
   var $ctrl = this;
-  $ctrl.pokemonName = pokemonName;
-  $ctrl.title = isUser ? pokemonName + " fainted!";
+  //$ctrl.pokemonName = pokemonName;
+  //$ctrl.title = isUser ? pokemonName + " fainted!";
+  $ctrl.score = score;
 
   $ctrl.ok = function () {
     $uibModalInstance.close();
-    if (!user) {
-      PokeModel.getRandomOpponent();
-    }
+    // Submit name to highscore - Firebase code
+
+    // Go to highscore page - Question: why doesn't ng-href work in the partial? That's why I had to include the line here.
+    $location.path("/highscore");
   };
 
-  $ctrl.cancel = function () {
+  /*$ctrl.cancel = function () {
     $uibModalInstance.dismiss('cancel');
-  };
-}); */
+  };*/
+});
