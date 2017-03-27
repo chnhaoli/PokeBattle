@@ -6,7 +6,27 @@
 pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     var that = this;
     //For loading widget;
-    var isLoading = false;
+    var isLoading = true;
+    //1-721; 10001-10090;
+    var pokemonAllName = [];
+    this.GetPokedex = $resource('http://pokeapi.co/api/v2/pokedex/:index', {}, {
+        get: {
+
+        }
+    });
+    this.GetPokedex.get({index: 1}, function(data){
+        for (key in data.pokemon_entries){
+            pokemonAllName.push(data.pokemon_entries[key].pokemon_species.name);
+            isLoading = false;
+        }
+    });
+    // var pokemonAllId = [];
+    // for (i = 1; i <= 721; i++){
+    //     pokemonAllId.push(i);
+    // }
+    // for (i = 10001; i <= 10090; i++){
+    //     pokemonAllId.push(i);
+    // }
     //Team in pokemon name;
     var team = [1,2,3,4];
     //Detailed opponent;
@@ -102,17 +122,17 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
 
 
     this.GetPokeByType = $resource('http://pokeapi.co/api/v2/type/:typeId', {}, {
-      get: {
+        get: {
 
-      }
+        }
     })
 
     this.increaseScore = function() {
-      score += 1;
+        score += 1;
     }
 
     this.getScore = function() {
-      return score;
+        return score;
     }
 
     //Get a randomized interger between 0 and max (default inclusive).
@@ -133,7 +153,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
         statsUsed.defense   = Math.round((pokemon.stats[3].base_stat + defIV) * 2 * level / 100 + 5);
         statsUsed.spAttack  = Math.round((pokemon.stats[2].base_stat + spIV ) * 2 * level / 100 + 5);
         statsUsed.spDefense = Math.round((pokemon.stats[1].base_stat + spIV ) * 2 * level / 100 + 5);
-        statsUsed.speed = Math.round((pokemon.stats[0].base_stat + spIV ) * 2 * level / 100 + 5);
+        statsUsed.speed =     Math.round((pokemon.stats[0].base_stat + spIV ) * 2 * level / 100 + 5);
         statsUsed.HP = statsUsed.maxHP;
         return statsUsed;
     }
@@ -171,7 +191,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
                     pokemon.movesUsed[index].accuracy = data.accuracy;
                     pokemon.movesUsed[index].damageClass = data.damage_class.name;
                     if (index == 3)
-                        callback();
+                    callback();
                 }
             }(i));
         }
@@ -189,8 +209,8 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
                     teamDetails[index].battleStats = that.calcStats(data);
 
                     // TODO: !!!!!!!! Starting data for testing - remove later
-                    teamDetails[index].battleStats.HP = 1;
-                    console.log(teamDetails[index].battleStats);
+                    // teamDetails[index].battleStats.HP = 1;
+                    // console.log(teamDetails[index].battleStats);
 
                     teamDetails[index].type = that.restructureTypes(data.types);
                     that.getMoves(teamDetails[index], function(){
@@ -209,11 +229,20 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     this.getTeamDetails = function() {
         return teamDetails;
     }
-
+    //Random a team;
+    this.getRandomTeam = function() {
+        var allName = pokemonAllName.slice(0);
+        team = [];
+        for (i = 0; i < 4; i++){
+            var randomTemp = that.randomInt(720);
+            team[i] = allName[randomTemp];
+            allName.splice(randomTemp, 1);
+        }
+    }
     this.swapTwoPokemon = function(index1, index2) {
-      var temp = team[index1];
-      team[index1] = team[index2];
-      team[index2] = temp;
+        var temp = team[index1];
+        team[index1] = team[index2];
+        team[index2] = temp;
     }
 
     this.getOppDetails = function() {
@@ -223,23 +252,23 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
 
 
     this.addToTeam = function(pokemonName) {
-      if (team.length>3) {
-         alert("You already have 4 Pokémons in your team, no cheating ~^o^~");
-      }
-      else
-      {
-        team.push(pokemonName);
-        console.log(team);
-      }
+        if (team.length>3) {
+            alert("You already have 4 Pokémons in your team, no cheating ~^o^~");
+        }
+        else
+        {
+            team.push(pokemonName);
+            console.log(team);
+        }
     }
 
     this.deleteFromTeam = function(pokemonName) {
-      for(key in team){
-        if(pokemonName == team[key]){
-            team.splice(key,1);
+        for(key in team){
+            if(pokemonName == team[key]){
+                team.splice(key,1);
+            }
+            break;
         }
-        break;
-      }
     }
 
     this.getIsInTeam = function(pokemonName){
@@ -251,15 +280,15 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
         return false;
     }
 
-    
+
     //Returns the selected team;
     this.getTeam = function() {
         return team;
     }
     //GET: Get a random opponent;
-    this.getRandomOpponent = function(callback) {
+    this.getRandomPokemon = function(callback) {
         isLoading = true;
-        var randomNum = Math.floor(Math.random() * 150) + 1;
+        var randomNum = that.randomInt(151);
         this.GetPokemon.get({pokemonNameOrId: randomNum}, function(data) {
             opponentDetails = {};
             console.log('opp');
@@ -267,7 +296,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
             opponentDetails.battleStats = that.calcStats(data);
             opponentDetails.type = that.restructureTypes(data.types);
             if (callback !== undefined) {
-              callback();
+                callback();
             }
             that.getMoves(opponentDetails, function() {
                 if (opponentDetails.movesUsed.length === 4) {
@@ -399,9 +428,9 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     }
 
     this.changePokemon = function(index) {
-      var temp = teamDetails[0];
-      teamDetails[0] = teamDetails[index];
-      teamDetails[index] = temp;
+        var temp = teamDetails[0];
+        teamDetails[0] = teamDetails[index];
+        teamDetails[index] = temp;
     }
 
     // Angular service needs to return an object that has all the
