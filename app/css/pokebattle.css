@@ -60,6 +60,10 @@ p {
   width: 5%;
 }
 
+.dragging {
+  opacity: 0.4;
+}
+
 .footer {
     background-color: #FFFFFF;
     color: #a5a5a5;
@@ -93,8 +97,25 @@ p {
   display: inline-block;
 }
 
+.loadingGif {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background: rgba(255, 255, 255, .8)
+              url('../images/PikaLoading.gif')
+              50% 50%
+              no-repeat;
+}
+
 .pokemonImg {
   width: 40%
+}
+
+#chosenPokemon: -moz-drag-over {
+  border: 1px solid black;
 }
 
 #confirmedList {
@@ -102,7 +123,7 @@ p {
 }
 
 
-#healthBar {
+#healthBarUser {
   background-color: green;
   height: 10px;
   width: 250px;
@@ -112,7 +133,7 @@ p {
 }
 
 
-#healthBar2 {
+#healthBarOpp {
   background-color: green;
   height: 10px;
   width: 250px;

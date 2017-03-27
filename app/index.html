@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- Notice the ng-app Angular directive. This tells Angular where the application starts and also
-<<<<<<< HEAD
+
     which module to associate the app with. In app.js we create the "dinnerPlanner" module. -->
 
     <html lang="en" ng-app="pokeBattle" ng-controller="PokeCtrl">
@@ -42,51 +42,11 @@
                     });
                     $this.tooltip('show');
                 }
-=======
-which module to associate the app with. In app.js we create the "dinnerPlanner" module. -->
-
-<html lang="en" ng-app="pokeBattle" ng-controller="PokeCtrl">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>PokéBattle</title>
-
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="public/bootstrap.min.css">
-    <!-- Own CSS -->
-    <link rel="stylesheet" href="css/pokebattle.css">
-    <link href="https://fonts.googleapis.com/css?family=Baloo+Bhaina" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-
-    <!-- For tooltips -->
-    <style type="text/css">
-    .tool {
-        width: 270px;
-        overflow:hidden;
-        white-space:nowrap;
-        text-overflow:ellipsis;
-        text-align: center;
-    }
-    </style>
-
-    <script type="text/javascript">
-    $(document).on('mouseenter', ".tool", function () {
-        var $this = $(this);
-        if (this.offsetWidth < this.scrollWidth && !$this.attr('title')) {
-            $this.tooltip({
-                title: $this.text(),
-                placement: "bottom"
->>>>>>> origin/JingJingBranch
             });
         </script>
-
-
     </head>
+      
+      
     <body ng-controller="AudioController">
 
         <audio id="myTune" src="images/bg.mp3" autoplay loop ng-model="audio">
@@ -101,6 +61,15 @@ which module to associate the app with. In app.js we create the "dinnerPlanner" 
             <img src="images/musicPause.png" height="30" size="30" onclick="document.getElementById('myTune').play()" ng-show="show" ng-click="musicControl()">
         </div>
 <!-- Here in index.html you should put only the layout that is shared among all the screens (e.g. header
+
+    <!-- Header -->
+    <!--
+    <div class="header">
+        <a href="#/home"><div ng-click="clearOffset()"><h1 id="title">PokéBattle</h1></div></a>
+        <p id="subtitle">The number one Pokémon battle game on the web</p>
+    </div>
+    -->
+    <!-- Here in index.html you should put only the layout that is shared among all the screens (e.g. header
     ,footer, etc.). The rest of the view specific layout will go into the html partials (check partials folder) -->
 
     <div ng-view>
@@ -111,12 +80,6 @@ which module to associate the app with. In app.js we create the "dinnerPlanner" 
     <div class="footer">
         <p>&copy; Beichen Chen, Jinwei Lin, Hao Li, Jingjing Xie 2017</p>
     </div>
-
-
-
-
-
-
 
 
 
@@ -135,7 +98,6 @@ which module to associate the app with. In app.js we create the "dinnerPlanner" 
     <script src="public/ui-bootstrap-tpls.js"></script>
     <script src="public/angular-sanitize.js"></script>
     <script src="public/angular-drag-and-drop-lists.js"></script>
-    <script src="public/dnd.js"></script>
 
     <!-- The application JavaScript code -->
     <script src="js/app.js"></script>
