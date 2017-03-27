@@ -19,38 +19,38 @@
             <div ng-controller="ProgressDemoCtrl" class="panel-body">
                 <div class="col-md-12" style="text-align: right;">
                     <div class="col-md-4"><h4>HP</h4></div>
-                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>  
+                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>
                     </div>
                 </div>
 
                 <div class="col-md-12" style="text-align: right;">
                     <div class="col-md-4"><h4>Attack</h4></div>
-                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>  
+                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>
                     </div>
                 </div>
 
                 <div class="col-md-12" style="text-align: right;">
                     <div class="col-md-4"><h4>Defense</h4></div>
-                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>  
+                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>
                     </div>
                 </div>
 
                 <div class="col-md-12" style="text-align: right;">
                     <div class="col-md-4"><h4>Special Attack</h4></div>
-                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>  
+                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>
                     </div>
                 </div>
 
                 <div class="col-md-12" style="text-align: right;">
                     <div class="col-md-4"><h4>Special Defense</h4></div>
-                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>  
+                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>
                     </div>
                 </div>
 
                 <div class="col-md-12" style="text-align: right;">
                     <div class="col-md-4"><h4>Speed</h4></div>
-                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>  
-                    </div> 
+                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>
+                    </div>
                 </div>
             </div>
         </div>
@@ -67,13 +67,13 @@
 
 <!-- my team -->
 <div class="col-md-12 panel-body">
- 
-        <div class="col-md-12 panel-body"> 
+
+        <div class="col-md-12 panel-body">
             <div class="col-md-3" ng-repeat="pokemonName in team()">
                  <div ng-if="isInList(pokemonName)"><a ng-click="deleteFromTeam(pokemonName)"><img src="images/selected.png" style="float: right;" /></a>
                  </div>
-                <!--<img class="column" draggable="true" ondragstart="handleDragStart(event);" 
-                ondragover="handleDragOver(event);" ondragenter="handleDragEnter(event)"; ondragleave="handleDragLeave(event);" 
+                <!--<img class="column" draggable="true" ondragstart="handleDragStart(event);"
+                ondragover="handleDragOver(event);" ondragenter="handleDragEnter(event)"; ondragleave="handleDragLeave(event);"
                 ondrop="handleDrop(event);" ondragend="handleDragEnd(event);" ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'" class="teamImg" alt="{{pokemonName}}" >
                 -->
                 <div class="dndPokemon" dnd-element>
@@ -98,16 +98,16 @@
         </select>
 </div>
 
-<!-- space --> 
+<!-- space -->
 <div class="col-md-5 panel-body"></div>
 
 <!-- search -->
 <div>
     <form class="col-md-4 panel-body" name="filterField" ng-submit="filterField.$valid && setFilter(input)">
-        <input class="form-control" type="text" placeholder="Enter key words to search" ng-model="filter">
+        <input class="form-control" id="searchBar" type="text" placeholder="Enter key words to search" ng-model="filter">
     </form>
     <div class="col-md-1 panel-body" style="text-align: center;">
-        <button type="button" class="btn btn-default" ng-click="searchPoke(filter, type)">Search</button>
+        <button type="button" class="btn btn-default" id="searchButton" ng-click="searchPoke(filter, type)">Search</button>
     </div>
 </div>
 
@@ -118,28 +118,24 @@
         <!-- Where the search results locates. -->
         <div ng-repeat="pokemonName in pokeByType" class="col-md-3 panel-body">
             <!-- <button class="panel"> -->
-                <a ng-click="getPokemonDetail(pokemonName.pokemon.name)" class="btn btn-default">
-                    <div class="panel-body">
-                        <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName.pokemon.name}}.png"
-                        onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'"
-                        alt="{{pokemonName.pokemon.name}}"
-                        class="img-responsive"
-                        style="width: 210px ; height:210px; margin:auto;/>
-                    </div>
-                    <div class="tool panel-heading">
-                        <h4>{{pokemonName.pokemon.name}}</h4>
-                    </div>
-                    <!-- <div class="panel-footer">
-                        {{dish.readyInMinutes}} mins
-                    </div> -->
-                </a>
-                <div ng-if="!isInList(pokemonName.pokemon.name)"><a ng-click="addToTeam(pokemonName.pokemon.name)"><img src="images/select.png" style="float: right;" /></a></div>
-                <div ng-if="isInList(pokemonName.pokemon.name)"><a ng-click="deleteFromTeam(pokemonName.pokemon.name)"><img src="images/selected.png" style="float: right;" /></a>
+            <a ng-click="getPokemonDetail(pokemonName.pokemon.name)" class="btn btn-default">
+                <div class="panel-body">
+                    <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName.pokemon.name}}.png"
+                    onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'"
+                    alt="{{pokemonName.pokemon.name}}"
+                    class="img-responsive"
+                    style="width: 210px ; height:210px; margin:auto;/>
                 </div>
-                <!--<div ng-show="isSelect"><a ng-click="addToTeam(pokemonName.pokemon.name)"><img src="images/select.png" style="float: right;" /></a></div>
-                <div ng-show="!isSelected"><a ng-click="deleteFromTeam(pokemonName.pokemon.name)"><img src="images/selected.png" style="float: right;" /></a>
-                </div>-->
-            <!-- </button> -->
+                <div class="tool panel-heading">
+                    <h4>{{pokemonName.pokemon.name}}</h4>
+                </div>
+                <!-- <div class="panel-footer">
+                    {{dish.readyInMinutes}} mins
+                </div> -->
+            </a>
+            <div ng-if="!isInList(pokemonName.pokemon.name)"><a ng-click="addToTeam(pokemonName.pokemon.name)"><img src="images/select.png" style="float: right;" /></a></div>
+            <div ng-if="isInList(pokemonName.pokemon.name)"><a ng-click="deleteFromTeam(pokemonName.pokemon.name)"><img src="images/selected.png" style="float: right;" /></a>
+            </div>
         </div>
     </div>
 </div>
@@ -148,5 +144,3 @@
   <div class="loadingGifDiv" ng-show="isLoading">
     <img id="loadingGif" src="../images/PikaLoading.gif">
   </div>
-
-

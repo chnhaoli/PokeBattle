@@ -110,6 +110,10 @@ p {
               no-repeat;
 }
 
+.row {
+  text-align: center;
+}
+
 .pokemonImg {
   width: 40%
 }
@@ -447,9 +451,9 @@ p {
 }
 /*.homeButton{
   background-color: #3466af;
-  color: #ffcb05; 
+  color: #ffcb05;
   width: 200px;
-}*/ 
+}*/
 
 /*Hover Pulse */
 @-webkit-keyframes hvr-pulse {
@@ -516,7 +520,7 @@ p {
 .form-style-6 input[type="time"],
 .form-style-6 input[type="url"],
 .form-style-6 textarea,
-.form-style-6 select 
+.form-style-6 select
 {
     -webkit-transition: all 0.30s ease-in-out;
     -moz-transition: all 0.30s ease-in-out;
@@ -529,7 +533,7 @@ p {
     width: 75%;
     background: #fff;
     margin-bottom: 4%;
-    border: 2px solid #03476B;  
+    border: 2px solid #03476B;
     padding: 4%;
     color: #555;
     font: 95% "Comic Sans MS", cursive, sans-serif;

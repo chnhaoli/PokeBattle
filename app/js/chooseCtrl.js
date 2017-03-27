@@ -41,19 +41,21 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
   }
 
   $scope.addToTeam = function(pokemonName){
-    PokeModel.addToTeam(pokemonName);   
+    PokeModel.addToTeam(pokemonName);
   }
 
   $scope.deleteFromTeam = function(pokemonName){
+    console.log("hello");
+    console.log(pokemonName);
     PokeModel.deleteFromTeam(pokemonName);
-    PokeModel.getTeam();
+    console.log($scope.team());
   }
 
 
   $scope.swapTwoPokemon = function(index1, index2) {
     PokeModel.swapTwoPokemon(index1, index2);
   }
-  
+
   //Message box
   var $ctrl = this;
   $ctrl.animationsEnabled = true;
@@ -67,7 +69,7 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
         ariaDescribedBy: 'modal-body',
         templateUrl: 'myModalContent.html',
         controller: 'ModalInstanceCtrl',
-        controllerAs: '$ctrl',  
+        controllerAs: '$ctrl',
         size: size,
         appendTo: parentElem,
         resolve: {
@@ -130,17 +132,25 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
       if(filter === ''){
         $scope.getPokeByType($scope.type);
       }
-      else{     
+      else{
         PokeModel.GetPokeByType.get({typeId: type}, function(data){
           for (i in data.pokemon){
             if(filter === data.pokemon[i].pokemon.name){
               searchresult.push(data.pokemon[i]);
             }}
-            $scope.pokeByType = searchresult; 
+            $scope.pokeByType = searchresult;
           },function(data){
             console.log("Something went wrong");
           });
       }}
+
+      // Can we do the following? (Is it bad practive to use getElementById in controller?)
+      document.getElementById("searchBar").addEventListener("keyup", function(event) {
+        event.preventDefault();
+        if (event.keyCode == 13) {
+            document.getElementById("searchButton").click();
+        }
+      });
 
 });
 

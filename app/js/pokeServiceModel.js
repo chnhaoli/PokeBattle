@@ -8,7 +8,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     //For loading widget;
     var isLoading = false;
     //Team in pokemon name;
-    var team = [1,2,3,4];
+    var team = [];
     //Detailed opponent;
     var opponentDetails = {};
     //Detailed pokemons for whole team;
@@ -237,8 +237,8 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
       for(key in team){
         if(pokemonName == team[key]){
             team.splice(key,1);
+            break;
         }
-        break;
       }
     }
 
@@ -251,7 +251,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
         return false;
     }
 
-    
+
     //Returns the selected team;
     this.getTeam = function() {
         return team;
