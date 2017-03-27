@@ -64,6 +64,12 @@ function($routeProvider) {
     });
 }]);
 
+
+pokeBattleApp.controller('AudioController', function($scope) {
+ $scope.musicControl = function(){
+    $scope.show ? $scope.show = false : $scope.show = true;
+}});
+
 // Testing with directives
 
 pokeBattleApp.directive('dndElement', function() {

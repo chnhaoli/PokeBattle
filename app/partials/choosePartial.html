@@ -11,166 +11,142 @@
                 </li>
             </ul>
             Selected: <b>{{ $ctrl.selected.item }}</b>-->
-            <p>Choose {{$ctrl.pokemonName}} to be on your team?</p>
+            <h4>Choose {{$ctrl.pokemonName.name}} to be on your team?</h4>
+
+            <!-- showtype -->
+            <p ng-repeat = "type in $ctrl.pokemonName.types.object.type.name">{{type}}</p>
+
+            <div ng-controller="ProgressDemoCtrl" class="panel-body">
+                <div class="col-md-12" style="text-align: right;">
+                    <div class="col-md-4"><h4>HP</h4></div>
+                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>  
+                    </div>
+                </div>
+
+                <div class="col-md-12" style="text-align: right;">
+                    <div class="col-md-4"><h4>Attack</h4></div>
+                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>  
+                    </div>
+                </div>
+
+                <div class="col-md-12" style="text-align: right;">
+                    <div class="col-md-4"><h4>Defense</h4></div>
+                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>  
+                    </div>
+                </div>
+
+                <div class="col-md-12" style="text-align: right;">
+                    <div class="col-md-4"><h4>Special Attack</h4></div>
+                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>  
+                    </div>
+                </div>
+
+                <div class="col-md-12" style="text-align: right;">
+                    <div class="col-md-4"><h4>Special Defense</h4></div>
+                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>  
+                    </div>
+                </div>
+
+                <div class="col-md-12" style="text-align: right;">
+                    <div class="col-md-4"><h4>Speed</h4></div>
+                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>  
+                    </div> 
+                </div>
+            </div>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
+            <button ng-show="!$ctrl.isInListDialogue()" class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Add to Team</button>
+            <button ng-show="$ctrl.isInListDialogue()" class="btn btn-primary" type="button" ng-click="$ctrl.delete()">Delete from Team</button>
             <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
         </div>
     </script>
-
     <!--<button type="button" class="btn btn-default" ng-click="open('sm')">Small modal</button>-->
 </div>
 
-<!-- Main -->
+<h4>Choose 4 Pokémons to battle with</h4>
+
+<!-- my team -->
+<div class="col-md-12 panel-body">
+ 
+        <div class="col-md-12 panel-body"> 
+            <div class="col-md-3" ng-repeat="pokemonName in team()">
+                 <div ng-if="isInList(pokemonName)"><a ng-click="deleteFromTeam(pokemonName)"><img src="images/selected.png" style="float: right;" /></a>
+                 </div>
+                <!--<img class="column" draggable="true" ondragstart="handleDragStart(event);" 
+                ondragover="handleDragOver(event);" ondragenter="handleDragEnter(event)"; ondragleave="handleDragLeave(event);" 
+                ondrop="handleDrop(event);" ondragend="handleDragEnd(event);" ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'" class="teamImg" alt="{{pokemonName}}" >
+                -->
+                <div class="dndPokemon" dnd-element>
+                </div>
+                <p class="col-md-12" style="text-align: center;">{{pokemonName}}</p>
+            </div>
+        </div>
+        <div class="col-md-6" style="text-align: right;"><a href="#!/overview" type="button" class="btn btn-primary gradient">Random Team!</a></div>
+        <div class="col-md-6" style="text-align: left;"><a ng-href="#!/battle" type="button" class="btn btn-primary gradient">Go!</a></div>
+        <!-- Button here to confirm the dinner menu. -->
+
+            <!-- <a ng-show="selectedMenu.length > 0" id="confirmDinnerButton" href="#!/overview" type="button" class="btn btn-warning btn-md col-md-2">Battle</a>
+            <a ng-show="selectedMenu.length == 0" ng-disabled="true" type="button" class="btn btn-warning btn-disabled btn-md col-md-2">Battle!</a> -->
+</div>
+
+<!-- type -->
+<div class="col-md-2 panel-body">
+        <select ng-model="type"  name="typeField" class="form-control" ng-change="searchPoke(filter, type)">
+            <option ng-repeat="r in types" value="{{r.id}}">
+                {{r.name}}
+            </option>
+        </select>
+</div>
+
+<!-- space --> 
+<div class="col-md-5 panel-body"></div>
+
+<!-- search -->
 <div>
-  <p>Choose 6 Pokémon to battle with</p>
-
-  <div class="inline alignCenter" ng-repeat="pokemonName in allPokemonNames">
-    <!--<img class="pokemonImg" ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName}}.png" ng-click="alert(pokemonName)"/>-->
-    <div class="modal-demo">
-      <img class="pokemonImg" ng-src="https://img.pokemondb.net/artwork/{{pokemonName}}.jpg" ng-click="open('sm', pokemonName)"/>
+    <form class="col-md-4 panel-body" name="filterField" ng-submit="filterField.$valid && setFilter(input)">
+        <input class="form-control" type="text" placeholder="Enter key words to search" ng-model="filter">
+    </form>
+    <div class="col-md-1 panel-body" style="text-align: center;">
+        <button type="button" class="btn btn-default" ng-click="searchPoke(filter, type)">Search</button>
     </div>
-
-    <p>{{pokemonName}}</p>
-    <!--<div>
-      <img class="checkbox" src="../images/checkbox.png"/>
-    </div>-->
-  </div>
-
-  <div class="loadingGif" ng-show="loading">
-
-  </div>
-
-
-  <div class="buttonsDiv">
-    <button class="btn btn-primary" ng-click="getAllPokemon()">More Pokémon</button>
-    <!--<button class="btn btn-info" ng-click="showConfirmed()">Show confirmed</button>-->
-  </div>
-
-
-  <div id="confirmedList">
-    <h3>Confirmed Pokémon: </h3>
-    <span ng-repeat="pokemonName in team()">
-
-      <div class="dndPokemon" dnd-element>
-      </div>
-
-      {{pokemonName}}
-    </span>
-  </div>
-
 </div>
 
 
-
-
-<!-- Drag and drop testing -->
-<div class="simpleDemo row">
-
-    <div class="col-md-8">
-        <div class="row">
-            <div ng-repeat="(listName, list) in models.lists" class="col-md-6">
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">List {{listName}}</h3>
+<!-- Main -->
+<div class="panel-body">
+  <div class="row" style="max-height: 625px; width: 100%;">
+        <!-- Where the search results locates. -->
+        <div ng-repeat="pokemonName in pokeByType" class="col-md-3 panel-body">
+            <!-- <button class="panel"> -->
+                <a ng-click="getPokemonDetail(pokemonName.pokemon.name)" class="btn btn-default">
+                    <div class="panel-body">
+                        <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName.pokemon.name}}.png"
+                        onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'"
+                        alt="{{pokemonName.pokemon.name}}"
+                        class="img-responsive"
+                        style="width: 210px ; height:210px; margin:auto;/>
                     </div>
-                    <ul dnd-list="list">
-                    <!-- The dnd-draggable directive makes an element draggable and will
-                         transfer the object that was assigned to it. If an element was
-                         dragged away, you have to remove it from the original list
-                         yourself using the dnd-moved attribute -->
-                        <img ng-repeat="pokemonName in team()"
-                            ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName}}.png"
-                            dnd-draggable="pokemonName"
-                            dnd-moved="list.splice($index, 1)"
-                            dnd-effect-allowed="move"
-                            dnd-selected="models.selected = pokemonName"
-                            ng-class="{'selected': models.selected === pokemonName}"
-                            width="100px"
-                            height="100px"
-                            >
-                            {{pokemonName.label}}
-                        </li>
-                    </ul>
+                    <div class="tool panel-heading">
+                        <h4>{{pokemonName.pokemon.name}}</h4>
+                    </div>
+                    <!-- <div class="panel-footer">
+                        {{dish.readyInMinutes}} mins
+                    </div> -->
+                </a>
+                <div ng-if="!isInList(pokemonName.pokemon.name)"><a ng-click="addToTeam(pokemonName.pokemon.name)"><img src="images/select.png" style="float: right;" /></a></div>
+                <div ng-if="isInList(pokemonName.pokemon.name)"><a ng-click="deleteFromTeam(pokemonName.pokemon.name)"><img src="images/selected.png" style="float: right;" /></a>
                 </div>
-            </div>
-        </div>
-
-        <div view-source="simple"></div>
-
-    </div>
-
-    <div class="col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Generated Model</h3>
-            </div>
-            <div class="panel-body">
-                <pre class="code">{{modelAsJson}}</pre>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-
-
-<!--
-
-<div class="advancedDemo row">
-    <div ng-repeat="containers in model">
-
-        <div class="dropzone box box-yellow">
-        <h3>Dropzone {{$index + 1}}</h3>
-        <ul dnd-list="containers"
-            dnd-allowed-types="['container']"
-            dnd-external-sources="true"
-            dnd-dragover="dragoverCallback(index, external, type, callback)"
-            dnd-drop="dropCallback(index, item, external, type)">
-            <li ng-repeat="container in containers"
-                dnd-draggable="container"
-                dnd-type="'container'"
-                dnd-effect-allowed="copyMove"
-                dnd-moved="containers.splice($index, 1)"
-                dnd-callback="container.items.length">
-                <div class="container-element box box-blue">
-                    <h3>Container (effects allowed: {{container.effectAllowed}})</h3>
-                    <ul dnd-list="container.items"
-                        dnd-allowed-types="['item']"
-                        dnd-horizontal-list="true"
-                        dnd-external-sources="true"
-                        dnd-effect-allowed="{{container.effectAllowed}}"
-                        dnd-dragover="dragoverCallback(index, external, type)"
-                        dnd-drop="dropCallback(index, item, external, type)"
-                        dnd-inserted="logListEvent('inserted at', index, external, type)"
-                        class="itemlist">
-                        <img ng-repeat="item in team()"
-                            dnd-draggable="item"
-                            dnd-type="'item'"
-                            dnd-effect-allowed="{{item.effectAllowed}}"
-                            dnd-dragstart="logEvent('Started to drag an item')"
-                            dnd-moved="container.items.splice($index, 1)"
-                            dnd-dragend="logEvent('Drag operation ended. Drop effect: ' + dropEffect)"
-                            ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{item}}.png"
-                            width="150px"
-                            height="150px">
-                            {{item.label}}
-                        </img>
-                    </ul>
-                    <div class="clearfix"></div>
-                </div>
-            </li>
-        </ul>
-
+                <!--<div ng-show="isSelect"><a ng-click="addToTeam(pokemonName.pokemon.name)"><img src="images/select.png" style="float: right;" /></a></div>
+                <div ng-show="!isSelected"><a ng-click="deleteFromTeam(pokemonName.pokemon.name)"><img src="images/selected.png" style="float: right;" /></a>
+                </div>-->
+            <!-- </button> -->
         </div>
     </div>
 </div>
 
-<div view-source="advanced"></div>
 
-<h2>Generated Model</h2>
-<pre>{{modelAsJson}}</pre>
--->
+  <div class="loadingGifDiv" ng-show="isLoading">
+    <img id="loadingGif" src="../images/PikaLoading.gif">
+  </div>
 
-<a ng-href="#!/battle"><button class="btn btn-success">Go!</button></a>
+

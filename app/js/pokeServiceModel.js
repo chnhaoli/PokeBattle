@@ -60,6 +60,9 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
 
     //Offset for listing pokemons;
     var offset = 0;
+
+
+    //API calls
     //API: pokemon;
     this.GetPokemon = $resource('http://pokeapi.co/api/v2/pokemon/:pokemonNameOrId', {}, {
         get: {
@@ -96,6 +99,13 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
             errorCallback(error);
         })
     }
+
+
+    this.GetPokeByType = $resource('http://pokeapi.co/api/v2/type/:typeId', {}, {
+      get: {
+
+      }
+    })
 
     this.increaseScore = function() {
       score += 1;
@@ -210,10 +220,38 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
         return opponentDetails;
     }
 
-    //Adds pokemon to selected team;
+
+
     this.addToTeam = function(pokemonName) {
+      if (team.length>3) {
+         alert("You already have 4 Pokémons in your team, no cheating ~^o^~");
+      }
+      else
+      {
         team.push(pokemonName);
+        console.log(team);
+      }
     }
+
+    this.deleteFromTeam = function(pokemonName) {
+      for(key in team){
+        if(pokemonName == team[key]){
+            team.splice(key,1);
+        }
+        break;
+      }
+    }
+
+    this.getIsInTeam = function(pokemonName){
+        for(var i = 0; i < team.length; ++i) {
+            if(pokemonName == team[i]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    
     //Returns the selected team;
     this.getTeam = function() {
         return team;
@@ -365,39 +403,6 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
       teamDetails[0] = teamDetails[index];
       teamDetails[index] = temp;
     }
-
-
-    //Cookies
-    // this.storeCookie = function(id, content){
-    //     $cookieStore.put(id, '');
-    //     $cookieStore.put(id, content);
-    // }
-    //
-    // this.getCookie = function(id){
-    //     return $cookieStore.get(id);
-    // }
-    //
-    // this.getDishFromCookie = function(menuInId){
-    //     var menu = [];
-    //     var dish = {};
-    //     for(idFlag = 0; idFlag < menuInId.length; idFlag++) {
-    //         that.GetDish.get({id:menuInId[idFlag]},function(data){
-    //             dish = {};
-    //             dish.id = data.id;
-    //             dish.title = data.title;
-    //             dish.image = data.image;
-    //             dish.price = 0;
-    //             for(ingredient = 0; ingredient < data.extendedIngredients.length; ingredient++){
-    //                 dish.price += data.extendedIngredients[ingredient].amount;
-    //             }
-    //             dish.price = dish.price;
-    //             dish.preparation = data.instructions;
-    //             menu.push(dish);
-    //         },function(data){
-    //         });
-    //     }
-    //     return menu;
-    // }
 
     // Angular service needs to return an object that has all the
     // methods created in it. You can consider that this is instead
