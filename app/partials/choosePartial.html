@@ -42,21 +42,16 @@
                     <div class="col-md-8"><uib-progressbar class="progress-striped" max="230" value="$ctrl.pokemon.stats[1].base_stat" type="danger"></uib-progressbar>
                     </div>
                 </div>
-
-               <!--  <div class="col-md-12" style="text-align: right;">
-                    <div class="col-md-4"><h4>Speed</h4></div>
-                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="180" value="$ctrl.pokemon.stats[0].base_stat" type="danger"></uib-progressbar>
-                    </div>
-                </div> -->
             </div>
-        </div>
-        <div class="modal-footer">
-            <button ng-show="!$ctrl.isInListDialogue()" class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Add to Team</button>
-            <button ng-show="$ctrl.isInListDialogue()" class="btn btn-primary" type="button" ng-click="$ctrl.delete()">Delete from Team</button>
-            <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
-        </div>
-    </script>
-    <!--<button type="button" class="btn btn-default" ng-click="open('sm')">Small modal</button>-->
+    </div>
+</div>
+<div class="modal-footer">
+    <button ng-show="!$ctrl.isInListDialogue()" class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Add to Team</button>
+    <button ng-show="$ctrl.isInListDialogue()" class="btn btn-primary" type="button" ng-click="$ctrl.delete()">Delete from Team</button>
+    <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+</div>
+</script>
+<!--<button type="button" class="btn btn-default" ng-click="open('sm')">Small modal</button>-->
 </div>
 
 <h4>Choose 4 Pokémons to battle with</h4>
@@ -76,22 +71,30 @@
                 </div>
                 <p class="col-md-12">{{pokemonName}}</p>
             </div>
+            <!--<img class="column" draggable="true" ondragstart="handleDragStart(event);"
+            ondragover="handleDragOver(event);" ondragenter="handleDragEnter(event)"; ondragleave="handleDragLeave(event);"
+            ondrop="handleDrop(event);" ondragend="handleDragEnd(event);" ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'" class="teamImg" alt="{{pokemonName}}" >
+        -->
+        <div class="dndPokemon" dnd-element>
         </div>
-        <div class="col-md-6" style="text-align: right;"><a href="#!/overview" type="button" class="btn btn-primary gradient">Random Team!</a></div>
-        <div class="col-md-6" style="text-align: left;"><a ng-href="#!/battle" type="button" class="btn btn-primary gradient">Go!</a></div>
-        <!-- Button here to confirm the dinner menu. -->
+        <p class="col-md-12" style="text-align: center;">{{pokemonName}}</p>
+    </div>
+</div>
+<div class="col-md-6" style="text-align: right;"><a ng-click="randomTeam()" type="button" class="btn btn-primary gradient">Random Team!</a></div>
+<div class="col-md-6" style="text-align: left;"><a ng-href="#!/battle" type="button" class="btn btn-primary gradient">Go!</a></div>
+<!-- Button here to confirm the dinner menu. -->
 
-            <!-- <a ng-show="selectedMenu.length > 0" id="confirmDinnerButton" href="#!/overview" type="button" class="btn btn-warning btn-md col-md-2">Battle</a>
-            <a ng-show="selectedMenu.length == 0" ng-disabled="true" type="button" class="btn btn-warning btn-disabled btn-md col-md-2">Battle!</a> -->
+<!-- <a ng-show="selectedMenu.length > 0" id="confirmDinnerButton" href="#!/overview" type="button" class="btn btn-warning btn-md col-md-2">Battle</a>
+<a ng-show="selectedMenu.length == 0" ng-disabled="true" type="button" class="btn btn-warning btn-disabled btn-md col-md-2">Battle!</a> -->
 </div>
 
 <!-- type -->
 <div class="col-md-2 panel-body">
-        <select ng-model="type"  name="typeField" class="form-control" ng-change="searchPoke(filter, type)">
-            <option ng-repeat="r in types" value="{{r.id}}">
-                {{r.name}}
-            </option>
-        </select>
+    <select ng-model="type"  name="typeField" class="form-control" ng-change="searchPoke(filter, type)">
+        <option ng-repeat="r in types" value="{{r.id}}">
+            {{r.name}}
+        </option>
+    </select>
 </div>
 
 <!-- space -->
@@ -110,11 +113,12 @@
 
 <!-- Main -->
 <div class="panel-body">
+<<<<<<< HEAD
   <div class="row">
         <!-- Where the search results locates. -->
         <div ng-repeat="pokemon in pokeByType" class="col-md-3 panel-body">
             <!-- <button class="panel"> -->
-            <a ng-click="getPokemonDetail(pokemon.pokemon.name)" class="btn btn-default">
+            <a ng-click="getPokemonDetail(pokemonName.pokemon.name)" class="btn btn-default">
                 <div class="panel-body">
                     <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemon.pokemon.name}}.png"
                     onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'"
@@ -126,9 +130,11 @@
                     <h4>{{pokemon.pokemon.name}}</h4>
                 </div>
             </a>
+
             <!-- click icon to sdd and remove pokemon-->
             <div class="mainViewSelect" ng-if="!isInList(pokemon.pokemon.name)"><img src="images/select.png" ng-click="addToTeam(pokemon.pokemon.name)"/></div>
             <div class="mainViewSelect" ng-if="isInList(pokemon.pokemon.name)"><img src="images/selected.png" ng-click="deleteFromTeam(pokemon.pokemon.name)"/></div>
+
         </div>
     </div>
 </div>

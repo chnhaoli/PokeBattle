@@ -29,6 +29,12 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
   $scope.pokeByType = '';
   $scope.pokemonTypes = [];
 
+
+  $scope.randomTeam = function(){
+      PokeModel.getRandomTeam();
+      console.log(PokeModel.getTeam());
+  }
+
   $scope.loading = true;
 
   //Pokemon
