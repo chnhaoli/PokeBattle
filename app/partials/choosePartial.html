@@ -75,8 +75,6 @@
             ondragover="handleDragOver(event);" ondragenter="handleDragEnter(event)"; ondragleave="handleDragLeave(event);"
             ondrop="handleDrop(event);" ondragend="handleDragEnd(event);" ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'" class="teamImg" alt="{{pokemonName}}" >
         -->
-        <div class="dndPokemon" dnd-element>
-        </div>
         <p class="col-md-12" style="text-align: center;">{{pokemonName}}</p>
     </div>
 </div>
@@ -113,12 +111,11 @@
 
 <!-- Main -->
 <div class="panel-body">
-<<<<<<< HEAD
   <div class="row">
         <!-- Where the search results locates. -->
         <div ng-repeat="pokemon in pokeByType" class="col-md-3 panel-body">
             <!-- <button class="panel"> -->
-            <a ng-click="getPokemonDetail(pokemonName.pokemon.name)" class="btn btn-default">
+            <a ng-click="getPokemonDetail(pokemon.pokemon.name)" class="btn btn-default">
                 <div class="panel-body">
                     <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemon.pokemon.name}}.png"
                     onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'"
