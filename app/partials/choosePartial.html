@@ -113,11 +113,15 @@
 
 
 <!-- Main -->
-<div class="panel-body">
-  <div class="row" style="max-height: 625px; width: 100%;">
+<div class="panel-body" style="height: 100%">
+<!--     <div class="col-md-1" style="height: 100%"> </div> -->
+    <div class="row" style="max-height: 625px; width: 100%;" id="allPokemons">
         <!-- Where the search results locates. -->
-        <div ng-repeat="pokemonName in pokeByType" class="col-md-3 panel-body">
+       
+        <div ng-repeat="pokemonName in pokeByType" class="col-md-2 panel-body" >
             <!-- <button class="panel"> -->
+
+
             <a ng-click="getPokemonDetail(pokemonName.pokemon.name)" class="btn btn-default">
                 <div class="panel-body">
                     <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName.pokemon.name}}.png"
