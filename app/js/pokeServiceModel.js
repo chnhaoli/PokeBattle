@@ -179,8 +179,8 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
                     teamDetails[index].battleStats = that.calcStats(data);
 
                     // TODO: !!!!!!!! Starting data for testing - remove later
-                    teamDetails[index].battleStats.HP = 1;
-                    console.log(teamDetails[index].battleStats);
+                    //teamDetails[index].battleStats.HP = 1;
+                    //console.log(teamDetails[index].battleStats);
 
                     teamDetails[index].type = that.restructureTypes(data.types);
                     that.getMoves(teamDetails[index], function(){

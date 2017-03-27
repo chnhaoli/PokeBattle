@@ -77,7 +77,7 @@ pokeBattleApp.directive('dndElement', function() {
 
       elem.on('dragstart', function(e) {
         $('.ui-draggable-dragging').addClass('dragging');
-        e.target.style.opacity = '0.4';  // this / e.target is the source node.
+        //e.target.style.opacity = '0.4';  // this / e.target is the source node.
         //elem.css('opacity', '0.4');
 
 
