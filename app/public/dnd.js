@@ -1,6 +1,3 @@
-
-var that = this;
-
 function handleDragOver(e) {
   if (e.preventDefault) {
     e.preventDefault(); // Necessary. Allows us to drop.
@@ -12,12 +9,12 @@ function handleDragOver(e) {
 
 function handleDragEnter(e) {
   // this / e.target is the current hover target.
-  this.classList.add('over');
+  e.target.classList.add('over');
 }
 
 
 function handleDragLeave(e) {
-  this.classList.remove('over');  // this / e.target is previous target element.
+  e.target.classList.remove('over');  // this / e.target is previous target element.
 }
 
 var cols = document.querySelectorAll('#columns .column');
@@ -37,10 +34,10 @@ function handleDrop(e) {
   }
 
   // Don't do anything if dropping the same column we're dragging.
-  if (dragSrcEl != this) {
+  if (dragSrcEl != e.target) {
     // Set the source column's HTML to the HTML of the column we dropped on.
-    dragSrcEl.innerHTML = this.innerHTML;
-    this.innerHTML = e.dataTransfer.getData('text/html');
+    dragSrcEl.innerHTML = e.target.innerHTML;
+    e.target.innerHTML = e.dataTransfer.getData('text/html');
   }
 
   return false;
@@ -70,12 +67,12 @@ var dragSrcEl = null;
 
 function handleDragStart(e) {
   // Target (this) element is the source node.
-  this.style.opacity = '0.4';
+  e.target.style.opacity = '0.4';
 
-  dragSrcEl = this;
+  dragSrcEl = e.target;
 
   e.dataTransfer.effectAllowed = 'move';
-  e.dataTransfer.setData('text/html', this.innerHTML);
+  e.dataTransfer.setData('text/html', e.target.innerHTML);
 }
 
 

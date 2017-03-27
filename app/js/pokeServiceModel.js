@@ -77,10 +77,16 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
       console.log(team);
     }
 
-    this.addToTeam = function(pokemonName) {
-      team.push(pokemonName);
-      console.log(team);
 
+    this.addToTeam = function(pokemonName) {
+      if (team.length>3) {
+         alert("You already have 4 Pokémons in your team, no cheating ~^o^~");
+      }
+      else
+      {
+        team.push(pokemonName);
+        console.log(team);
+      }
     }
 
     this.deleteFromTeam = function(pokemonName) {
@@ -90,6 +96,15 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
         }
         break;
       }
+    }
+
+    this.getIsInTeam = function(pokemonName){
+        for(var i = 0; i < team.length; ++i) {
+            if(pokemonName == team[i]) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

@@ -55,7 +55,8 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Add to Team</button>
+            <button ng-show="!$ctrl.isInListDialogue()" class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Add to Team</button>
+            <button ng-show="$ctrl.isInListDialogue()" class="btn btn-primary" type="button" ng-click="$ctrl.delete()">Delete from Team</button>
             <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
         </div>
     </script>
@@ -68,10 +69,12 @@
 <div class="col-md-12 panel-body">
  
         <div class="col-md-12 panel-body">
-            <div class="col-md-3 column" ng-repeat="pokemonName in team()" draggable="true" ondragstart="handleDragStart(event);" 
+            <div class="col-md-3" ng-repeat="pokemonName in team()">
+                 <div ng-if="isInList(pokemonName)"><a ng-click="deleteFromTeam(pokemonName)"><img src="images/selected.png" style="float: right;" /></a>
+                 </div>
+                <img class="column" draggable="true" ondragstart="handleDragStart(event);" 
                 ondragover="handleDragOver(event);" ondragenter="handleDragEnter(event)"; ondragleave="handleDragLeave(event);" 
-                ondrop="handleDrop(event);" ondragend="handleDragEnd(event);">
-                <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'" class="teamImg" alt="{{pokemonName}}" >
+                ondrop="handleDrop(event);" ondragend="handleDragEnd(event);" ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'" class="teamImg" alt="{{pokemonName}}" >
                 <p class="col-md-12" style="text-align: center;">{{pokemonName}}</p>
             </div>
         </div>

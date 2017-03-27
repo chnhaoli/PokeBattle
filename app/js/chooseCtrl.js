@@ -26,9 +26,7 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
 
   $scope.type = '1';
   $scope.filter = '';
-  $scope.pokeByType =' ';
-  $scope.isSelected = true;
-  $scope.pokemonName=false
+  $scope.pokeByType = '';
 
   $scope.loading = true;
 
@@ -38,25 +36,16 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
   };
 
   $scope.isInList = function(name) {
-    var team = $scope.team();
-    for(var i = 0; i < team.length; ++i) {
-      if(name == team[i]) {
-        return true;
-      }
-    }
-    return false;
+    return PokeModel.getIsInTeam(name);
   }
 
   $scope.addToTeam = function(pokemonName){
-    PokeModel.addToTeam(pokemonName);
-   // $scope.pokemonName.pokemon.name = false;
-    $scope.isSelected = false;
+    PokeModel.addToTeam(pokemonName);   
   }
 
   $scope.deleteFromTeam = function(pokemonName){
     PokeModel.deleteFromTeam(pokemonName);
     PokeModel.getTeam();
-    $scope.isSelected = true;
   }
 
 
@@ -81,7 +70,6 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
             return $ctrl.items;
           },
           pokemonName: function() {
-            console.log($scope.selectedPokemonDetail);
             return $scope.selectedPokemonDetail;
           }
         }
@@ -247,10 +235,21 @@ pokeBattleApp.controller('ModalInstanceCtrl', function ($uibModalInstance, pokem
   var $ctrl = this;
   $ctrl.pokemonName = pokemonName;
 
+  $ctrl.isInListDialogue = function() {
+    console.log(11111);
+    return PokeModel.getIsInTeam($ctrl.pokemonName.name);
+  }
+
   $ctrl.ok = function () {
     //$uibModalInstance.close($ctrl.selected.item);
     $uibModalInstance.close();
     PokeModel.addToTeam($ctrl.pokemonName.name);
+  };
+
+  $ctrl.delete = function () {
+    //$uibModalInstance.close($ctrl.selected.item);
+    $uibModalInstance.close();
+    PokeModel.deleteFromTeam($ctrl.pokemonName.name);
   };
 
   $ctrl.cancel = function () {
