@@ -30,6 +30,7 @@ h2 {
 h3 {
   font-family: 'Baloo Bhaina', cursive;
   color: #a5a5a5;
+  text-align: center;
 }
 
 h4 {
@@ -449,6 +450,38 @@ p {
 .column.over {
   border: 2px dashed #000;
 }
+
+.label {
+  font-size: 16px;
+  margin-left:20px;
+  margin-bottom:30px;
+  margin-top:30px;
+  float: left;
+
+}
+
+.progress-striped{
+  margin-top: 10px;
+}
+
+.teamSelection {
+  text-align: center;
+}
+
+.teamSelectionIcon{
+  margin-left:180px;
+}
+
+.mainViewSelect{
+  margin-top:-10px;
+  margin-left:210px;
+}
+
+/*.startSectionButton{
+  margin-top: 20px;
+}
+*/
+
 /*.homeButton{
   background-color: #3466af;
   color: #ffcb05;
@@ -494,7 +527,7 @@ p {
   animation-iteration-count: infinite;
 }
 
-<style type="text/css">
+
 .form-style-6{
     font: 95% Arial, Helvetica, sans-serif;
     max-width: 400px;
@@ -571,4 +604,3 @@ p {
 .form-style-6 input[type="button"]:hover{
     background: #03476B;
 }
-</style>

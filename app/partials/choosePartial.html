@@ -5,53 +5,49 @@
             <h3 class="modal-title" id="modal-title">Confirm Pokémon</h3>
         </div>
         <div class="modal-body" id="modal-body">
-            <!--<ul>
-                <li ng-repeat="item in $ctrl.items">
-                    <a href="#" ng-click="$event.preventDefault(); $ctrl.selected.item = item">{{ item }}</a>
-                </li>
-            </ul>
-            Selected: <b>{{ $ctrl.selected.item }}</b>-->
-            <h4>Choose {{$ctrl.pokemonName.name}} to be on your team?</h4>
+            <h4>Choose {{$ctrl.pokemon.name}} to be on your team?</h4>
 
             <!-- showtype -->
-            <p ng-repeat = "type in $ctrl.pokemonName.types.object.type.name">{{type}}</p>
+            <div ng-repeat = "type in $ctrl.getPokemonTypes($ctrl.pokemon.types)">
+                <div class="label label-success">{{type}}</div>
+            </div>
 
             <div ng-controller="ProgressDemoCtrl" class="panel-body">
                 <div class="col-md-12" style="text-align: right;">
                     <div class="col-md-4"><h4>HP</h4></div>
-                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>
+                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="255" value="$ctrl.pokemon.stats[5].base_stat" type="danger"></uib-progressbar>
                     </div>
                 </div>
 
                 <div class="col-md-12" style="text-align: right;">
                     <div class="col-md-4"><h4>Attack</h4></div>
-                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>
+                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="190" value="$ctrl.pokemon.stats[4].base_stat" type="danger"></uib-progressbar>
                     </div>
                 </div>
 
                 <div class="col-md-12" style="text-align: right;">
                     <div class="col-md-4"><h4>Defense</h4></div>
-                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>
+                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="230" value="$ctrl.pokemon.stats[3].base_stat" type="danger"></uib-progressbar>
                     </div>
                 </div>
 
                 <div class="col-md-12" style="text-align: right;">
                     <div class="col-md-4"><h4>Special Attack</h4></div>
-                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>
+                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="194" value="$ctrl.pokemon.stats[2].base_stat" type="danger"></uib-progressbar>
                     </div>
                 </div>
 
                 <div class="col-md-12" style="text-align: right;">
                     <div class="col-md-4"><h4>Special Defense</h4></div>
-                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>
+                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="230" value="$ctrl.pokemon.stats[1].base_stat" type="danger"></uib-progressbar>
                     </div>
                 </div>
 
-                <div class="col-md-12" style="text-align: right;">
+               <!--  <div class="col-md-12" style="text-align: right;">
                     <div class="col-md-4"><h4>Speed</h4></div>
-                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="200" value="166" type="danger"><i>166 / 200</i></uib-progressbar>
+                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="180" value="$ctrl.pokemon.stats[0].base_stat" type="danger"></uib-progressbar>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="modal-footer">
@@ -68,17 +64,17 @@
 <!-- my team -->
 <div class="col-md-12 panel-body">
 
-        <div class="col-md-12 panel-body">
-            <div class="col-md-3" ng-repeat="pokemonName in team()">
-                 <div ng-if="isInList(pokemonName)"><a ng-click="deleteFromTeam(pokemonName)"><img src="images/selected.png" style="float: right;" /></a>
+        <div class="col-md-12 panel-body" style="height: 300px;">
+            <div class="col-md-3 teamSelection"><p>1</p></div>
+            <div class="col-md-3 teamSelection"><p>2</p></div>
+            <div class="col-md-3 teamSelection"><p>3</p></div>
+            <div class="col-md-3 teamSelection"><p>4</p></div>
+            <div class="col-md-3 teamSelection" ng-repeat="pokemonName in team()">
+                 <div class="teamSelectionIcon" ng-if="isInList(pokemonName)"><img src="images/unselect.png" ng-click="deleteFromTeam(pokemonName)"/>
                  </div>
-                <!--<img class="column" draggable="true" ondragstart="handleDragStart(event);"
-                ondragover="handleDragOver(event);" ondragenter="handleDragEnter(event)"; ondragleave="handleDragLeave(event);"
-                ondrop="handleDrop(event);" ondragend="handleDragEnd(event);" ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'" class="teamImg" alt="{{pokemonName}}" >
-                -->
                 <div class="dndPokemon" dnd-element>
                 </div>
-                <p class="col-md-12" style="text-align: center;">{{pokemonName}}</p>
+                <p class="col-md-12">{{pokemonName}}</p>
             </div>
         </div>
         <div class="col-md-6" style="text-align: right;"><a href="#!/overview" type="button" class="btn btn-primary gradient">Random Team!</a></div>
@@ -114,28 +110,25 @@
 
 <!-- Main -->
 <div class="panel-body">
-  <div class="row" style="max-height: 625px; width: 100%;">
+  <div class="row">
         <!-- Where the search results locates. -->
-        <div ng-repeat="pokemonName in pokeByType" class="col-md-3 panel-body">
+        <div ng-repeat="pokemon in pokeByType" class="col-md-3 panel-body">
             <!-- <button class="panel"> -->
-            <a ng-click="getPokemonDetail(pokemonName.pokemon.name)" class="btn btn-default">
+            <a ng-click="getPokemonDetail(pokemon.pokemon.name)" class="btn btn-default">
                 <div class="panel-body">
-                    <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName.pokemon.name}}.png"
+                    <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemon.pokemon.name}}.png"
                     onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'"
-                    alt="{{pokemonName.pokemon.name}}"
+                    alt="{{pokemon.pokemon.name}}"
                     class="img-responsive"
-                    style="width: 210px ; height:210px; margin:auto;/>
+                    style="width: 210px ; height:210px;"/>
                 </div>
-                <div class="tool panel-heading">
-                    <h4>{{pokemonName.pokemon.name}}</h4>
+                <div class="panel-heading">
+                    <h4>{{pokemon.pokemon.name}}</h4>
                 </div>
-                <!-- <div class="panel-footer">
-                    {{dish.readyInMinutes}} mins
-                </div> -->
             </a>
-            <div ng-if="!isInList(pokemonName.pokemon.name)"><a ng-click="addToTeam(pokemonName.pokemon.name)"><img src="images/select.png" style="float: right;" /></a></div>
-            <div ng-if="isInList(pokemonName.pokemon.name)"><a ng-click="deleteFromTeam(pokemonName.pokemon.name)"><img src="images/selected.png" style="float: right;" /></a>
-            </div>
+            <!-- click icon to sdd and remove pokemon-->
+            <div class="mainViewSelect" ng-if="!isInList(pokemon.pokemon.name)"><img src="images/select.png" ng-click="addToTeam(pokemon.pokemon.name)"/></div>
+            <div class="mainViewSelect" ng-if="isInList(pokemon.pokemon.name)"><img src="images/selected.png" ng-click="deleteFromTeam(pokemon.pokemon.name)"/></div>
         </div>
     </div>
 </div>
