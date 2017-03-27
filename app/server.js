@@ -18,3 +18,4 @@ app.listen(process.env.PORT || 8000); //the port you want to use
 
 // Previous package.json start script:
 //"start": "http-server app/ -a 0.0.0.0 -p 8000"
+//   "start": "node ./app/server.js"

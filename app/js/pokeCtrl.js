@@ -8,31 +8,4 @@ pokeBattleApp.controller('PokeCtrl', function ($scope,PokeModel) {
       PokeModel.clearOffset();
     }
 
-
-    // Dinner example
-
-    $scope.numberOfGuests = PokeModel.getNumberOfGuests();
-
-    $scope.setNumberOfGuest = function(number){
-        PokeModel.setNumberOfGuests(number);
-    }
-
-    $scope.getNumberOfGuests = function() {
-        return PokeModel.getNumberOfGuests();
-    }
-
-    $scope.plusNumberOfGuests = function() {
-        PokeModel.setNumberOfGuests(PokeModel.getNumberOfGuests() + 1);
-        $scope.numberOfGuests = PokeModel.getNumberOfGuests();
-    }
-
-    $scope.minusNumberOfGuests = function() {
-        PokeModel.setNumberOfGuests(PokeModel.getNumberOfGuests() - 1);
-        $scope.numberOfGuests = PokeModel.getNumberOfGuests();
-    }
-
-    $scope.selectedMenu = PokeModel.getSelectedMenu();
-    $scope.getTotalCost = function(){
-        return PokeModel.getTotalPrice() * PokeModel.getNumberOfGuests();
-    }
 });

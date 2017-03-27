@@ -35,19 +35,26 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
     return PokeModel.getTeam();
   };
 
+
   $scope.isInList = function(name) {
     return PokeModel.getIsInTeam(name);
   }
 
   $scope.addToTeam = function(pokemonName){
-    PokeModel.addToTeam(pokemonName);   
+    PokeModel.addToTeam(pokemonName);
   }
 
   $scope.deleteFromTeam = function(pokemonName){
+    console.log("hello");
+    console.log(pokemonName);
     PokeModel.deleteFromTeam(pokemonName);
-    PokeModel.getTeam();
+    console.log($scope.team());
   }
 
+
+  $scope.swapTwoPokemon = function(index1, index2) {
+    PokeModel.swapTwoPokemon(index1, index2);
+  }
 
   //Message box
   var $ctrl = this;
@@ -62,7 +69,7 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
         ariaDescribedBy: 'modal-body',
         templateUrl: 'myModalContent.html',
         controller: 'ModalInstanceCtrl',
-        controllerAs: '$ctrl',  
+        controllerAs: '$ctrl',
         size: size,
         appendTo: parentElem,
         resolve: {
@@ -85,14 +92,6 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
     $ctrl.toggleAnimation = function () {
       $ctrl.animationsEnabled = !$ctrl.animationsEnabled;
     };
-
-
-    // $ctrl.ok = function () {
-    //   $scope.isSelected = false;
-    // //$uibModalInstance.close($ctrl.selected.item);
-    //   $uibModalInstance.close();
-    //   PokeModel.addToTeam($ctrl.pokemonName.name);
-    // };
 
 
     //get pokemon by type
@@ -133,97 +132,25 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
       if(filter === ''){
         $scope.getPokeByType($scope.type);
       }
-      else{     
+      else{
         PokeModel.GetPokeByType.get({typeId: type}, function(data){
           for (i in data.pokemon){
             if(filter === data.pokemon[i].pokemon.name){
               searchresult.push(data.pokemon[i]);
             }}
-            $scope.pokeByType = searchresult; 
+            $scope.pokeByType = searchresult;
           },function(data){
             console.log("Something went wrong");
           });
       }}
 
-
-  // Drag and drop - testing
-
-  // Simple
-  $scope.models = {
-   selected: null,
-   lists: {"A": [], "B": []}
- };
-
-
-   // Generate initial model
-   for (var i = 0; i <= 3; ++i) {
-     $scope.models.lists.A.push({label: "Item A" + i});
-     $scope.models.lists.B.push({label: "Item B" + i});
-   }
-
-
-   // Model to JSON for demo purpose
-   $scope.$watch('models', function(model) {
-     $scope.modelAsJson = angular.toJson(model, true);
-   }, true);
-
-   // Advanced
-
-   /*$scope.dragoverCallback = function(index, external, type, callback) {
-      $scope.logListEvent('dragged over', index, external, type);
-      // Invoke callback to origin for container types.
-      if (type == 'container' && !external) {
-          console.log('Container being dragged contains ' + callback() + ' items');
-      }
-      return index < 10; // Disallow dropping in the third row.
-   };
-
-   $scope.dropCallback = function(index, item, external, type) {
-      $scope.logListEvent('dropped at', index, external, type);
-      // Return false here to cancel drop. Return true if you insert the item yourself.
-      return item;
-   };
-
-   $scope.logEvent = function(message) {
-      console.log(message);
-   };
-
-   $scope.logListEvent = function(action, index, external, type) {
-      var message = external ? 'External ' : '';
-      message += type + ' element was ' + action + ' position ' + index;
-      console.log(message);
-    };*/
-
-   // Initialize model
-   /*$scope.model = [[], []];
-   var id = 10;
-   angular.forEach(['all', 'move', 'copy', 'link', 'copyLink', 'copyMove'], function(effect, i) {
-     var container = {items: [], effectAllowed: effect};
-     for (var k = 0; k < 7; ++k) {
-       container.items.push({label: effect + ' ' + id++, effectAllowed: effect});
-     }
-     $scope.model[i % $scope.model.length].push(container);
-   });*/
-
-   /*$scope.model = [[], []];
-   var id = 10;
-   angular.forEach(['all'], function(effect, i) {
-     var container = {items: [], effectAllowed: effect};
-     for (var k = 0; k < 4; ++k) {
-       container.items.push({label: effect + ' ' + id++, effectAllowed: effect});
-     }
-     $scope.model[i % $scope.model.length].push(container);
-   });
-
-
-   $scope.$watch('model', function(model) {
-     $scope.modelAsJson = angular.toJson(model, true);
-   }, true);*/
-
-  // Modal popup - testing
-
-  //search bar function 
-
+      // Can we do the following? (Is it bad practive to use getElementById in controller?)
+      document.getElementById("searchBar").addEventListener("keyup", function(event) {
+        event.preventDefault();
+        if (event.keyCode == 13) {
+            document.getElementById("searchButton").click();
+        }
+      });
 
 });
 
