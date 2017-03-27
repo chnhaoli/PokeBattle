@@ -48,8 +48,10 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
   }
 
   $scope.deleteFromTeam = function(pokemonName){
+    console.log("hello");
+    console.log(pokemonName);
     PokeModel.deleteFromTeam(pokemonName);
-    PokeModel.getTeam();
+    console.log($scope.team());
   }
 
 
@@ -144,6 +146,14 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
             console.log("Something went wrong");
           });
       }}
+
+      // Can we do the following? (Is it bad practive to use getElementById in controller?)
+      document.getElementById("searchBar").addEventListener("keyup", function(event) {
+        event.preventDefault();
+        if (event.keyCode == 13) {
+            document.getElementById("searchButton").click();
+        }
+      });
 
 });
 

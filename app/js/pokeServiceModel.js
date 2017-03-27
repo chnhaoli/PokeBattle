@@ -28,7 +28,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     //     pokemonAllId.push(i);
     // }
     //Team in pokemon name;
-    var team = [1,2,3,4];
+    var team = [];
     //Detailed opponent;
     var opponentDetails = {};
     //Detailed pokemons for whole team;
@@ -208,10 +208,6 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
                     //teamDetails[index].level = null;
                     teamDetails[index].battleStats = that.calcStats(data);
 
-                    // TODO: !!!!!!!! Starting data for testing - remove later
-                    // teamDetails[index].battleStats.HP = 1;
-                    // console.log(teamDetails[index].battleStats);
-
                     teamDetails[index].type = that.restructureTypes(data.types);
                     that.getMoves(teamDetails[index], function(){
                         if (teamDetails[index].movesUsed.length === 4){
@@ -263,12 +259,13 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     }
 
     this.deleteFromTeam = function(pokemonName) {
-        for(key in team){
-            if(pokemonName == team[key]){
-                team.splice(key,1);
-            }
+
+      for(key in team){
+        if(pokemonName == team[key]){
+            team.splice(key,1);
             break;
         }
+      }
     }
 
     this.getIsInTeam = function(pokemonName){

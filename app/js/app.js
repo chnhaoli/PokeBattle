@@ -75,15 +75,19 @@ pokeBattleApp.controller('AudioController', function($scope) {
 pokeBattleApp.directive('dndElement', function() {
   return {
     replace: 'true',
-    template: '<img class="chosenPokemon" ng-src="https://img.pokemondb.net/artwork/{{pokemonName}}.jpg" index="{{$index}}">',
+    template: '<img class="chosenPokemon teamImg" ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName}}.png" index="{{$index}}">',
     link: function(scope, elem, attr) {
       var dragSrcEl = null;
 
       elem.attr('draggable', 'true');
 
+      elem.on('error', function(e) {
+        e.target.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg';
+      })
+
       elem.on('dragstart', function(e) {
         $('.ui-draggable-dragging').addClass('dragging');
-        e.target.style.opacity = '0.4';  // this / e.target is the source node.
+        //e.target.style.opacity = '0.4';  // this / e.target is the source node.
         //elem.css('opacity', '0.4');
 
 
