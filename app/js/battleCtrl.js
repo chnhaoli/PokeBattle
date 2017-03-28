@@ -14,7 +14,7 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $log, dialog
   };
 
   // Booleans to check if loading has finished
-  $scope.loading = function() {
+  $scope.isLoading = function() {
     return PokeModel.getIsLoading();
   }
 
@@ -43,6 +43,7 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $log, dialog
   $scope.score = function() {
     return PokeModel.getScore();
   }
+
 
   // Update user's health bar if user = true, else update opponent's health bar.
   $scope.updateHealthBar = function(user) {

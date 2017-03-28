@@ -1,4 +1,4 @@
-<div class="loadingGif" ng-show="loading()">
+<div class="loadingGif" ng-show="isLoading()">
 </div>
 
 <div class="error" ng-show="error">
@@ -35,7 +35,7 @@
       </div>
     </div>
 
-    <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{teamDetails()[0].name}}.png"></img>
+    <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{teamDetails()[0].name}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'"></img>
     <p>{{teamDetails()[0].name}}</p>
   </div>
   <div class="col-lg-6" id="secondPokemon">
@@ -45,7 +45,7 @@
       </div>
     </div>
 
-    <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{opponentDetails().name}}.png"></img>
+    <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{opponentDetails().name}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'"></img>
 
     <p>{{opponentDetails().name}}</p>
   </div>

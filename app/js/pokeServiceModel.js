@@ -6,7 +6,9 @@
 pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     var that = this;
     //For loading widget;
-    var isLoading = true;
+    var teamIsLoading = false;
+    var oppIsLoading = false;
+    var isLoading = false;
     //1-721; 10001-10090;
     var pokemonAllName = [];
     this.GetPokedex = $resource('http://pokeapi.co/api/v2/pokedex/:index', {}, {
@@ -178,11 +180,48 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
 
         }
     });
+
+    // Checks the moves array for duplicate moves and replaces them
+    this.checkDuplicates = function(randomMoveIds, pokemon) {
+      var duplicateExists = true;
+      while (duplicateExists) {
+        console.log("enter while");
+        for (var i = 0; i < randomMoveIds.length; i++) {
+          var firstMoveId = randomMoveIds[i];
+          for (var j = 0; j < randomMoveIds.length; j++) {
+            if (j != i) {
+              var secondMoveId = randomMoveIds[j];
+              if (firstMoveId == secondMoveId) {
+                // Reassigning new random number as move id
+                randomMoveIds[i] = that.randomInt(pokemon.moves.length-1);
+              } else {
+                console.log("not same");
+                if (j == randomMoveIds.length-2 && i == randomMoveIds.length-1) {
+                  console.log("compared all");
+                  console.log(randomMoveIds);
+                  // Have compared all moves
+                  duplicateExists = false;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      return randomMoveIds;
+    }
     //GET: Get 4 random moves for a pokemon;
     this.getMoves = function(pokemon, callback){
         pokemon.movesUsed = [];
+        var randomMoveIds = [];
+        for (var i = 0; i < 4; i++) {
+          var randomNum = that.randomInt(pokemon.moves.length-1);
+          randomMoveIds.push(randomNum);
+        }
+        randomMoveIds = that.checkDuplicates(randomMoveIds, pokemon);
         for (var i = 0; i < 4; i++){
-            that.GetMove.get({moveId : pokemon.moves[that.randomInt(pokemon.moves.length-1)].move.name}, function(index) {
+            var moveId = randomMoveIds[i];
+            that.GetMove.get({moveId : pokemon.moves[moveId].move.name}, function(index) {
                 return function(data) {
                     pokemon.movesUsed[index] = {};
                     pokemon.movesUsed[index].name = data.name;
@@ -210,10 +249,22 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
 
                     teamDetails[index].type = that.restructureTypes(data.types);
                     that.getMoves(teamDetails[index], function(){
-                        if (teamDetails[index].movesUsed.length === 4){
-                            isLoading = false;
-                            console.log(teamDetails[index]);
+                        console.log(teamDetails[index]);
+
+                        var countFinished = 0;
+                        for (var i = 0; i < 4; i++) {
+                            if (teamDetails[i].movesUsed.length === 4){
+                              countFinished++;
+                            }
                         }
+                        if (countFinished == 4) {
+                            console.log("hello");
+                            teamIsLoading = false;
+                            if(oppIsLoading == false) {
+                                isLoading = false;
+                            }
+                        }
+
                     });
                 }
             }(key), function (error) {
@@ -221,6 +272,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
             })
         }
     }
+
     //Returns the team details;
     this.getTeamDetails = function() {
         return teamDetails;
@@ -297,7 +349,10 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
             }
             that.getMoves(opponentDetails, function() {
                 if (opponentDetails.movesUsed.length === 4) {
-                    isLoading = false;
+                    oppIsLoading = false;
+                    if (teamIsLoading == false) {
+                        isLoading = false;
+                    }
                     console.log(opponentDetails);
                 }
             });

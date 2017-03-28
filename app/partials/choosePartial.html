@@ -54,7 +54,9 @@
 <!--<button type="button" class="btn btn-default" ng-click="open('sm')">Small modal</button>-->
 </div>
 
-<h4>Choose 4 Pokémons to battle with</h4>
+<div style="text-align: center">
+<h4>Drag and drop to choose order of your team:</h4>
+</div>
 
 <!-- my team -->
 <div class="col-md-12 panel-body">
@@ -78,12 +80,16 @@
         <p class="col-md-12" style="text-align: center;">{{pokemonName}}</p>
     </div>
 </div>
-<div class="col-md-6" style="text-align: right;"><a ng-click="randomTeam()" type="button" class="btn btn-primary gradient">Random Team!</a></div>
-<div class="col-md-6" style="text-align: left;"><a ng-href="#!/battle" type="button" class="btn btn-primary gradient">Go!</a></div>
+<div class="col-md-6" style="text-align: right; marign-bottom: 30px"><a ng-click="randomTeam()" type="button" class="btn btn-primary gradient">Random Team!</a></div>
+<div class="col-md-6" style="text-align: left; margin-bottom: 30px"><a ng-href="#!/battle" type="button" class="btn btn-primary gradient">Go!</a></div>
 <!-- Button here to confirm the dinner menu. -->
 
 <!-- <a ng-show="selectedMenu.length > 0" id="confirmDinnerButton" href="#!/overview" type="button" class="btn btn-warning btn-md col-md-2">Battle</a>
 <a ng-show="selectedMenu.length == 0" ng-disabled="true" type="button" class="btn btn-warning btn-disabled btn-md col-md-2">Battle!</a> -->
+</div>
+
+<div style="text-align: center;">
+<h4>Choose 4 Pokémons to battle with</h4>
 </div>
 
 <!-- type -->
@@ -138,5 +144,5 @@
 
 
   <div class="loadingGifDiv" ng-show="isLoading">
-    <img id="loadingGif" src="../images/PikaLoading.gif">
+    <img class="loadingGif">
   </div>
