@@ -40,7 +40,7 @@ h3 {
 }
 
 h4 {
-  font-family: "Asul", cursive, sans-serif;
+  font-family: "Nunito";
   font-size: 22px;
 }
 
@@ -677,4 +677,3 @@ p {
   -webkit-transform: translateY(-15px);
   transform: translateY(-15px);
 }
-
