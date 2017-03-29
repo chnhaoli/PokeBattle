@@ -47,8 +47,15 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
   }
 
   $scope.addToTeam = function(pokemonName){
+    if ($scope.team().length > 3) {
+     $scope.openTip();
+   }
+   else
+   {
     PokeModel.addToTeam(pokemonName);
   }
+
+}
 
   $scope.deleteFromTeam = function(pokemonName){
     PokeModel.deleteFromTeam(pokemonName);
@@ -69,104 +76,127 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
   $ctrl.animationsEnabled = true;
   $scope.open = function (size, pokemon, parentSelector) {
     console.log("open");
-      //Get specific pokemon's info
-      var parentElem = parentSelector ? angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
-      var modalInstance = $uibModal.open({
-        animation: $ctrl.animationsEnabled,
-        ariaLabelledBy: 'modal-title',
-        ariaDescribedBy: 'modal-body',
-        templateUrl: 'myModalContent.html',
-        controller: 'ModalInstanceCtrl',
-        controllerAs: '$ctrl',
-        size: size,
-        appendTo: parentElem,
-        resolve: {
-          items: function () {
-            return $ctrl.items;
-          },
-          pokemon: function() {
-            return $scope.selectedPokemonDetail;
-          }
+    //Get specific pokemon's info
+    var parentElem = parentSelector ? angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
+    var modalInstance = $uibModal.open({
+      animation: $ctrl.animationsEnabled,
+      ariaLabelledBy: 'modal-title',
+      ariaDescribedBy: 'modal-body',
+      templateUrl: 'myModalContent.html',
+      controller: 'ModalInstanceCtrl',
+      controllerAs: '$ctrl',
+      size: size,
+      appendTo: parentElem,
+      resolve: {
+        items: function () {
+          return $ctrl.items;
+        },
+        pokemon: function() {
+          return $scope.selectedPokemonDetail;
         }
-      });
-
-      modalInstance.result.then(function (selectedItem) {
-        $ctrl.selected = selectedItem;
-      }, function () {
-        $log.info('Modal dismissed at: ' + new Date());
-      });
-    };
-
-    $ctrl.toggleAnimation = function () {
-      $ctrl.animationsEnabled = !$ctrl.animationsEnabled;
-    };
-
-
-    //get pokemon by type
-    $scope.getPokeByType = function(id) {
-      $scope.isLoading = true;
-      $scope.isError = false;
-      PokeModel.GetPokeByType.get({typeId:id},function(data){
-        $scope.pokeByType = data.pokemon;
-        $scope.isLoading = false;
-      },function(data){
-        $scope.isLoading = false;
-        $scope.isError = true;
-      });
-    }
-
-    $scope.getPokeByType($scope.type);
-
-
-    //get detail information of a pokemon
-    $scope.getPokemonDetail = function(pokemonName) {
-      $scope.isLoading = true;
-      $scope.isError = false;
-      PokeModel.GetPokemon.get({pokemonNameOrId:pokemonName},function(data){
-        $scope.selectedPokemonDetail = data;
-        console.log($scope.selectedPokemonDetail);
-        $scope.open('md', pokemonName);
-        $scope.isLoading = false;
-      },function(data){
-       $scope.isLoading = false;
-       $scope.isError = true;
-     });
-    }
-
-
-    // Search pokemon with type and filter
-    $scope.searchPoke = function(filter, type){
-      var searchresult = [];
-      if(filter === ''){
-        $scope.getPokeByType($scope.type);
       }
-      else{
-        PokeModel.GetPokeByType.get({typeId: type}, function(data){
-          for (i in data.pokemon){
-            if(filter === data.pokemon[i].pokemon.name){
-              searchresult.push(data.pokemon[i]);
-            }}
-            $scope.pokeByType = searchresult;
-          },function(data){
-            console.log("Something went wrong");
-          });
-      }
-    }
+    });
 
-    // Can we do the following? (Is it bad practive to use getElementById in controller?)
-    /*document.getElementById("searchBar").addEventListener("keyup", function(event) {
-      event.preventDefault();
-      if (event.keyCode == 13) {
-          document.getElementById("searchButton").click();
-      }
-    });*/
+    modalInstance.result.then(function (selectedItem) {
+      $ctrl.selected = selectedItem;
+    }, function () {
+      $log.info('Modal dismissed at: ' + new Date());
+    });
+  };
 
-    $scope.checkIfEnter = function(event, filter, type) {
-      event.preventDefault();
-      if (event.keyCode == 13) {
-          $scope.searchPoke(filter, type);
-      }
+  $ctrl.toggleAnimation = function () {
+    $ctrl.animationsEnabled = !$ctrl.animationsEnabled;
+  };
+
+  $scope.openTip = function (size, parentSelector) {
+    //Get specific pokemon's info
+    var tipMessage="";
+    var parentElem = parentSelector ? angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
+    var modalInstance = $uibModal.open({
+      animation: $ctrl.animationsEnabled,
+      ariaLabelledBy: 'modal-title',
+      ariaDescribedBy: 'modal-body',
+      templateUrl: 'myModalContentMessageTip.html',
+      controller: 'ModalInstanceTipCtrl',
+      controllerAs: '$ctrl',
+      size: size,
+      appendTo: parentElem,
+      resolve: {}
+    });
+
+    modalInstance.result.then(function (selectedItem) {
+      $ctrl.selected = selectedItem;
+    }, function () {
+      $log.info('Modal dismissed at: ' + new Date());
+    });
+  };
+
+
+  //get pokemon by type
+  $scope.getPokeByType = function(id) {
+    $scope.isLoading = true;
+    $scope.isError = false;
+    PokeModel.GetPokeByType.get({typeId:id},function(data){
+      $scope.pokeByType = data.pokemon;
+      $scope.isLoading = false;
+    },function(data){
+      $scope.isLoading = false;
+      $scope.isError = true;
+    });
+  }
+
+  $scope.getPokeByType($scope.type);
+
+
+  //get detail information of a pokemon
+  $scope.getPokemonDetail = function(pokemonName) {
+    $scope.isLoading = true;
+    $scope.isError = false;
+    PokeModel.GetPokemon.get({pokemonNameOrId:pokemonName},function(data){
+      $scope.selectedPokemonDetail = data;
+      console.log($scope.selectedPokemonDetail);
+      $scope.open('md', pokemonName);
+      $scope.isLoading = false;
+    },function(data){
+     $scope.isLoading = false;
+     $scope.isError = true;
+   });
+  }
+
+
+  // Search pokemon with type and filter
+  $scope.searchPoke = function(filter, type){
+    var searchresult = [];
+    if(filter === ''){
+      $scope.getPokeByType($scope.type);
     }
+    else{
+      PokeModel.GetPokeByType.get({typeId: type}, function(data){
+        for (i in data.pokemon){
+          if(filter === data.pokemon[i].pokemon.name){
+            searchresult.push(data.pokemon[i]);
+          }}
+          $scope.pokeByType = searchresult;
+        },function(data){
+          console.log("Something went wrong");
+        });
+    }
+  }
+
+  // Can we do the following? (Is it bad practive to use getElementById in controller?)
+  /*document.getElementById("searchBar").addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode == 13) {
+        document.getElementById("searchButton").click();
+    }
+  });*/
+
+  $scope.checkIfEnter = function(event, filter, type) {
+    event.preventDefault();
+    if (event.keyCode == 13) {
+        $scope.searchPoke(filter, type);
+    }
+  }
 
 });
 
@@ -203,6 +233,21 @@ pokeBattleApp.controller('ModalInstanceCtrl', function ($uibModalInstance, pokem
   };
 });
 
+
+// Please note that $uibModalInstance represents a modal window (instance) dependency.
+// It is not the same as the $uibModal service used above.
+
+
+
+pokeBattleApp.controller('ModalInstanceTipCtrl', function ($uibModalInstance, PokeModel) {
+
+  var $ctrl = this;
+
+  $ctrl.ok = function () {
+    //$uibModalInstance.close($ctrl.selected.item);
+    $uibModalInstance.close();
+  };
+});
 
 //progressbar controller
 pokeBattleApp.controller('ProgressDemoCtrl', function ($scope) {

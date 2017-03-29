@@ -51,8 +51,24 @@
     <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
 </div>
 </script>
+
 <!--<button type="button" class="btn btn-default" ng-click="open('sm')">Small modal</button>-->
 </div>
+
+
+
+<!-- messageTip -->
+<div class="modal-demo">
+    <script type="text/ng-template" id="myModalContentMessageTip.html">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modal-title">You already have 4 Pokémons in your team, no cheating ~^o^~</h3>
+            <div style="text-align: center;">
+            <button class="btn btn-primary tipButton" type="button" ng-click="$ctrl.ok()">Got it</button>
+            </div>
+        </div>
+    </script>
+</div>
+
 
 <div style="text-align: center">
 <h4>Drag and drop to choose order of your team:</h4>

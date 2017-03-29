@@ -300,14 +300,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
 
 
     this.addToTeam = function(pokemonName) {
-        if (team.length>3) {
-            alert("You already have 4 Pokémons in your team, no cheating ~^o^~");
-        }
-        else
-        {
-            team.push(pokemonName);
-            console.log(team);
-        }
+        team.push(pokemonName);
     }
 
     this.deleteFromTeam = function(pokemonName) {
