@@ -90,7 +90,7 @@
       <button class="btn btn-primary width150" ng-click="attack(3)">{{teamDetails()[0].movesUsed[3].name}}</button>
     </div>
     <div class="btnRow2">
-      <button class="btn btn-info  width150 battleBackButton" ng-click="back()">Back</button>
+      <button class="btn btn-warning width150 battleBackButton" ng-click="back()">Back</button>
     </div>
   </div>
 
@@ -115,16 +115,16 @@
     </div>
     <div class="btnRow2">
       <button class="btn btn-primary width150" ng-click="changePokemon(3)">{{teamDetails()[3].name}}</button>
-      <button class="btn btn-info width150 battleBackButton" ng-click="back()">Back</button>
+      <button class="btn btn-warning width150 battleBackButton" ng-click="back()">Back</button>
     </div>
   </div>
 
   <div class="buttons" ng-show="nextShow">
-    <button class="btn btn-primary width150" ng-click="nextTurn()">Next</button>
+    <button class="btn btn-primary" ng-click="nextTurn()">Next</button>
   </div>
 
   <div class="buttons" ng-show="nextOppShow">
-    <button class="btn btn-primary width150" ng-click="nextOpponent()">Battle next Pokémon!</button>
+    <button class="btn btn-primary" ng-click="nextOpponent()">Battle next Pokémon!</button>
   </div>
 
 </div>
