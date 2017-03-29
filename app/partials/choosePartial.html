@@ -97,7 +97,8 @@
     </div>
 </div>
 <div class="col-md-6" style="text-align: right; marign-bottom: 30px"><a ng-click="randomTeam()" type="button" class="btn btn-primary gradient">Random Team!</a></div>
-<div class="col-md-6" style="text-align: left; margin-bottom: 30px"><a ng-href="#!/battle" type="button" class="btn btn-primary gradient">Go!</a></div>
+<div ng-show = "isFourMem()" class="col-md-6" style="text-align: left; margin-bottom: 30px"><a ng-href="#!/battle" type="button" class="btn btn-primary gradient">Go!</a></div>
+<div ng-show = "!isFourMem()" class="col-md-6" style="text-align: left; margin-bottom: 30px"><button class="btn btn-primary gradient" ng-disabled = "true" >Go!</button></div>
 <!-- Button here to confirm the dinner menu. -->
 
 <!-- <a ng-show="selectedMenu.length > 0" id="confirmDinnerButton" href="#!/overview" type="button" class="btn btn-warning btn-md col-md-2">Battle</a>

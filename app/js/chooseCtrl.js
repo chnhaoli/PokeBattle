@@ -42,6 +42,15 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
     return PokeModel.getTeam();
   };
 
+  $scope.isFourMem = function(){
+    if( $scope.team().length == 4){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
   $scope.isInList = function(name) {
     return PokeModel.getIsInTeam(name);
   }
@@ -163,24 +172,6 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
   }
 
 
-  // Search pokemon with type and filter
-  $scope.searchPoke = function(filter, type){
-    var searchresult = [];
-    if(filter === ''){
-      $scope.getPokeByType($scope.type);
-    }
-    else{
-      PokeModel.GetPokeByType.get({typeId: type}, function(data){
-        for (i in data.pokemon){
-          if(filter === data.pokemon[i].pokemon.name){
-            searchresult.push(data.pokemon[i]);
-          }}
-          $scope.pokeByType = searchresult;
-        },function(data){
-          console.log("Something went wrong");
-        });
-    }
-  }
 
 
   // Search pokemon with type and filter

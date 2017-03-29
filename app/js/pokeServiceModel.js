@@ -326,7 +326,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     //GET: Get a random opponent;
     this.getRandomOpponent = function(callback) {
         isLoading = true;
-        var randomNum = that.randomInt(151);
+        var randomNum = that.randomInt(720)+1;
         this.GetPokemon.get({pokemonNameOrId: randomNum}, function(data) {
             opponentDetails = {};
             console.log('opp');
