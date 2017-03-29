@@ -97,11 +97,14 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, PokeModel) {
       size: size,
       appendTo: parentElem,
       resolve: {
-        items: function () {
-          return $ctrl.items;
+        team: function () {
+          return $scope.team();
         },
         pokemon: function() {
           return $scope.selectedPokemonDetail;
+        },
+        openTip: function() {
+          return $scope.openTip();
         }
       }
     });
@@ -119,7 +122,6 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, PokeModel) {
 
   $scope.openTip = function (size, parentSelector) {
     //Get specific pokemon's info
-    var tipMessage="";
     var parentElem = parentSelector ? angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
     var modalInstance = $uibModal.open({
       animation: $ctrl.animationsEnabled,
@@ -206,7 +208,7 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, PokeModel) {
 
 // Please note that $uibModalInstance represents a modal window (instance) dependency.
 // It is not the same as the $uibModal service used above.
-pokeBattleApp.controller('ModalInstanceCtrl', function ($uibModalInstance, pokemon, PokeModel) {
+pokeBattleApp.controller('ModalInstanceCtrl', function ($uibModalInstance, team, pokemon, openTip, PokeModel) {
 
   var $ctrl = this;
   $ctrl.pokemon = pokemon;
@@ -222,7 +224,12 @@ pokeBattleApp.controller('ModalInstanceCtrl', function ($uibModalInstance, pokem
   $ctrl.ok = function () {
     //$uibModalInstance.close($ctrl.selected.item);
     $uibModalInstance.close();
-    PokeModel.addToTeam($ctrl.pokemon.name);
+    console.log(team.length);
+    if (team.length == 4) {
+      openTip;
+    } else {
+      PokeModel.addToTeam($ctrl.pokemon.name);
+    }
   };
 
   $ctrl.delete = function () {
