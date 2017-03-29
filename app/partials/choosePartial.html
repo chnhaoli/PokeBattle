@@ -12,7 +12,7 @@
                 <div class="label label-success">{{type}}</div>
             </div>
 
-            <div ng-controller="ProgressDemoCtrl" class="panel-body">
+            <div class="panel-body">
                 <div class="col-md-12" style="text-align: right;">
                     <div class="col-md-4"><h4>HP</h4></div>
                     <div class="col-md-8"><uib-progressbar class="progress-striped" max="255" value="$ctrl.pokemon.stats[5].base_stat" type="danger"></uib-progressbar>
@@ -51,8 +51,24 @@
     <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
 </div>
 </script>
+
 <!--<button type="button" class="btn btn-default" ng-click="open('sm')">Small modal</button>-->
 </div>
+
+
+
+<!-- messageTip -->
+<div class="modal-demo">
+    <script type="text/ng-template" id="myModalContentMessageTip.html">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modal-title">You already have 4 Pokémons in your team, no cheating ~^o^~</h3>
+            <div style="text-align: center;">
+            <button class="btn btn-primary tipButton" type="button" ng-click="$ctrl.ok()">Got it</button>
+            </div>
+        </div>
+    </script>
+</div>
+
 
 <div style="text-align: center">
 <a href="#!/home">
@@ -89,8 +105,12 @@
     <h5>Drag and drop to choose order of your team.</h5>
     <h5> Choose 4 Pokémons to battle with.</h5>
 </div>
-<div class="col-md-6" style="text-align: right; margin-bottom: 30px"><a ng-click="randomTeam()" type="button" class="btn btn-primary gradient">Random Team!</a></div>
-<div class="col-md-6" style="text-align: left; margin-bottom: 30px"><a ng-href="#!/battle" type="button" class="btn btn-primary gradient">Go!</a></div>
+
+
+<div class="col-md-6" style="text-align: right; marign-bottom: 30px"><a ng-click="randomTeam()" type="button" class="btn btn-primary gradient">Random Team!</a></div>
+<div ng-show = "isFourMem()" class="col-md-6" style="text-align: left; margin-bottom: 30px"><a ng-href="#!/battle" type="button" class="btn btn-primary gradient">Go!</a></div>
+<div ng-show = "!isFourMem()" class="col-md-6" style="text-align: left; margin-bottom: 30px"><button class="btn btn-primary gradient" ng-disabled = "true" >Go!</button></div>
+
 <!-- Button here to confirm the dinner menu. -->
 
 <!-- <a ng-show="selectedMenu.length > 0" id="confirmDinnerButton" href="#!/overview" type="button" class="btn btn-warning btn-md col-md-2">Battle</a>
