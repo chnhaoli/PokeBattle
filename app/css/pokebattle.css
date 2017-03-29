@@ -45,14 +45,19 @@ h4 {
   font-size: 22px;
 }
 
+h5 {
+  font-family: "Nunito";
+  font-size: 16px;
+}
+
 span {
     font-family: 'Baloo Bhaina', cursive;
     color: #a5a5a5;
 }
 
 p {
-  font-family: 'Baloo Bhaina', cursive;
-  color: #a5a5a5;
+  font-family: "Nunito";
+  font-size: 16px;
 }
 
 .alignCenter {
