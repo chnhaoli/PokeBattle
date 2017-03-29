@@ -48,14 +48,14 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
 
   $scope.addToTeam = function(pokemonName){
     if ($scope.team().length > 3) {
-     $scope.openTip();
-   }
-   else
-   {
-    PokeModel.addToTeam(pokemonName);
-  }
+      $scope.openTip();
+    }
+    else
+    {
+      PokeModel.addToTeam(pokemonName);
+    }
 
-}
+  }
 
   $scope.deleteFromTeam = function(pokemonName){
     PokeModel.deleteFromTeam(pokemonName);
@@ -131,7 +131,6 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
     });
   };
 
-
   //get pokemon by type
   $scope.getPokeByType = function(id) {
     $scope.isLoading = true;
@@ -183,13 +182,27 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
     }
   }
 
-  // Can we do the following? (Is it bad practive to use getElementById in controller?)
-  /*document.getElementById("searchBar").addEventListener("keyup", function(event) {
-    event.preventDefault();
-    if (event.keyCode == 13) {
-        document.getElementById("searchButton").click();
+
+  // Search pokemon with type and filter
+  $scope.searchPoke = function(filter, type){
+    var searchresult = [];
+    if(filter === ''){
+        $scope.getPokeByType($scope.type);
     }
-  });*/
+    else {
+        PokeModel.GetPokeByType.get({typeId: type}, function(data){
+            for (i in data.pokemon){
+                if(filter === data.pokemon[i].pokemon.name){
+                    searchresult.push(data.pokemon[i]);
+                }
+            }
+            $scope.pokeByType = searchresult;
+        },function(data) {
+            console.log("Something went wrong");
+        });
+    }
+  }
+
 
   $scope.checkIfEnter = function(event, filter, type) {
     event.preventDefault();
@@ -197,7 +210,6 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
         $scope.searchPoke(filter, type);
     }
   }
-
 });
 
 
@@ -251,28 +263,30 @@ pokeBattleApp.controller('ModalInstanceTipCtrl', function ($uibModalInstance, Po
 
 //progressbar controller
 pokeBattleApp.controller('ProgressDemoCtrl', function ($scope) {
-  $scope.max = 200;
+    var $ctrl = this;
+    $ctrl.pokemon = pokemon;
 
-  $scope.random = function() {
-    var value = Math.floor(Math.random() * 100 + 1);
-    var type = 'info';
-    $scope.type = type;
-  };
-
-  $scope.random();
-
-  $scope.randomStacked = function() {
-    $scope.stacked = [];
-    var types = ['success', 'info', 'warning', 'danger'];
-
-    for (var i = 0, n = Math.floor(Math.random() * 4 + 1); i < n; i++) {
-      var index = Math.floor(Math.random() * 4);
-      $scope.stacked.push({
-        value: Math.floor(Math.random() * 30 + 1),
-        type: types[index]
-      });
+    $ctrl.isInListDialogue = function() {
+        return PokeModel.getIsInTeam($ctrl.pokemon.name);
     }
-  };
 
-  $scope.randomStacked();
+    $ctrl.getPokemonTypes = function(type){
+        return PokeModel.restructureTypes(type);
+    }
+
+    $ctrl.ok = function () {
+        //$uibModalInstance.close($ctrl.selected.item);
+        $uibModalInstance.close();
+        PokeModel.addToTeam($ctrl.pokemon.name);
+    };
+
+    $ctrl.delete = function () {
+        //$uibModalInstance.close($ctrl.selected.item);
+        $uibModalInstance.close();
+        PokeModel.deleteFromTeam($ctrl.pokemon.name);
+    };
+
+    $ctrl.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
 });

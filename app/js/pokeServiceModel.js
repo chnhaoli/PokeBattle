@@ -280,9 +280,10 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     //Random a team;
     this.getRandomTeam = function() {
         var allName = pokemonAllName.slice(0);
+        console.log(allName);
         team = [];
         for (i = 0; i < 4; i++){
-            var randomTemp = that.randomInt(720);
+            var randomTemp = that.randomInt(allName.length-1);
             team[i] = allName[randomTemp];
             allName.splice(randomTemp, 1);
         }
@@ -297,14 +298,11 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
         return opponentDetails;
     }
 
-
-
     this.addToTeam = function(pokemonName) {
         team.push(pokemonName);
     }
 
     this.deleteFromTeam = function(pokemonName) {
-
       for(key in team){
         if(pokemonName == team[key]){
             team.splice(key,1);
@@ -321,8 +319,6 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
         }
         return false;
     }
-
-
     //Returns the selected team;
     this.getTeam = function() {
         return team;
@@ -350,6 +346,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
                 }
             });
         }, function(error) {
+            console.log("getRandomOpponent error");
             console.log(error);
         })
     }
@@ -389,8 +386,6 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
 
         var eff2 = oppType2 ? effectivenessMatrix[types.indexOf(moveType)][types.indexOf(oppType2)] : 1;
 
-        console.log("eff1 " + eff1);
-        console.log("eff2 " + eff2);
         return eff1 * eff2;
     }
     //Tell the description of effectiveness;
@@ -430,23 +425,12 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
             alert('Damage class error');
         }
 
-        console.log("move type " + move.type);
-        console.log("opp type1 " + oppPokemon.type[0]);
-        console.log("opp type2 " + oppPokemon.type[1]);
-
-
         var effectiveness = that.getEffectiveness(move.type, oppPokemon.type[0], oppPokemon.type[1]);
 
         var stab = that.getSTAB(move.type, pokemon.type[0], pokemon.type[1]);
 
-        console.log("stab " + stab);
-        console.log("atk " + atk);
-        console.log("def " + def);
-        console.log("effectiveness " + effectiveness);
-
         var level = pokemon.level ? pokemon.level : 100;
         var damage = Math.round(((0.4 * level + 2) * move.power * atk / def / 50 + 2) * effectiveness * stab * (that.randomInt(15)+85)/100);
-        console.log(damage);
         return damage
     }
     //Get the pokemon HP after the damages
