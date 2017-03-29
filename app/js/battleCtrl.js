@@ -295,7 +295,7 @@ pokeBattleApp.controller('BattleModalInstanceCtrl', function ($uibModalInstance,
   $ctrl.ok = function () {
     $uibModalInstance.close();
     // Submit name to highscore - Firebase code
-
+    
     // Go to highscore page - Question: why doesn't ng-href work in the partial? That's why I had to include the line here.
     $location.path("/highscore");
   };

@@ -86,9 +86,10 @@ pokeBattleApp.directive('dndElement', function() {
       })
 
       elem.on('dragstart', function(e) {
-        $('.ui-draggable-dragging').addClass('dragging');
+        //$('.ui-draggable-dragging').addClass('dragging');
         //e.target.style.opacity = '0.4';  // this / e.target is the source node.
         //elem.css('opacity', '0.4');
+        //console.log(e.target);
 
 
         //console.log(attr.index);
@@ -96,7 +97,7 @@ pokeBattleApp.directive('dndElement', function() {
         var firstPokemon = scope.team()[attr.index];
         var firstPokemonIndex = attr.index;
 
-        //e.originalEvent.dataTransfer.setData("firstElement", e.target);
+        e.originalEvent.dataTransfer.setData("firstElement", e.target);
         e.originalEvent.dataTransfer.setData("firstPokemon", firstPokemon);
         e.originalEvent.dataTransfer.setData("firstPokemonIndex", firstPokemonIndex);
 
@@ -136,10 +137,10 @@ pokeBattleApp.directive('dndElement', function() {
 
         var secondPokemon = scope.team()[attr.index];
         var secondPokemonIndex = attr.index;
-        //var firstElement = e.originalEvent.dataTransfer.getData("firstElement");
+        var firstElement = e.originalEvent.dataTransfer.getData("firstElement");
         var firstPokemon = e.originalEvent.dataTransfer.getData("firstPokemon");
         var firstPokemonIndex = e.originalEvent.dataTransfer.getData("firstPokemonIndex");
-        //console.log(firstElement);
+        console.log(firstElement);
 
         if (firstPokemon != secondPokemon) {
           scope.swapTwoPokemon(firstPokemonIndex, secondPokemonIndex);
