@@ -43,19 +43,15 @@
                     </div>
                 </div>
             </div>
-    </div>
-</div>
-<div class="modal-footer">
-    <button ng-show="!$ctrl.isInListDialogue()" class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Add to Team</button>
-    <button ng-show="$ctrl.isInListDialogue()" class="btn btn-primary" type="button" ng-click="$ctrl.delete()">Delete from Team</button>
-    <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
-</div>
-</script>
+        </div>
 
-<!--<button type="button" class="btn btn-default" ng-click="open('sm')">Small modal</button>-->
+        <div class="modal-footer">
+            <button ng-show="!$ctrl.isInListDialogue()" class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Add to Team</button>
+            <button ng-show="$ctrl.isInListDialogue()" class="btn btn-primary" type="button" ng-click="$ctrl.delete()">Delete from Team</button>
+            <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+        </div>
+    </script>
 </div>
-
-
 
 <!-- messageTip -->
 <div class="modal-demo">
@@ -70,36 +66,34 @@
 </div>
 
 
+<!-- Title picture -->
 <div style="text-align: center">
-<a href="#!/home">
-<img src="images/title1.png" height="150px" width="690px" style="display:block; margin: auto; position: relative; z-index: 2; width: 30%;
-    height: 30%;"/>
-</a>
+    <a href="#!/home">
+    <img src="images/title1.png" height="150px" width="690px" style="display:block; margin: auto; position: relative; z-index: 2; width: 30%;
+        height: 30%;"/>
+    </a>
 
 </div>
 
 <!-- my team -->
 <div class="col-md-12 panel-body">
 
-        <div class="col-md-12 panel-body" style="height: 300px; margin-bottom: 40px;">
+    <div class="col-md-12 panel-body" style="height: 300px; margin-bottom: 40px;">
 
-            <div class="col-md-3 teamSelection"><p>1</p></div>
-            <div class="col-md-3 teamSelection"><p>2</p></div>
-            <div class="col-md-3 teamSelection"><p>3</p></div>
-            <div class="col-md-3 teamSelection"><p>4</p></div>
-            <div class="col-md-3 teamSelection" ng-repeat="pokemonName in team()" >
+        <div class="col-md-3 teamSelection"><p>1</p></div>
+        <div class="col-md-3 teamSelection"><p>2</p></div>
+        <div class="col-md-3 teamSelection"><p>3</p></div>
+        <div class="col-md-3 teamSelection"><p>4</p></div>
+        <div class="col-md-3 teamSelection" ng-repeat="pokemonName in team()" >
             <!-- 这段加在上面就有background了： style="background-image: url('images/battlefield.png'); background-repeat: no-repeat; float: center;" -->
-                 <div class="teamSelectionIcon" ng-if="isInList(pokemonName)" ><img src="images/unselect.png" ng-click="deleteFromTeam(pokemonName)"/>
-                 </div>
-                <div class="dndPokemon" dnd-element>
-                </div>
-                <p class="col-md-12" style="margin-top: 10px;">{{pokemonName}}</p>
+            <div class="teamSelectionIcon" ng-if="isInList(pokemonName)" ><img src="images/unselect.png" ng-click="deleteFromTeam(pokemonName)"/>
             </div>
-            <!--<img class="column" draggable="true" ondragstart="handleDragStart(event);"
-            ondragover="handleDragOver(event);" ondragenter="handleDragEnter(event)"; ondragleave="handleDragLeave(event);"
-            ondrop="handleDrop(event);" ondragend="handleDragEnd(event);" ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemonName}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'" class="teamImg" alt="{{pokemonName}}" >
-        -->
-        <p class="col-md-12" style="text-align: center;">{{pokemonName}}</p>
+            <div class="dndPokemon" dnd-element>
+            </div>
+            <p class="col-md-12" style="margin-top: 10px;">{{pokemonName}}</p>
+        </div>
+
+    <p class="col-md-12" style="text-align: center;">{{pokemonName}}</p>
     </div>
     <div style="height: 50px;"></div>
     <h5> Choose 4 Pokémons to battle with.</h5>
@@ -107,17 +101,14 @@
 </div>
 
 
-<div class="col-md-6" style="text-align: right; marign-bottom: 30px"><a ng-click="randomTeam()" type="button" class="btn btn-primary gradient">Random Team!</a></div>
-<div ng-show = "isFourMem()" class="col-md-6" style="text-align: left; margin-bottom: 30px"><a ng-href="#!/battle" type="button" class="btn btn-primary gradient">Go!</a></div>
-<div ng-show = "!isFourMem()" class="col-md-6" style="text-align: left; margin-bottom: 30px"><button class="btn btn-primary gradient" ng-disabled = "true" >Go!</button></div>
-
-<!-- Button here to confirm the dinner menu. -->
-
-<!-- <a ng-show="selectedMenu.length > 0" id="confirmDinnerButton" href="#!/overview" type="button" class="btn btn-warning btn-md col-md-2">Battle</a>
-<a ng-show="selectedMenu.length == 0" ng-disabled="true" type="button" class="btn btn-warning btn-disabled btn-md col-md-2">Battle!</a> -->
+<div class="col-md-6" style="text-align: right; marign-bottom: 30px">
+    <a ng-click="randomTeam()" type="button" class="btn btn-primary gradient">Random Team!</a>
 </div>
-
-<div style="text-align: center;">
+<div ng-show = "isFourMem()" class="col-md-6" style="text-align: left; margin-bottom: 30px">
+    <a ng-href="#!/battle" type="button" class="btn btn-primary gradient">Go!</a>
+</div>
+<div ng-show = "!isFourMem()" class="col-md-6" style="text-align: left; margin-bottom: 30px">
+    <button class="btn btn-primary gradient" ng-disabled = "true" >Go!</button>
 </div>
 
 <!-- type -->
@@ -135,7 +126,7 @@
 <!-- search -->
 <div>
     <form class="col-md-4 panel-body" name="filterField" ng-submit="filterField.$valid && setFilter(input)">
-        <input class="form-control" id="searchBar" type="text" ng-keyup="checkIfEnter($event, filter, type)" placeholder="Enter key words to search" ng-model="filter">
+        <input class="form-control" id="searchBar" type="text" ng-keyup="checkIfEnter($event, filter, type)" placeholder="Enter Pokémon name to search" ng-model="filter">
     </form>
     <div class="col-md-1 panel-body" style="text-align: center;">
         <button type="button" class="btn btn-default" id="searchButton" ng-click="searchPoke(filter, type)">Search</button>
@@ -143,7 +134,7 @@
 </div>
 
 
-<!-- Main -->
+<!-- List of all Pokémons that match search -->
 <div class="panel-body">
   <div class="row">
         <!-- Where the search results locates. -->
@@ -170,7 +161,7 @@
     </div>
 </div>
 
-
-  <div class="loadingGifDiv" ng-show="isLoading">
-    <img class="loadingGif">
-  </div>
+<!-- Loading Gif -->
+<div class="loadingGifDiv" ng-show="isLoading">
+  <img class="loadingGif">
+</div>
