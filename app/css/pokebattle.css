@@ -50,6 +50,8 @@ h5 {
   font-size: 16px;
 }
 
+
+
 span {
     font-family: "Nunito";
     color: #a5a5a5;
@@ -82,12 +84,12 @@ p {
     color: #a5a5a5;
     text-align: center;
     font-size: 12px;
-    padding-top: 15px;
+    padding-top: 10px;
     position: fixed;
     bottom: 0;
     width: 100%;
     /*border-top: 1px solid #5C5C5C;*/
-    font-family: 'Baloo Bhaina', cursive;
+    /*font-family: 'Baloo Bhaina', cursive;*/
 /*    margin-top: 100px;*/
 
 }
@@ -95,16 +97,6 @@ p {
 .healthBarDiv {
   text-align: left;
 }
-
-/*.homeView {
-  background: url("../images/HomepageView2.jpg");
-  background-size: 100% 100%;
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-}*/
 
 .inline {
   display: inline-block;
@@ -142,6 +134,14 @@ p {
 
 #opponentPokemon{
   margin-top: 20px;
+}
+
+#startButton {
+  font-family: "Nunito";
+}
+
+#username {
+  font-family: "Nunito";
 }
 
 #userPokemon{
@@ -228,124 +228,6 @@ p {
   /*text-shadow: -7px 0 #2b4bff, 0 7px #2b4bff, 7px 0 #2b4bff, 0 -7px #2b4bff;*/
 }
 
-
-/************************************/
-
-/**
- * The dnd-list should always have a min-height,
- * otherwise you can't drop to it once it's empty
- */
-.simpleDemo ul[dnd-list] {
-    min-height: 42px;
-    padding-left: 0px;
-}
-
-/**
- * The dndDraggingSource class will be applied to
- * the source element of a drag operation. It makes
- * sense to hide it to give the user the feeling
- * that he's actually moving it.
- */
-.simpleDemo ul[dnd-list] .dndDraggingSource {
-    display: none;
-}
-
-/**
- * An element with .dndPlaceholder class will be
- * added to the dnd-list while the user is dragging
- * over it.
- */
-.simpleDemo ul[dnd-list] .dndPlaceholder {
-    background-color: #ddd;
-    display: block;
-    min-height: 42px;
-}
-
-.simpleDemo ul[dnd-list] li {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-top-right-radius: 4px;
-    border-top-left-radius: 4px;
-    display: block;
-    padding: 10px 15px;
-    margin-bottom: -1px;
-}
-
-/**
- * Show selected elements in green
- */
-.simpleDemo ul[dnd-list] li.selected {
-    background-color: #dff0d8;
-    color: #3c763d;
-}
-
-
-/**
- * The dnd-list should always have a min-height,
- * otherwise you can't drop to it once it's empty
- */
-.advancedDemo .dropzone ul[dnd-list] {
-    min-height: 42px;
-    margin: 0px;
-    padding-left: 0px;
-}
-
-.advancedDemo .dropzone li {
-    display: block;
-}
-
-/**
- * Reduce opacity of elements during the drag operation. This allows the user
- * to see where he is dropping his element, even if the element is huge. The
- * .dndDragging class is automatically set during the drag operation.
- */
-.advancedDemo .dropzone .dndDragging {
-    opacity: 0.7;
-}
-
-/**
- * The dndDraggingSource class will be applied to the source element of a drag
- * operation.
- */
-.advancedDemo .dropzone .dndDraggingSource {
-    /*opacity: 0.5;*/
-    display: none;
-}
-
-/**
- * An element with .dndPlaceholder class will be added as child of the dnd-list
- * while the user is dragging over it.
- */
-.advancedDemo .dropzone .dndPlaceholder {
-    background-color: #ddd !important;
-    display: block;
-    min-height: 42px;
-}
-
-/***************************** Element type specific styles *****************************/
-
-.advancedDemo .dropzone .itemlist {
-    min-height: 120px !important;
-}
-
-.advancedDemo .dropzone .itemlist > li {
-    background-color: #337ab7;
-    border: none;
-    border-radius: .25em;
-    color: #fff;
-    float: left;
-    font-weight: 700;
-    height: 50px;
-    margin: 5px;
-    padding: 3px;
-    text-align: center;
-    width: 80px;
-}
-
-.advancedDemo .dropzone .container-element {
-    margin: 10px;
-}
-
 .bgYellowColor{
   background-color:rgba(255,203,5,0.1);
 }
@@ -391,11 +273,11 @@ p {
 }
 
 .tool {
-        width: 270px;
-        overflow:hidden;
-        white-space:nowrap;
-        text-overflow:ellipsis;
-        text-align: center;
+  width: 270px;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  text-align: center;
  }
 
 .teamImg {
@@ -417,59 +299,6 @@ p {
   -webkit-transition: height 0.6s ease;
   -o-transition: height 0.6s ease;
   transition: height 0.6s ease;
-}
-
-[draggable] {
-  -moz-user-select: none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
-  /*Required to make elements draggable in old WebKit */
-  -khtml-user-drag: element;
-  -webkit-user-drag: element;
-}
-.column {
-  height: 180px;
-  width: 180px;
-  float: center;
-  border: 2px solid #666666;
-  background-color: #ccc;
-  margin-right: 5px;
-  -webkit-border-radius: 10px;
-  -ms-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  -webkit-box-shadow: inset 0 0 3px #000;
-  -ms-box-shadow: inset 0 0 3px #000;
-  box-shadow: inset 0 0 3px #000;
-  text-align: center;
-  cursor: move;
-}
-.column header {
-  color: #fff;
-  text-shadow: #000 0 1px;
-  box-shadow: 5px;
-  padding: 5px;
-  background: -moz-linear-gradient(left center, rgb(0,0,0), rgb(79,79,79), rgb(21,21,21));
-  background: -webkit-gradient(linear, left top, right top,
-                               color-stop(0, rgb(0,0,0)),
-                               color-stop(0.50, rgb(79,79,79)),
-                               color-stop(1, rgb(21,21,21)));
-  background: -webkit-linear-gradient(left center, rgb(0,0,0), rgb(79,79,79), rgb(21,21,21));
-  background: -ms-linear-gradient(left center, rgb(0,0,0), rgb(79,79,79), rgb(21,21,21));
-  border-bottom: 1px solid #ddd;
-  -webkit-border-top-left-radius: 10px;
-  -moz-border-radius-topleft: 10px;
-  -ms-border-radius-topleft: 10px;
-  border-top-left-radius: 10px;
-  -webkit-border-top-right-radius: 10px;
-  -ms-border-top-right-radius: 10px;
-  -moz-border-radius-topright: 10px;
-  border-top-right-radius: 10px;
-}
-
-.column.over {
-  border: 2px dashed #000;
 }
 
 .label {

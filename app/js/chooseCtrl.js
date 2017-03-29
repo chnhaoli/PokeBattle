@@ -1,4 +1,4 @@
-pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialogs, PokeModel) {
+pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, PokeModel) {
 
   // Initial scope values
   $scope.selectedPokemonDetail = [];
@@ -106,11 +106,11 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
       }
     });
 
-    modalInstance.result.then(function (selectedItem) {
+    /*modalInstance.result.then(function (selectedItem) {
       $ctrl.selected = selectedItem;
     }, function () {
       $log.info('Modal dismissed at: ' + new Date());
-    });
+    });*/
   };
 
   $ctrl.toggleAnimation = function () {
@@ -133,11 +133,11 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
       resolve: {}
     });
 
-    modalInstance.result.then(function (selectedItem) {
+    /*modalInstance.result.then(function (selectedItem) {
       $ctrl.selected = selectedItem;
     }, function () {
       $log.info('Modal dismissed at: ' + new Date());
-    });
+    });*/
   };
 
   //get pokemon by type
@@ -266,9 +266,14 @@ pokeBattleApp.controller('ProgressDemoCtrl', function ($scope) {
     }
 
     $ctrl.ok = function () {
-        //$uibModalInstance.close($ctrl.selected.item);
         $uibModalInstance.close();
-        PokeModel.addToTeam($ctrl.pokemon.name);
+        // This hello doesn't get printed when I click the button that calls this function... in fact none of the changes occur
+        console.log("hello");
+        if ($scope.team().length == 4) {
+          $scope.openTip();
+        } else {
+          PokeModel.addToTeam($ctrl.pokemon.name);
+        }
     };
 
     $ctrl.delete = function () {

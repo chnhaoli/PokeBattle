@@ -14,32 +14,32 @@
 
             <div class="panel-body">
                 <div class="col-md-12" style="text-align: right;">
-                    <div class="col-md-4"><h4>HP</h4></div>
-                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="255" value="$ctrl.pokemon.stats[5].base_stat" type="danger"></uib-progressbar>
+                    <div class="col-md-5"><h4>HP</h4></div>
+                    <div class="col-md-7"><uib-progressbar class="progress-striped" max="255" value="$ctrl.pokemon.stats[5].base_stat" type="danger"></uib-progressbar>
                     </div>
                 </div>
 
                 <div class="col-md-12" style="text-align: right;">
-                    <div class="col-md-4"><h4>Attack</h4></div>
-                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="190" value="$ctrl.pokemon.stats[4].base_stat" type="danger"></uib-progressbar>
+                    <div class="col-md-5"><h4>Attack</h4></div>
+                    <div class="col-md-7"><uib-progressbar class="progress-striped" max="190" value="$ctrl.pokemon.stats[4].base_stat" type="danger"></uib-progressbar>
                     </div>
                 </div>
 
                 <div class="col-md-12" style="text-align: right;">
-                    <div class="col-md-4"><h4>Defense</h4></div>
-                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="230" value="$ctrl.pokemon.stats[3].base_stat" type="danger"></uib-progressbar>
+                    <div class="col-md-5"><h4>Defense</h4></div>
+                    <div class="col-md-7"><uib-progressbar class="progress-striped" max="230" value="$ctrl.pokemon.stats[3].base_stat" type="danger"></uib-progressbar>
                     </div>
                 </div>
 
                 <div class="col-md-12" style="text-align: right;">
-                    <div class="col-md-4"><h4>Special Attack</h4></div>
-                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="194" value="$ctrl.pokemon.stats[2].base_stat" type="danger"></uib-progressbar>
+                    <div class="col-md-5"><h4>Special Attack</h4></div>
+                    <div class="col-md-7"><uib-progressbar class="progress-striped" max="194" value="$ctrl.pokemon.stats[2].base_stat" type="danger"></uib-progressbar>
                     </div>
                 </div>
 
                 <div class="col-md-12" style="text-align: right;">
-                    <div class="col-md-4"><h4>Special Defense</h4></div>
-                    <div class="col-md-8"><uib-progressbar class="progress-striped" max="230" value="$ctrl.pokemon.stats[1].base_stat" type="danger"></uib-progressbar>
+                    <div class="col-md-5"><h4>Special Defense</h4></div>
+                    <div class="col-md-7"><uib-progressbar class="progress-striped" max="230" value="$ctrl.pokemon.stats[1].base_stat" type="danger"></uib-progressbar>
                     </div>
                 </div>
             </div>
@@ -81,13 +81,13 @@
 <!-- my team -->
 <div class="col-md-12 panel-body">
 
-        <div class="col-md-12 panel-body" style="height: 300px;">
-            
+        <div class="col-md-12 panel-body" style="height: 300px; margin-bottom: 40px;">
+
             <div class="col-md-3 teamSelection"><p>1</p></div>
             <div class="col-md-3 teamSelection"><p>2</p></div>
             <div class="col-md-3 teamSelection"><p>3</p></div>
             <div class="col-md-3 teamSelection"><p>4</p></div>
-            <div class="col-md-3 teamSelection" ng-repeat="pokemonName in team()" > 
+            <div class="col-md-3 teamSelection" ng-repeat="pokemonName in team()" >
             <!-- 这段加在上面就有background了： style="background-image: url('images/battlefield.png'); background-repeat: no-repeat; float: center;" -->
                  <div class="teamSelectionIcon" ng-if="isInList(pokemonName)" ><img src="images/unselect.png" ng-click="deleteFromTeam(pokemonName)"/>
                  </div>
@@ -102,8 +102,8 @@
         <p class="col-md-12" style="text-align: center;">{{pokemonName}}</p>
     </div>
     <div style="height: 50px;"></div>
-    <h5>Drag and drop to choose order of your team.</h5>
     <h5> Choose 4 Pokémons to battle with.</h5>
+    <h5>Drag and drop to choose order of your team.</h5>
 </div>
 
 

@@ -1,4 +1,4 @@
-pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $log, dialogs, PokeModel) {
+pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, PokeModel) {
 
   // Call writeTeamDetails and getRandomOpponent upon page load
   PokeModel.writeTeamDetails();
@@ -185,7 +185,7 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $log, dialog
 
     $scope.resetMessages();
 
-    // TODO: Perform user move
+    // Perform user move
     PokeModel.performMove($scope.teamDetails()[0], $scope.opponentDetails(), $scope.teamDetails()[0].movesUsed[index], function(effectiveness) {
       console.log("eff: " + effectiveness);
       $scope.effectivenessMsg = effectiveness;
@@ -204,7 +204,7 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $log, dialog
     $scope.nextShow = true;
     $scope.attackOptions = false;
 
-    // TODO: if opponent's HP is zero, display fainted message, increase score, switch opponent Pokémon.
+    // if opponent's HP is zero, display fainted message, increase score, switch opponent Pokémon.
     if ($scope.opponentDetails().battleStats.HP === 0) {
       PokeModel.increaseScore();
       $scope.faintedMsg = $scope.opponentDetails().name + " fainted!";
@@ -267,11 +267,11 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $log, dialog
       }
     });
 
-    modalInstance.result.then(function (selectedItem) {
+    /*modalInstance.result.then(function (selectedItem) {
       $ctrl.selected = selectedItem;
     }, function () {
       $log.info('Modal dismissed at: ' + new Date());
-    });
+    });*/
   };
 
   $ctrl.toggleAnimation = function () {
@@ -288,19 +288,13 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $log, dialog
 pokeBattleApp.controller('BattleModalInstanceCtrl', function ($uibModalInstance, score, $location) {
 
   var $ctrl = this;
-  //$ctrl.pokemonName = pokemonName;
-  //$ctrl.title = isUser ? pokemonName + " fainted!";
   $ctrl.score = score;
 
   $ctrl.ok = function () {
     $uibModalInstance.close();
     // Submit name to highscore - Firebase code
-    
+
     // Go to highscore page - Question: why doesn't ng-href work in the partial? That's why I had to include the line here.
     $location.path("/highscore");
   };
-
-  /*$ctrl.cancel = function () {
-    $uibModalInstance.dismiss('cancel');
-  };*/
 });
