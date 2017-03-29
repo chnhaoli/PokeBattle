@@ -150,15 +150,23 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, $log, dialog
           },function(data){
             console.log("Something went wrong");
           });
-      }}
+      }
+    }
 
-      // Can we do the following? (Is it bad practive to use getElementById in controller?)
-      document.getElementById("searchBar").addEventListener("keyup", function(event) {
-        event.preventDefault();
-        if (event.keyCode == 13) {
-            document.getElementById("searchButton").click();
-        }
-      });
+    // Can we do the following? (Is it bad practive to use getElementById in controller?)
+    /*document.getElementById("searchBar").addEventListener("keyup", function(event) {
+      event.preventDefault();
+      if (event.keyCode == 13) {
+          document.getElementById("searchButton").click();
+      }
+    });*/
+
+    $scope.checkIfEnter = function(event, filter, type) {
+      event.preventDefault();
+      if (event.keyCode == 13) {
+          $scope.searchPoke(filter, type);
+      }
+    }
 
 });
 
