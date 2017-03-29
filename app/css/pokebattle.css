@@ -66,9 +66,19 @@ p {
   text-align: center;
 }
 
+.allButtons {
+  margin-bottom: 100px;
+}
+
 .buttonsDiv {
   margin-top: 30px;
   margin-bottom: 20px;
+}
+
+
+
+.btnRow2 {
+  margin-top: 4px;
 }
 
 .checkbox {
@@ -123,6 +133,10 @@ p {
   width: 40%
 }
 
+.width150 {
+  width: 150px;
+}
+
 #chosenPokemon: -moz-drag-over {
   border: 1px solid black;
 }
@@ -169,32 +183,6 @@ p {
 }
 
 
-#highscore {
-  font-family: pixel;
-  font-size: 35px;
-  color: #3ec46c;
-  position: absolute;
-  top: 50%;
-  left: 67%;
-}
-
-#homepageBy {
-  font-family: pixel;
-  color: #000000;
-  position: absolute;
-  top: 60%;
-  left: 6%;
-}
-
-#homepageTitle {
-  font-family: pixel;
-  font-size: 50px;
-  color: #319b55;
-  position: absolute;
-  top: 35%;
-  left: 10%;
-}
-
 #loadingGif {
   width: 200px;
 }
@@ -208,15 +196,6 @@ p {
 #subtitle {
   font-family: 'Baloo Bhaina', cursive;
   color: #a5a5a5;
-}
-
-#start {
-  font-family: pixel;
-  font-size: 35px;
-  color: #3ec46c;
-  position: absolute;
-  top: 35%;
-  left: 71%;
 }
 
 #title {
