@@ -30,12 +30,12 @@ min-height: 100%;
 }
 
 h2 {
-  font-family: 'Baloo Bhaina', cursive;
+ font-family: "Nunito";
   color: #a5a5a5;
 }
 
 h3 {
-  font-family: 'Baloo Bhaina', cursive;
+  font-family: "Nunito";
   color: #a5a5a5;
   text-align: center;
 }
@@ -45,14 +45,19 @@ h4 {
   font-size: 22px;
 }
 
+h5 {
+  font-family: "Nunito";
+  font-size: 16px;
+}
+
 span {
-    font-family: 'Baloo Bhaina', cursive;
+    font-family: "Nunito";
     color: #a5a5a5;
 }
 
 p {
-  font-family: 'Baloo Bhaina', cursive;
-  color: #a5a5a5;
+  font-family: "Nunito";
+  font-size: 16px;
 }
 
 .alignCenter {
@@ -135,6 +140,14 @@ p {
   margin-bottom: 50px;
 }
 
+#opponentPokemon{
+  margin-top: 20px;
+}
+
+#userPokemon{
+  margin-top: 20px;
+  transform: scale(-1, 1)
+}
 
 #healthBarUser {
   background-color: green;
@@ -485,6 +498,9 @@ p {
   margin-left:210px;
 }
 
+.tipButton{
+  margin-top:20px;
+}
 /*.startSectionButton{
   margin-top: 20px;
 }

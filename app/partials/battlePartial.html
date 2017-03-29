@@ -26,26 +26,30 @@
 
 
 <div class="row">
+<a href="#!/home">
+<img src="images/title1.png" height="150px" width="690px" style="display:block; margin: auto; position: relative; z-index: 2; width: 30%;
+    height: 30%;"/>
+</a>
   <h3>Score: {{score()}}</h3>
 
-  <div class="col-lg-6" id="firstPokemon">
+  <div class="col-lg-6">
 
     <div class="healthBarDiv">
       <div id="healthBarUser">
       </div>
     </div>
 
-    <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{teamDetails()[0].name}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'"></img>
+    <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{teamDetails()[0].name}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'" id="userPokemon"></img>
     <p>{{teamDetails()[0].name}}</p>
   </div>
-  <div class="col-lg-6" id="secondPokemon">
+  <div class="col-lg-6">
 
     <div class="healthBarDiv">
       <div id="healthBarOpp">
       </div>
     </div>
 
-    <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{opponentDetails().name}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'"></img>
+    <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{opponentDetails().name}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'" id="opponentPokemon"></img>
 
     <p>{{opponentDetails().name}}</p>
   </div>
@@ -100,8 +104,4 @@
     <button class="btn btn-primary" ng-click="nextOpponent()">Battle next Pokémon!</button>
   </div>
 
-  <div id="confirmedList">
-    <h3>Team: </h3>
-    <span ng-repeat="pokemonName in team()">{{pokemonName}} </span>
-  </div>
 </div>
