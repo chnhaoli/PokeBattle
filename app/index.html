@@ -58,11 +58,9 @@
         </audio>
         <!-- backgroung play and stop icons -->
         <div class="col-md-12" style="text-align: right;">
-        <img src="images/musicPlay.png" height="30" size="30" onclick="document.getElementById('myTune').pause()" ng-show="!show" ng-click="musicControl()">
-            <!-- <img id="musicStop" src="pics/musicStop.png" height="40" size="40" onclick="document.getElementById('myTune').pause()"> -->
-        </div>
-        <div class="col-md-12" style="text-align: right;">
+            <img src="images/musicPlay.png" height="30" size="30" onclick="document.getElementById('myTune').pause()" ng-show="!show" ng-click="musicControl()">
             <img src="images/musicPause.png" height="30" size="30" onclick="document.getElementById('myTune').play()" ng-show="show" ng-click="musicControl()">
+            <!-- <img id="musicStop" src="pics/musicStop.png" height="40" size="40" onclick="document.getElementById('myTune').pause()"> -->
         </div>
 <!-- Here in index.html you should put only the layout that is shared among all the screens (e.g. header
 
@@ -81,8 +79,18 @@
     </div>
 
     <!-- Footer -->
-    <div class="footer">
+    <div class="footer col-md-12">
+      <div class="col-md-3">
+      </div>
+      <div class="col-md-6">
         <p>&copy; Beichen Chen, Jinwei Lin, Hao Li, Jingjing Xie 2017</p>
+      </div>
+      <div class="col-md-3">
+        <div class="faqAbout" style="text-align: right;">
+          <a href="#!/faq" id="faq">F.A.Q.</a>
+          <a href="#!/about"id="about">About</a>
+        </div>
+      </div>
     </div>
 
 

@@ -43,23 +43,33 @@ h3 {
 h4 {
   font-family: "Nunito";
   font-size: 22px;
+  color: #a5a5a5;
 }
 
 h5 {
   font-family: "Nunito";
   font-size: 16px;
+  color: #a5a5a5;
 }
 
 
 
 span {
     font-family: "Nunito";
-    color: #a5a5a5;
+    /*color: #a5a5a5;*/
 }
 
 p {
   font-family: "Nunito";
   font-size: 16px;
+  color: #a5a5a5;
+}
+
+.aboutText {
+  margin-top: 100px;
+  margin-left: 250px;
+  margin-right: 250px;
+  color: #a5a5a5;
 }
 
 .alignCenter {
@@ -70,12 +80,13 @@ p {
   margin-bottom: 100px;
 }
 
+.answer {
+}
+
 .buttonsDiv {
   margin-top: 30px;
   margin-bottom: 20px;
 }
-
-
 
 .btnRow2 {
   margin-top: 4px;
@@ -87,6 +98,13 @@ p {
 
 .dragging {
   opacity: 0.4;
+}
+
+.faqMain {
+  margin-top: 100px;
+  margin-left: 250px;
+  margin-right: 250px;
+  color: #a5a5a5;
 }
 
 .footer {
@@ -125,6 +143,12 @@ p {
               no-repeat;
 }
 
+.faqAbout {
+  font-size: 16px;
+  font-family: "Nunito";
+  text-align: center;
+}
+
 .row {
   text-align: center;
 }
@@ -133,9 +157,18 @@ p {
   width: 40%
 }
 
+.question {
+  margin-top: 40px;
+}
+
 .width150 {
   width: 150px;
 }
+
+/*#about {
+  margin-right: 50px;
+  float:right;
+}*/
 
 #chosenPokemon: -moz-drag-over {
   border: 1px solid black;
@@ -144,6 +177,10 @@ p {
 
 #confirmedList {
   margin-bottom: 50px;
+}
+
+#faq {
+  margin-right: 50px;
 }
 
 #opponentPokemon{

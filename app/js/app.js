@@ -49,15 +49,18 @@ function($routeProvider) {
         templateUrl: 'partials/choosePartial.html',
         controller: 'ChooseCtrl'
     }).
-    when('/details/:id', {
-        templateUrl: 'partials/detailPartial.html',
-    }).
     when('/battle', {
         templateUrl: 'partials/battlePartial.html',
         controller: 'BattleCtrl'
     }).
     when('/highscore', {
         templateUrl: 'partials/highscorePartial.html',
+    }).
+    when('/about', {
+        templateUrl: 'partials/aboutPartial.html',
+    }).
+    when('/faq', {
+        templateUrl: 'partials/faqPartial.html',
     }).
     otherwise({
         redirectTo: '/home'
