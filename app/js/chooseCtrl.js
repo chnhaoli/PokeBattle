@@ -104,7 +104,10 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, PokeModel) {
           return $scope.selectedPokemonDetail;
         },
         openTip: function() {
-          return $scope.openTip();
+          //return $scope.openTip();
+        },
+        isFourMem: function() {
+          return $scope.isFourMem();
         }
       }
     });
@@ -208,10 +211,15 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, PokeModel) {
 
 // Please note that $uibModalInstance represents a modal window (instance) dependency.
 // It is not the same as the $uibModal service used above.
-pokeBattleApp.controller('ModalInstanceCtrl', function ($uibModalInstance, team, pokemon, openTip, PokeModel) {
+pokeBattleApp.controller('ModalInstanceCtrl', function ($uibModalInstance, team, pokemon, openTip, isFourMem, PokeModel) {
 
   var $ctrl = this;
   $ctrl.pokemon = pokemon;
+  console.log(isFourMem);
+  $ctrl.isFourMem = function() {
+    return isFourMem;
+  }
+
 
   $ctrl.isInListDialogue = function() {
     return PokeModel.getIsInTeam($ctrl.pokemon.name);
@@ -226,8 +234,10 @@ pokeBattleApp.controller('ModalInstanceCtrl', function ($uibModalInstance, team,
     $uibModalInstance.close();
     console.log(team.length);
     if (team.length == 4) {
-      openTip;
+      console.log("open tip");
+      //openTip;
     } else {
+      console.log("add to team");
       PokeModel.addToTeam($ctrl.pokemon.name);
     }
   };
@@ -257,39 +267,4 @@ pokeBattleApp.controller('ModalInstanceTipCtrl', function ($uibModalInstance, Po
     //$uibModalInstance.close($ctrl.selected.item);
     $uibModalInstance.close();
   };
-});
-
-//progressbar controller
-pokeBattleApp.controller('ProgressDemoCtrl', function ($scope) {
-    var $ctrl = this;
-    $ctrl.pokemon = pokemon;
-
-    $ctrl.isInListDialogue = function() {
-        return PokeModel.getIsInTeam($ctrl.pokemon.name);
-    }
-
-    $ctrl.getPokemonTypes = function(type){
-        return PokeModel.restructureTypes(type);
-    }
-
-    $ctrl.ok = function () {
-        $uibModalInstance.close();
-        // This hello doesn't get printed when I click the button that calls this function... in fact none of the changes occur
-        console.log("hello");
-        if ($scope.team().length == 4) {
-          $scope.openTip();
-        } else {
-          PokeModel.addToTeam($ctrl.pokemon.name);
-        }
-    };
-
-    $ctrl.delete = function () {
-        //$uibModalInstance.close($ctrl.selected.item);
-        $uibModalInstance.close();
-        PokeModel.deleteFromTeam($ctrl.pokemon.name);
-    };
-
-    $ctrl.cancel = function () {
-        $uibModalInstance.dismiss('cancel');
-    };
 });

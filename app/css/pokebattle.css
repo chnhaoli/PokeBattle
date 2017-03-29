@@ -21,6 +21,7 @@ body {
   text-align: center;
   /*background-color: #fff2f2;*/
   background-color: #F2FCFF;
+  font-family: "Nunito";
 }
 
 body {
@@ -51,8 +52,6 @@ h5 {
   font-size: 16px;
   color: #a5a5a5;
 }
-
-
 
 span {
     font-family: "Nunito";
@@ -159,6 +158,10 @@ p {
 
 .question {
   margin-top: 40px;
+}
+
+.searchMatches {
+  margin-bottom: 100px;
 }
 
 .width150 {

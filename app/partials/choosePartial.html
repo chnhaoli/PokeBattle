@@ -46,7 +46,7 @@
         </div>
 
         <div class="modal-footer">
-            <button ng-show="!$ctrl.isInListDialogue()" class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Add to Team</button>
+            <button ng-show="!$ctrl.isInListDialogue()" ng-disabled="$ctrl.isFourMem()" class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Add to Team</button>
             <button ng-show="$ctrl.isInListDialogue()" class="btn btn-primary" type="button" ng-click="$ctrl.delete()">Delete from Team</button>
             <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
         </div>
@@ -134,7 +134,7 @@
 
 
 <!-- List of all Pokémons that match search -->
-<div class="panel-body">
+<div class="panel-body searchMatches">
   <div class="row">
         <!-- Where the search results locates. -->
         <div ng-repeat="pokemon in pokeByType" class="col-md-3 panel-body">
