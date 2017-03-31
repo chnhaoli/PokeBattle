@@ -8,4 +8,23 @@ pokeBattleApp.controller('PokeCtrl', function ($scope,PokeModel) {
       PokeModel.clearOffset();
     }
 
+
+    //Test for checking name;
+    $scope.startIO = 1;
+    $scope.checkName = function(){
+
+    	for(i in $scope.userNameList ){
+    		if($scope.user_name === $scope.userNameList[i]){
+    		console.log("This name is taken, please try another one.");
+    		$scope.startIO = 0;
+    		}
+
+    		if($scope.startIO === 1){
+    			window.location.href = "http://localhost:8000/index.html#!/choose";
+    		}
+    	}    	
+    	$scope.startIO = 1;
+    }
+
+    $scope.userNameList = ["John", "Mary", "Phillip"];
 });

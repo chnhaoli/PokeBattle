@@ -384,12 +384,14 @@ p {
 .hvr-pulse {
   transform: perspective(1px) translateZ(0);
   box-shadow: 0 0 1px transparent;
+  opacity: 0.1;
 }
 .hvr-pulse:hover, .hvr-pulse:focus, .hvr-pulse:active {
   animation-name: hvr-pulse;
   animation-duration: 1s;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
+  opacity: 1;
 }
 
 
