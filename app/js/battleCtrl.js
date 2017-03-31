@@ -73,7 +73,6 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $q, $uibModal, $firebas
     // 1. User's turn and user attacks
     // 2. Opponent's turn and opponent changes Pokémon
     else if ((userTurn && !changedPokemon) || (!userTurn && changedPokemon)) {
-      console.log("hello");
       $scope.updateHealthBar(false);
     }
   }

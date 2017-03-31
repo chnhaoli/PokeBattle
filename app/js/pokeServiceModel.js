@@ -475,7 +475,13 @@ pokeBattleApp.factory('PokeModel',function ($resource, $q, $cookieStore) {
 
         var level = pokemon.level ? pokemon.level : 100;
         var damage = Math.round(((0.4 * level + 2) * move.power * atk / def / 50 + 2) * effectiveness * stab * (that.randomInt(15)+85)/100);
-        return damage
+        console.log(damage);
+        // Happens when power is null, then the key "power" won't even get updated to Firebase so accessing power will give nothing and damage is NaN.
+        if (damage == undefined || isNaN(damage)) {
+          return 0;
+        } else {
+          return damage;
+        }
     }
     //Get the pokemon HP after the damages
     this.poseDamage = function(hp, damage){
@@ -490,7 +496,6 @@ pokeBattleApp.factory('PokeModel',function ($resource, $q, $cookieStore) {
         if(that.isOnTarget()){
             //On target;
             oppPokemon.battleStats.HP = that.poseDamage(oppPokemon.battleStats.HP, that.getDamage(move, pokemon, oppPokemon));
-
             callbackHit(that.tellEffectiveness(that.getEffectiveness(move.type, oppPokemon.type[0], oppPokemon.type[1])), that.isDying(oppPokemon));
         }
         else{
