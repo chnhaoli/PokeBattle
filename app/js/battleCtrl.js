@@ -1,4 +1,25 @@
-pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, PokeModel) {
+pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObject, PokeModel) {
+
+  var ref = firebase.database().ref('/100/');
+
+  var obj = $firebaseObject(ref);
+
+  // to take an action after the data loads, use the $loaded() promise
+  obj.$loaded().then(function() {
+    console.log("loaded record:", obj.$id, obj.someOtherKeyInData, obj.$value);
+
+    // To iterate the key/value pairs of the object, use angular.forEach()
+    angular.forEach(obj, function(value, key) {
+      console.log(key, value);
+    });
+  });
+
+  // To make the data available in the DOM, assign it to $scope
+  $scope.data = obj;
+
+  // For three-way data bindings, bind it to the scope instead
+  obj.$bindTo($scope, "data");
+  console.log($scope.data);
 
   // Call writeTeamDetails and getRandomOpponent upon page load
   PokeModel.writeTeamDetails();

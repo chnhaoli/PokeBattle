@@ -10,7 +10,7 @@
 // also see that we included separate JavaScript files for these modules. Angular
 // has other core modules that you might want to use and explore when you go deeper
 // into developing Angular applications. For this lab, these two will suffice.
-var pokeBattleApp = angular.module('pokeBattle', ['ngRoute','ngResource','ngCookies', 'dialogs.main', 'ui.bootstrap']);
+var pokeBattleApp = angular.module('pokeBattle', ['ngRoute','ngResource','ngCookies', 'dialogs.main', 'ui.bootstrap', 'firebase']);
 
 
 // Here we configure our application module and more specifically our $routeProvider.
