@@ -1,29 +1,44 @@
 pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObject, PokeModel) {
 
-  var ref = firebase.database().ref('/100/');
+  $scope.username = function() {
+    return PokeModel.getUsername();
+  }
+  console.log($scope.username());
 
-  var obj = $firebaseObject(ref);
+  // Firebase
+  var battleDataRef = firebase.database().ref('/'+$scope.username()+'/');
+
+  var battleDataObj = $firebaseObject(battleDataRef);
 
   // to take an action after the data loads, use the $loaded() promise
-  obj.$loaded().then(function() {
-    console.log("loaded record:", obj.$id, obj.someOtherKeyInData, obj.$value);
+  battleDataObj.$loaded().then(function() {
+    console.log("loaded record:", battleDataObj.$id, battleDataObj.$value);
 
     // To iterate the key/value pairs of the object, use angular.forEach()
-    angular.forEach(obj, function(value, key) {
+    angular.forEach(battleDataObj, function(value, key) {
       console.log(key, value);
     });
   });
 
   // To make the data available in the DOM, assign it to $scope
-  $scope.data = obj;
+  $scope.battleDataObj = battleDataObj;
 
   // For three-way data bindings, bind it to the scope instead
-  obj.$bindTo($scope, "data");
-  console.log($scope.data);
+  battleDataObj.$bindTo($scope, "battleDataObj");
+  console.log($scope.battleDataObj);
 
-  // Call writeTeamDetails and getRandomOpponent upon page load
-  PokeModel.writeTeamDetails();
-  PokeModel.getRandomOpponent();
+  // End Firebase
+
+  if ($scope.battleDataObj.$value == null) {
+    // Call writeTeamDetails and getRandomOpponent upon page load
+    PokeModel.writeTeamDetails();
+    PokeModel.getRandomOpponent();
+  } else {
+    PokeModel.setTeamDetails($scope.battleDataObj.teamDetails);
+    // Set Opponent details
+
+    // Set score
+  }
 
   // Team and opponent arrays of pokemon objects
   $scope.teamDetails = function() {
@@ -33,6 +48,7 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
   $scope.opponentDetails = function() {
     return PokeModel.getOppDetails();
   };
+
 
   // Booleans to check if loading has finished
   $scope.isLoading = function() {
@@ -155,6 +171,9 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
       $scope.effectivenessMsg = missed;
     });
 
+    //Update to Firebase
+    battleDataRef.child("teamDetails").set(angular.fromJson(angular.toJson($scope.teamDetails())));
+
     // Change status message
     $scope.attackMsg = $scope.opponentDetails().name + " used " + $scope.opponentDetails().movesUsed[randomNum].name + "!";
 
@@ -214,6 +233,9 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
       console.log("missed: " + missed);
       $scope.effectivenessMsg = missed;
     })
+
+    //Update to Firebase
+    battleDataRef.child("oppDetails").set(angular.fromJson(angular.toJson($scope.opponentDetails())));
 
     // TODO: Use damage to hit opponent, changing their HP bar and HP value displayed. HP is under stats in Pokémon object
     $scope.updateHP(true, false);

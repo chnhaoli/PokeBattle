@@ -29,6 +29,9 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     // for (i = 10001; i <= 10090; i++){
     //     pokemonAllId.push(i);
     // }
+
+    // username
+    var username = "";
     //Team in pokemon name;
     var team = [];
     //Detailed opponent;
@@ -107,10 +110,6 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
             errorCallback(error);
         })
     }
-    //Clear the offset;
-    this.clearOffset = function() {
-        offset = 0;
-    }
     //GET: Get pokemon for searching;
     this.getPokemon = function(pokemonNameOrId, callback, errorCallback) {
         isLoading = true;
@@ -128,6 +127,16 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
 
         }
     })
+
+    this.setUsername = function(usernameToSet) {
+      username = usernameToSet;
+      console.log(username);
+
+    }
+
+    this.getUsername = function() {
+      return username;
+    }
 
     this.increaseScore = function() {
         score += 1;
@@ -271,6 +280,10 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
                 errorCallback(error);
             })
         }
+    }
+
+    this.setTeamDetails = function(teamDetails) {
+      teamDetails = teamDetails;
     }
 
     //Returns the team details;

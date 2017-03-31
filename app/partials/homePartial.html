@@ -1,7 +1,7 @@
 
 <div class="homeView">
   <div class="col-md-12" style="background-image: url('images/bg.gif');  background-size: contain; background-position: top; height: 800px; position: relative; bottom: 30px; z-index: -1">
-    
+
 	  <img src="images/title1.png" height="150px" width="690px" style="display:block; margin: auto; margin-top: 20px; position: relative; z-index: 2;"/>
 
 
@@ -17,14 +17,20 @@
       </div>
 
       <div class="col-md-3 form-style-6" style="position: relative; top: 480px; right: 138px">
-        <input type="submit" id="startButton" value="Log in" />
-        <a  style="position: relative; bottom: 3px; right: 114px; z-index: 2">
+        <input type="submit" id="startButton" value="Log in"/>
+        <a ng-click="checkName()" style="position: relative; bottom: 3px; right: 114px; z-index: 2">
           <img src="images/brackets_s.png"  class="hvr-pulse" style="width: 116px;" />
         </a>
       </div>
 
-    </div>
   
+      <div>
+        <input type="text" ng-model="username" value="Your name"/>
+      </div>
+
+    </div>
+
+
   <!--   <div style="margin-top: 500px; text-align: center;">
       <input class="form-control" style="width: 300px; margin: auto" placeholder="Enter name to enable save"/>
       <button class="btn btn-primary" style="margin-top: 20px">Start</button>
