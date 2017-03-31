@@ -11,27 +11,22 @@
       </div> -->
     	<div class="col-md-3 col-md-offset-4 form-style-6" style="position: relative; top: 480px; left: 35px;">
         <input type="submit" id="startButton" value="Sign up" />
-        <a  style="position: relative; bottom: 3px; right: 114px; z-index: 2">
+        <a ng-click="checkName()" style="position: relative; bottom: 3px; right: 114px; z-index: 2">
           <img src="images/brackets_s.png"  class="hvr-pulse" style="width: 116px;" />
         </a>
       </div>
 
       <div class="col-md-3 form-style-6" style="position: relative; top: 480px; right: 138px">
         <input type="submit" id="startButton" value="Log in"/>
-        <a ng-click="checkName()" style="position: relative; bottom: 3px; right: 114px; z-index: 2">
+        <a ng-click="checkPasswordAndGame()" style="position: relative; bottom: 3px; right: 114px; z-index: 2">
           <img src="images/brackets_s.png"  class="hvr-pulse" style="width: 116px;" />
         </a>
       </div>
 
-
-      <div>
-        <input type="text" ng-model="username" value="Your name"/>
-      </div>
-
-      <div>
-        <input type="text" ng-model="password" value="Password"/>
-      </div>
-
+    </div>
+    <div style="margin-top: 550px;">
+      <input type="text" ng-model="username" placeholder="Your name"/>
+      <input type="text" ng-model="password" placeholder="Password"/>
     </div>
 
 

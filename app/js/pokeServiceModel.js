@@ -3,7 +3,7 @@
 // dependency on any service you need. Angular will insure that the
 // service is created first time it is needed and then just reuse it
 // the next time.
-pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
+pokeBattleApp.factory('PokeModel',function ($resource, $q, $cookieStore) {
     var that = this;
     //For loading widget;
     var teamIsLoading = false;
@@ -146,6 +146,10 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
         return score;
     }
 
+    this.setScore = function(scoreToSet) {
+      score = scoreToSet;
+    }
+
     //Get a randomized interger between 0 and max (default inclusive).
     this.randomInt = function(max){
         return Math.floor(Math.random() * (max + 1));
@@ -244,9 +248,17 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
             }(i));
         }
     }
+
+    /*var promises = [];
+
+    $q.all(promises).then(function() {
+
+    })*/
+
+
     // GET: For all Pokémon names in team array, gets Pokémon details and passes that into an array teamDetails.
     // Special function in a function passing in key as index, called directly, ensuring the key gets updated from 0 to team.length-1.
-    this.writeTeamDetails = function() {
+    this.writeTeamDetails = function(callbackTeam) {
         isLoading = true;
         for (var key in team) {
             var pokemonName = team[key]/*.name*/;
@@ -272,6 +284,9 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
                             if(oppIsLoading == false) {
                                 isLoading = false;
                             }
+                            callbackTeam();
+                            //var deferred = $q.defer();
+                            //promises.push(deferred);
                         }
 
                     });
@@ -282,8 +297,8 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
         }
     }
 
-    this.setTeamDetails = function(teamDetails) {
-      teamDetails = teamDetails;
+    this.setTeamDetails = function(detailsToSet) {
+      teamDetails = detailsToSet;
     }
 
     //Returns the team details;
@@ -311,6 +326,10 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
         return opponentDetails;
     }
 
+    this.setOppDetails = function(detailsToSet) {
+      opponentDetails = detailsToSet;
+    }
+
     this.addToTeam = function(pokemonName) {
         team.push(pokemonName);
     }
@@ -336,6 +355,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
     this.getTeam = function() {
         return team;
     }
+
     //GET: Get a random opponent;
     this.getRandomOpponent = function(callback) {
         isLoading = true;
@@ -346,15 +366,17 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
             opponentDetails = data;
             opponentDetails.battleStats = that.calcStats(data);
             opponentDetails.type = that.restructureTypes(data.types);
-            if (callback !== undefined) {
-                callback();
-            }
             that.getMoves(opponentDetails, function() {
                 if (opponentDetails.movesUsed.length === 4) {
                     oppIsLoading = false;
                     if (teamIsLoading == false) {
                         isLoading = false;
                     }
+                    if (callback !== undefined) {
+                        callback();
+                    }
+                    //var deferred = $q.defer();
+                    //promises.push(deferred);
                     console.log(opponentDetails);
                 }
             });
@@ -362,6 +384,15 @@ pokeBattleApp.factory('PokeModel',function ($resource, $cookieStore) {
             console.log("getRandomOpponent error");
             console.log(error);
         })
+    }
+
+
+    this.getAllDetails = function(callback) {
+      this.writeTeamDetails(function() {
+        that.getRandomOpponent(function() {
+          callback();
+        })
+      })
     }
 
     /************ Battle damages **********/

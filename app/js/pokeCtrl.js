@@ -3,37 +3,37 @@
 pokeBattleApp.controller('PokeCtrl', function ($scope, $firebaseObject, PokeModel) {
 
   // Firebase
-  var usernamesRef = firebase.database().ref('/usernames/');
-
-  var existingUsernames = $firebaseObject(usernamesRef);
+  var accountsRef = firebase.database().ref('/accounts/');
+  var accountsObj = $firebaseObject(accountsRef);
 
   // to take an action after the data loads, use the $loaded() promise
-  existingUsernames.$loaded().then(function() {
-    console.log("loaded record:", existingUsernames.$id, existingUsernames.$value);
+  accountsObj.$loaded().then(function() {
+    console.log("loaded record:", accountsObj.$id, accountsObj.$value);
 
     // To iterate the key/value pairs of the object, use angular.forEach()
-    angular.forEach(existingUsernames, function(value, key) {
+    angular.forEach(accountsObj, function(value, key) {
       console.log(key, value);
     });
   });
 
   // To make the data available in the DOM, assign it to $scope
-  $scope.existingUsernames = existingUsernames;
+  $scope.accountsObj = accountsObj;
 
   // For three-way data bindings, bind it to the scope instead
-  existingUsernames.$bindTo($scope, "existingUsernames");
-  console.log($scope.existingUsernames);
+  accountsObj.$bindTo($scope, "accountsObj");
 
   // End Firebase
+
+
 
   //Test for checking name;
   $scope.startIO = true;
   $scope.checkName = function(){
-    var amount = Object.keys($scope.existingUsernames).length - 2;
+    var amount = Object.keys($scope.accountsObj).length - 2;
     console.log(amount);
 
-  	for(i in $scope.existingUsernames){
-  		if($scope.username === $scope.existingUsernames[i]){
+  	for(key in $scope.accountsObj){
+  		if($scope.username === key){
   		console.log("This name is taken, please try another one.");
   		$scope.startIO = false;
   		}
@@ -41,7 +41,7 @@ pokeBattleApp.controller('PokeCtrl', function ($scope, $firebaseObject, PokeMode
 
     if ($scope.startIO == true) {
       // Add username to Firebase list of all usernames and passwords
-      usernamesRef.child(amount).set($scope.username);
+      accountsRef.child($scope.username).set($scope.password);
       // Pass username to model
       PokeModel.setUsername($scope.username);
       window.location.href = "#!/choose";
@@ -50,5 +50,39 @@ pokeBattleApp.controller('PokeCtrl', function ($scope, $firebaseObject, PokeMode
     $scope.startIO = true;
   }
 
-  $scope.userNameList = ["John", "Mary", "Phillip"];
+  $scope.checkPasswordAndGame = function() {
+    var found = false;
+    for(key in $scope.accountsObj){
+  		if($scope.username === key){
+        // Found an existing username
+        found = true;
+        if ($scope.password === $scope.accountsObj[key]) {
+          // Pass username to model and start game
+          PokeModel.setUsername($scope.username);
+
+          var battleDataRef = firebase.database().ref('/gameData/'+$scope.username+'/');
+          var battleDataObj = $firebaseObject(battleDataRef);
+          $scope.battleDataObj = battleDataObj;
+
+          battleDataObj.$loaded().then(function() {
+            if ($scope.battleDataObj.teamDetails == undefined) {
+              window.location.href = "#!/choose";
+            } else {
+              window.location.href = "#!/battle";
+            }
+          });
+
+
+        } else {
+          console.log("Your password was incorrect.");
+        }
+  		}
+  	}
+    if (!found) {
+      // If no name found
+      console.log("No account with that username was found.");
+    }
+
+  }
+
 });
