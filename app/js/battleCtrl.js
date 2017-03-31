@@ -6,7 +6,7 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
   console.log($scope.username());
 
   // Firebase
-  var battleDataRef = firebase.database().ref('/'+$scope.username()+'/');
+  var battleDataRef = firebase.database().ref('/gameData/'+$scope.username()+'/');
 
   var battleDataObj = $firebaseObject(battleDataRef);
 
@@ -143,6 +143,9 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
       $scope.resetMessages();
       $scope.changeMsg = "You called out " + $scope.teamDetails()[0].name + "!";
 
+      //Update to Firebase
+      battleDataRef.child("teamDetails").set(angular.fromJson(angular.toJson($scope.teamDetails())));
+
       //show next button
       $scope.nextShow = true;
       $scope.changeOptions = false;
@@ -255,6 +258,9 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
       //$scope.open('sm', $scope.opponentDetails.name, false);
       $scope.nextShow = false;
       $scope.nextOppShow = true;
+
+      //Update to Firebase
+      battleDataRef.child("score").set(angular.fromJson(angular.toJson($scope.score())));
     }
 
   }
