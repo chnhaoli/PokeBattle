@@ -16,10 +16,10 @@
             <p>All your Pokémons have fainted!</p>
             <p>Your score: {{$ctrl.score()}}</p>
         </div>
-        <input placeholder="Your name"></input>
         <div class="modal-footer">
             <!-- Question: why doesn't ng-href work here? -->
-            <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()" ng-href="#!/highscore">Submit score</button>
+            <button class="btn btn-primary" type="button" ng-click="$ctrl.newGame()" ng-href="#!/choose">New Game</button>
+            <button class="btn btn-primary" type="button" ng-click="$ctrl.highscore()" ng-href="#!/highscore">Highscore</button>
         </div>
     </script>
 </div>

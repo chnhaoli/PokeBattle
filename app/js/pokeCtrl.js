@@ -12,7 +12,7 @@ pokeBattleApp.controller('PokeCtrl', function ($scope, $firebaseObject, PokeMode
 
     // To iterate the key/value pairs of the object, use angular.forEach()
     angular.forEach(accountsObj, function(value, key) {
-      console.log(key, value);
+      //console.log(key, value);
     });
   });
 

@@ -1,4 +1,4 @@
-pokeBattleApp.controller('BattleCtrl', function ($scope, $q, $uibModal, $firebaseObject, PokeModel) {
+pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObject, PokeModel) {
 
   // Booleans to check if loading has finished
   $scope.isLoading = function() {
@@ -164,6 +164,9 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $q, $uibModal, $firebas
   // For three-way data bindings, bind it to the scope instead
   battleDataObj.$bindTo($scope, "battleDataObj");
 
+  // Highscore Reference
+  var highscoreRef = firebase.database().ref('/highscores/');
+
   // Team and opponent arrays of pokemon objects
   $scope.teamDetails = function() {
     return PokeModel.getTeamDetails();
@@ -267,6 +270,14 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $q, $uibModal, $firebas
       }
 
       if (countFainted === 4) {
+        // Game over
+
+        // Update to Firebase - set highscore
+        highscoreRef.child($scope.username()).set($scope.score());
+        // Update to Firebase - erase game data so user can start new game.
+        battleDataRef.remove();
+
+        // Popup
         setTimeout(function() {
           $scope.open("sm");
         }, 1000);
@@ -418,14 +429,18 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $q, $uibModal, $firebas
 
 pokeBattleApp.controller('BattleModalInstanceCtrl', function ($uibModalInstance, score, $location) {
 
+  var highscoreRef = firebase.database().ref('/highscores/');
+
   var $ctrl = this;
   $ctrl.score = score;
 
-  $ctrl.ok = function () {
+  $ctrl.highscore = function () {
     $uibModalInstance.close();
-    // Submit name to highscore - Firebase code
-
     // Go to highscore page - Question: why doesn't ng-href work in the partial? That's why I had to include the line here.
     $location.path("/highscore");
   };
+
+  $ctrl.newGame = function() {
+    $location.path("/choose");
+  }
 });

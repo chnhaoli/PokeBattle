@@ -1,1 +1,17 @@
 <h1>Highscore</h1>
+<div id="scores">
+  <div class="col-md-3">
+  </div>
+  <div class="col-md-3 nameInHighscoreDiv">
+    <div ng-repeat="highscore in highscoreArray">
+      <p id="nameInHighscore">{{highscore[0]}}</p>
+    </div>
+  </div>
+  <div class="col-md-3 highscoreDiv">
+    <div ng-repeat="highscore in highscoreArray">
+      <p id="highscore">{{highscore[1]}}</p>
+    </div>
+  </div>
+  <div class="col-md-3">
+  </div>
+</div>

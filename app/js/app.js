@@ -55,6 +55,7 @@ function($routeProvider) {
     }).
     when('/highscore', {
         templateUrl: 'partials/highscorePartial.html',
+        controller: 'HighscoreCtrl'
     }).
     when('/about', {
         templateUrl: 'partials/aboutPartial.html',

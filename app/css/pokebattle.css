@@ -148,6 +148,14 @@ p {
   text-align: center;
 }
 
+/*.highscoreDiv {
+  text-align: left;
+}
+
+.nameInHighscoreDiv {
+  text-align: right;
+}*/
+
 .row {
   text-align: center;
 }
@@ -185,6 +193,14 @@ p {
 #faq {
   margin-right: 50px;
 }
+
+/*#highscore {
+  margin-right: 200px;
+}
+
+#nameInHighscore {
+  margin-left: 200px;
+}*/
 
 #opponentPokemon{
   margin-top: 20px;
@@ -231,6 +247,10 @@ p {
   margin-top: 40px;
   width: 35%;
   height: 35%;
+}
+
+#scores {
+  margin-top: 100px;
 }
 
 #subtitle {
