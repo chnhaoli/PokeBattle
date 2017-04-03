@@ -88,10 +88,12 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
     if (!gamedataExists) {
       $scope.mainOptions = true;
       $scope.resetMessages();
+      $scope.promptMsg = "What will you do?"
     } else {
       switch (battleDataObj.currentMenu) {
         case "main":
           $scope.mainOptions = true;
+          $scope.promptMsg = "What will you do?"
           break;
         case "nextOpp":
           $scope.nextOppShow = true;
@@ -121,6 +123,11 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
       $scope.updateHealthBar(true);
       $scope.updateHealthBar(false);
     }
+  }, function(error) {
+    //console.log(error);
+    //console.log(error.config.url.substring(33));
+    $scope.errorMsg = "There was an error loading "+ error.config.url.substring(33) + " (problem with the API). Please go back and choose another Pokémon."
+    $scope.isLoading = false;
   })
 
   // // Firebase
@@ -397,7 +404,9 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
     // battleDataRef.child("promptMsg").set($scope.promptMsg);
     // battleDataRef.child("currentMenu").set("main");
 
+    $scope.isLoading = true;
     PokeModel.getRandomOpponent(function() {
+      $scope.isLoading = false;
       // $scope.updateHP(true, false);
 
       //Update to Firebase

@@ -33,7 +33,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
     // username
     var username = "";
     //Team in pokemon name;
-    var team = [];
+    var team = ['keldeo'];
     //Detailed opponent;
     var opponentDetails = {};
     //Detailed pokemons for whole team;
@@ -221,7 +221,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
       return randomMoveIds;
     }
     //GET: Get 4 random moves for a pokemon;
-    this.getMoves = function(pokemon, callback){
+    this.getMoves = function(pokemon, callback, errorCallback){
         pokemon.movesUsed = [];
         var randomMoveIds = [];
         for (var i = 0; i < 4; i++) {
@@ -242,13 +242,16 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
                     if (index == 3)
                     callback();
                 }
-            }(i));
+            }(i), function(error) {
+              console.log(error);
+              errorCallback(error)
+            });
         }
     }
 
     // GET: For all Pokémon names in team array, gets Pokémon details and passes that into an array teamDetails.
     // Special function in a function passing in key as index, called directly, ensuring the key gets updated from 0 to team.length-1.
-    this.writeTeamDetails = function(callbackTeam) {
+    this.writeTeamDetails = function(callbackTeam, errorCallback) {
         //isLoading = true;
         for (var key in team) {
             var pokemonName = team[key]/*.name*/;
@@ -276,7 +279,8 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
                             // }
                             callbackTeam();
                         }
-
+                    }, function(error) {
+                      errorCallback(error);
                     });
                 }
             }(key), function (error) {
@@ -345,7 +349,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
     }
 
     //GET: Get a random opponent;
-    this.getRandomOpponent = function(callback) {
+    this.getRandomOpponent = function(callback, errorCallback) {
         //isLoading = true;
         var randomNum = that.randomInt(720)+1;
         this.GetPokemon.get({pokemonNameOrId: randomNum}, function(data) {
@@ -365,6 +369,8 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
                     }
                     console.log(opponentDetails);
                 }
+            }, function(error) {
+              errorCallback(error);
             });
         }, function(error) {
             console.log("getRandomOpponent error");
@@ -373,11 +379,15 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
     }
 
     // Gets all details needed for battle. Callback when both writeTeamDetails and getRandomOpponent are finished.
-    this.getAllDetails = function(callback) {
+    this.getAllDetails = function(callback, errorCallback) {
       this.writeTeamDetails(function() {
         that.getRandomOpponent(function() {
           callback();
+        }, function(error) {
+          errorCallback(error);
         })
+      }, function(error) {
+        errorCallback(error);
       })
     }
 
@@ -501,7 +511,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
 
     // Loads gamedata for the username from Firebase. If game data exists, set model details to Firebase data.
     // If game data does not exist, call APIs and set model details to API data.
-    this.loadFirebaseData = function(callback) {
+    this.loadFirebaseData = function(callback, errorCallback) {
       var battleDataRef = firebase.database().ref('/gameData/'+username+'/');
       var battleDataObj = $firebaseObject(battleDataRef);
 
@@ -514,8 +524,10 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
             battleDataRef.child("teamDetails").set(angular.fromJson(angular.toJson(teamDetails)));
             battleDataRef.child("oppDetails").set(angular.fromJson(angular.toJson(opponentDetails)));
             battleDataRef.child("score").set(angular.fromJson(angular.toJson(score)));
-
+            battleDataRef.child("currentMenu").set("main");
             callback(false, battleDataObj);
+          }, function(error) {
+            errorCallback(error);
           })
 
         } else {
