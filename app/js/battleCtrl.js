@@ -216,6 +216,7 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
 
   // Highscore Reference
   var highscoreRef = firebase.database().ref('/highscores/');
+  var highscoreObj = $firebaseObject(highscoreRef);
 
   // Team and opponent arrays of pokemon objects
   $scope.teamDetails = function() {
@@ -291,7 +292,6 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
 
   //Called when next button is clicked.
   $scope.nextTurn = function() {
-
     $scope.resetMessages();
 
     // Perform opponent move
@@ -353,9 +353,13 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
         // Game over
 
         // Update to Firebase - set highscore
-        highscoreRef.child($scope.username()).set($scope.score());
+        // highscoreRef.child($scope.username()).set($scope.score());
+        highscoreRef.push({
+          username: $scope.username(),
+          score: $scope.score()
+        })
         // Update to Firebase - erase game data so user can start new game.
-        battleDataRef.remove();
+        PokeModel.removeGameData();
 
         // Popup
         setTimeout(function() {
@@ -572,6 +576,7 @@ pokeBattleApp.controller('BattleModalInstanceCtrl', function ($uibModalInstance,
   };
 
   $ctrl.newGame = function() {
+    $uibModalInstance.close();
     $location.path("/choose");
   }
 });

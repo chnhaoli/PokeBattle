@@ -33,7 +33,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
     // username
     var username = "";
     //Team in pokemon name;
-    var team = ['keldeo'];
+    var team = [];
     //Detailed opponent;
     var opponentDetails = {};
     //Detailed pokemons for whole team;
@@ -280,10 +280,12 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
                             callbackTeam();
                         }
                     }, function(error) {
+                      //console.log("error with getting moves");
                       errorCallback(error);
                     });
                 }
             }(key), function (error) {
+                //console.log("error with getting pokemon");
                 errorCallback(error);
             })
         }
@@ -549,6 +551,11 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
       battleDataRef.child("faintedMsg").remove();
       battleDataRef.child("effectivenessMsg").remove();
       battleDataRef.child("promptMsg").remove();
+    }
+
+    this.removeGameData = function() {
+      var battleDataRef = firebase.database().ref('/gameData/'+username+'/');
+      battleDataRef.remove();
     }
 
     // Updates values to Firebase
