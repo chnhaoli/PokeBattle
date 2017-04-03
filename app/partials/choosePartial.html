@@ -154,8 +154,8 @@
             </a>
 
             <!-- click icon to sdd and remove pokemon-->
-            <div class="mainViewSelect" ng-if="!isInList(pokemon.pokemon.name)"><img src="images/select.png" ng-click="addToTeam(pokemon.pokemon.name)"/></div>
-            <div class="mainViewSelect" ng-if="isInList(pokemon.pokemon.name)"><img src="images/selected.png" ng-click="deleteFromTeam(pokemon.pokemon.name)"/></div>
+            <div class="mainViewSelect" style="position: relative; bottom: 40px; opacity: 0.3;" ng-if="!isInList(pokemon.pokemon.name)"><img src="images/select_v2.png" ng-click="addToTeam(pokemon.pokemon.name)"/></div>
+            <div class="mainViewSelect" style="position: relative; bottom: 40px;" ng-if="isInList(pokemon.pokemon.name)"><img src="images/selected_v2.png" ng-click="deleteFromTeam(pokemon.pokemon.name)"/></div>
 
         </div>
     </div>

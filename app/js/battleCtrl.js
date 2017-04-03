@@ -451,6 +451,11 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
     // battleDataRef.child("currentMenu").set("next");
     // battleDataRef.child("oppDetails").set(angular.fromJson(angular.toJson($scope.opponentDetails())));
 
+    //Check if is fainted;
+    $scope.isTeamFainted = function(order){
+        return $scope.teamDetails()[order].battleStats.HP === 0;
+    }
+
     // if opponent's HP is zero, display fainted message, increase score, switch opponent Pokémon.
     if ($scope.opponentDetails().battleStats.HP === 0) {
       PokeModel.increaseScore();
