@@ -2,7 +2,7 @@
 </div>
 
 <div class="error" ng-show="error">
-  <p>There was an error in loading the data. Please try again</p>
+    <p>There was an error in loading the data. Please try again</p>
 </div>
 
 <!-- Modal popup window -->
@@ -26,105 +26,108 @@
 
 
 <div class="row">
-  <a href="#!/home">
-  <img src="images/title1.png" height="150px" width="690px" style="display:block; margin: auto; position: relative; z-index: 2; width: 30%;
-      height: 30%;"/>
-  </a>
-  <h3>Score: {{score()}}</h3>
+    <a href="#!/home">
+        <img src="images/title1.png" height="150px" width="690px" style="display:block; margin: auto; position: relative; z-index: 2; width: 30%;
+        height: 30%;"/>
+    </a>
+    <h3>Score: {{score()}}</h3>
 
-  <div class="col-lg-6">
+    <div class="col-lg-6">
 
-    <div class="healthBarDiv">
-      <div id="healthBarUser">
-      </div>
+        <div class="healthBarDiv">
+            <div id="healthBarUser">
+            </div>
+        </div>
+
+        <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{teamDetails()[0].name}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'" id="userPokemon"></img>
+        <p>{{teamDetails()[0].name}}</p>
     </div>
+    <div class="col-lg-6">
 
-    <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{teamDetails()[0].name}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'" id="userPokemon"></img>
-    <p>{{teamDetails()[0].name}}</p>
-  </div>
-  <div class="col-lg-6">
+        <div class="healthBarDiv">
+            <div id="healthBarOpp">
+            </div>
+        </div>
 
-    <div class="healthBarDiv">
-      <div id="healthBarOpp">
-      </div>
+        <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{opponentDetails().name}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'" id="opponentPokemon"></img>
+
+        <p>{{opponentDetails().name}}</p>
     </div>
-
-    <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{opponentDetails().name}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'" id="opponentPokemon"></img>
-
-    <p>{{opponentDetails().name}}</p>
-  </div>
 
 </div>
 
 <div class="statusMsg">
-  <p>{{attackMsg}}</p>
-  <p>{{damageMsg}}</p>
-  <p>{{effectivenessMsg}}</p>
-  <p>{{faintedMsg}}</p>
-  <p>{{changeMsg}}</p>
-  <p>{{promptMsg}}</p>
+    <p>{{attackMsg}}</p>
+    <p>{{damageMsg}}</p>
+    <p>{{effectivenessMsg}}</p>
+    <p>{{faintedMsg}}</p>
+    <p>{{changeMsg}}</p>
+    <p>{{promptMsg}}</p>
 </div>
 
 <div class="allButtons">
 
-  <div class="buttons" ng-show="mainOptions">
-    <div>
-      <button class="btn btn-primary width150" ng-click="goToAttack()">Attack</button>
-      <button class="btn btn-primary width150" ng-click="goToItem()">Use Item</button>
+    <div class="buttons" ng-show="mainOptions">
+        <div>
+            <button class="btn btn-primary width150" ng-click="goToAttack()">Attack</button>
+            <button class="btn btn-primary width150" ng-click="goToItem()">Use Item</button>
+        </div>
+        <div class="btnRow2">
+            <button class="btn btn-primary width150" ng-click="goToChange()">Change Pokémon</button>
+            <button class="btn btn-primary width150" ng-click="run()">Run Away</button>
+        </div>
     </div>
-    <div class="btnRow2">
-      <button class="btn btn-primary width150" ng-click="goToChange()">Change Pokémon</button>
-      <button class="btn btn-primary width150" ng-click="run()">Run Away</button>
-    </div>
-  </div>
 
-  <!-- I need the moves to be randomized, how do I do this? Can I pass in a random number from 0 to moves.length-1?
-  Or do I have to manually update the object in teamDetails[0] to make the moves array only have 4 randomly chosen moves?-->
-  <div class="buttons" ng-show="attackOptions">
-    <div>
-      <button class="btn btn-primary width150" ng-click="attack(0)">{{teamDetails()[0].movesUsed[0].name}}</button>
-      <button class="btn btn-primary width150" ng-click="attack(1)">{{teamDetails()[0].movesUsed[1].name}}</button>
+    <!-- I need the moves to be randomized, how do I do this? Can I pass in a random number from 0 to moves.length-1?
+    Or do I have to manually update the object in teamDetails[0] to make the moves array only have 4 randomly chosen moves?-->
+    <div class="buttons" ng-show="attackOptions">
+        <div>
+            <button class="btn btn-primary width150" ng-click="attack(0)">{{teamDetails()[0].movesUsed[0].name}}</button>
+            <button class="btn btn-primary width150" ng-click="attack(1)">{{teamDetails()[0].movesUsed[1].name}}</button>
+        </div>
+        <div class="btnRow2">
+            <button class="btn btn-primary width150" ng-click="attack(2)">{{teamDetails()[0].movesUsed[2].name}}</button>
+            <button class="btn btn-primary width150" ng-click="attack(3)">{{teamDetails()[0].movesUsed[3].name}}</button>
+        </div>
+        <div class="btnRow2">
+            <button class="btn btn-warning width150 battleBackButton" ng-click="back()">Back</button>
+        </div>
     </div>
-    <div class="btnRow2">
-      <button class="btn btn-primary width150" ng-click="attack(2)">{{teamDetails()[0].movesUsed[2].name}}</button>
-      <button class="btn btn-primary width150" ng-click="attack(3)">{{teamDetails()[0].movesUsed[3].name}}</button>
-    </div>
-    <div class="btnRow2">
-      <button class="btn btn-warning width150 battleBackButton" ng-click="back()">Back</button>
-    </div>
-  </div>
 
-  <div class="buttons" ng-show="itemOptions">
-    <div>
-      <button class="btn btn-primary width150" ng-click="changePokemon(1)">{{teamDetails()[1].name}}</button>
-      <button class="btn btn-primary width150" ng-click="changePokemon(2)">{{teamDetails()[2].name}}</button>
+    <div class="buttons" ng-show="itemOptions">
+        <div>
+            <button class="btn btn-primary width150" ng-click="changePokemon(1)">{{teamDetails()[1].name}}</button>
+            <button class="btn btn-primary width150" ng-click="changePokemon(2)">{{teamDetails()[2].name}}</button>
+        </div>
+        <div class="btnRow2">
+            <button class="btn btn-primary width150" ng-click="changePokemon(3)">{{teamDetails()[3].name}}</button>
+            <button class="btn btn-primary width150" ng-click="changePokemon(3)">{{teamDetails()[3].name}}</button>
+        </div>
+        <div class="btnRow2">
+            <button class="btn btn-primary width150 battleBackButton" ng-click="back()">Back</button>
+        </div>
     </div>
-    <div class="btnRow2">
-      <button class="btn btn-primary width150" ng-click="changePokemon(3)">{{teamDetails()[3].name}}</button>
-      <button class="btn btn-primary width150" ng-click="changePokemon(3)">{{teamDetails()[3].name}}</button>
-    </div>
-    <div class="btnRow2">
-      <button class="btn btn-primary width150 battleBackButton" ng-click="back()">Back</button>
-    </div>
-  </div>
 
-  <div class="buttons" ng-show="changeOptions">
-    <div>
-      <button class="btn btn-primary width150" ng-click="changePokemon(1)">{{teamDetails()[1].name}}</button>
-      <button class="btn btn-primary width150" ng-click="changePokemon(2)">{{teamDetails()[2].name}}</button>
+    <div class="buttons" ng-show="changeOptions">
+        <div>
+            <button class="btn btn-primary width150" disabled="disabled" ng-hide="!isTeamFainted(1)" ng-click="changePokemon(1)">{{teamDetails()[1].name}}</button>
+            <button class="btn btn-primary width150" ng-hide="isTeamFainted(1)" ng-click="changePokemon(1)">{{teamDetails()[1].name}}</button>
+            <button class="btn btn-primary width150" disabled="disabled" ng-hide="!isTeamFainted(2)" ng-click="changePokemon(2)">{{teamDetails()[2].name}}</button>
+            <button class="btn btn-primary width150" ng-hide="isTeamFainted(2)" ng-click="changePokemon(2)">{{teamDetails()[2].name}}</button>
+        </div>
+        <div class="btnRow2">
+            <button class="btn btn-primary width150" disabled="disabled" ng-hide="!isTeamFainted(3)" ng-click="changePokemon(3)">{{teamDetails()[3].name}}</button>
+            <button class="btn btn-primary width150" ng-hide="isTeamFainted(3)" ng-click="changePokemon(3)">{{teamDetails()[3].name}}</button>
+            <button class="btn btn-warning width150 battleBackButton" ng-click="back()">Back</button>
+        </div>
     </div>
-    <div class="btnRow2">
-      <button class="btn btn-primary width150" ng-click="changePokemon(3)">{{teamDetails()[3].name}}</button>
-      <button class="btn btn-warning width150 battleBackButton" ng-click="back()">Back</button>
+
+    <div class="buttons" ng-show="nextShow">
+        <button class="btn btn-primary" ng-click="nextTurn()">Next</button>
     </div>
-  </div>
 
-  <div class="buttons" ng-show="nextShow">
-    <button class="btn btn-primary" ng-click="nextTurn()">Next</button>
-  </div>
-
-  <div class="buttons" ng-show="nextOppShow">
-    <button class="btn btn-primary" ng-click="nextOpponent()">Battle next Pokémon!</button>
-  </div>
+    <div class="buttons" ng-show="nextOppShow">
+        <button class="btn btn-primary" ng-click="nextOpponent()">Battle next Pokémon!</button>
+    </div>
 
 </div>
