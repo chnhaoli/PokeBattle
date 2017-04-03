@@ -3,12 +3,12 @@
 // dependency on any service you need. Angular will insure that the
 // service is created first time it is needed and then just reuse it
 // the next time.
-pokeBattleApp.factory('PokeModel',function ($resource, $q, $cookieStore) {
+pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieStore) {
     var that = this;
     //For loading widget;
     var teamIsLoading = false;
     var oppIsLoading = false;
-    var isLoading = false;
+    // var isLoading = false;
     //1-721; 10001-10090;
     var pokemonAllName = [];
     this.GetPokedex = $resource('http://pokeapi.co/api/v2/pokedex/:index', {}, {
@@ -19,7 +19,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $q, $cookieStore) {
     this.GetPokedex.get({index: 1}, function(data){
         for (key in data.pokemon_entries){
             pokemonAllName.push(data.pokemon_entries[key].pokemon_species.name);
-            isLoading = false;
+            //isLoading = false;
         }
     });
     // var pokemonAllId = [];
@@ -83,10 +83,6 @@ pokeBattleApp.factory('PokeModel',function ($resource, $q, $cookieStore) {
 
     var score = 0;
 
-    //Offset for listing pokemons;
-    var offset = 0;
-
-
     //API calls
     //API: pokemon;
     this.GetPokemon = $resource('http://pokeapi.co/api/v2/pokemon/:pokemonNameOrId', {}, {
@@ -95,16 +91,17 @@ pokeBattleApp.factory('PokeModel',function ($resource, $q, $cookieStore) {
         }
     });
 
-    this.getIsLoading = function() {
+    /*this.getIsLoading = function() {
         return isLoading;
-    }
+    }*/
+
     //GET: pokemon for choosing;
     this.getAllPokemon = function(callback, errorCallback) {
-        isLoading = true;
+        //isLoading = true;
         this.GetPokemon.get({offset: offset}, function(data) {
             offset += 20;
             console.log(offset);
-            isLoading = false;
+            //isLoading = false;
             callback(data);
         }, function(error) {
             errorCallback(error);
@@ -112,9 +109,9 @@ pokeBattleApp.factory('PokeModel',function ($resource, $q, $cookieStore) {
     }
     //GET: Get pokemon for searching;
     this.getPokemon = function(pokemonNameOrId, callback, errorCallback) {
-        isLoading = true;
+        //isLoading = true;
         this.GetPokemon.get({pokemonNameOrId: pokemonNameOrId}, function(data) {
-            isLoading = false;
+            //isLoading = false;
             callback(data);
         }, function(error) {
             errorCallback(error);
@@ -249,17 +246,10 @@ pokeBattleApp.factory('PokeModel',function ($resource, $q, $cookieStore) {
         }
     }
 
-    /*var promises = [];
-
-    $q.all(promises).then(function() {
-
-    })*/
-
-
     // GET: For all Pokémon names in team array, gets Pokémon details and passes that into an array teamDetails.
     // Special function in a function passing in key as index, called directly, ensuring the key gets updated from 0 to team.length-1.
     this.writeTeamDetails = function(callbackTeam) {
-        isLoading = true;
+        //isLoading = true;
         for (var key in team) {
             var pokemonName = team[key]/*.name*/;
             that.GetPokemon.get({pokemonNameOrId: pokemonName} , function(index) {
@@ -280,13 +270,11 @@ pokeBattleApp.factory('PokeModel',function ($resource, $q, $cookieStore) {
                         }
                         if (countFinished == 4) {
                             console.log("hello");
-                            teamIsLoading = false;
-                            if(oppIsLoading == false) {
-                                isLoading = false;
-                            }
+                            // teamIsLoading = false;
+                            // if(oppIsLoading == false) {
+                            //     isLoading = false;
+                            // }
                             callbackTeam();
-                            //var deferred = $q.defer();
-                            //promises.push(deferred);
                         }
 
                     });
@@ -358,7 +346,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $q, $cookieStore) {
 
     //GET: Get a random opponent;
     this.getRandomOpponent = function(callback) {
-        isLoading = true;
+        //isLoading = true;
         var randomNum = that.randomInt(720)+1;
         this.GetPokemon.get({pokemonNameOrId: randomNum}, function(data) {
             opponentDetails = {};
@@ -368,15 +356,13 @@ pokeBattleApp.factory('PokeModel',function ($resource, $q, $cookieStore) {
             opponentDetails.type = that.restructureTypes(data.types);
             that.getMoves(opponentDetails, function() {
                 if (opponentDetails.movesUsed.length === 4) {
-                    oppIsLoading = false;
-                    if (teamIsLoading == false) {
-                        isLoading = false;
-                    }
+                    // oppIsLoading = false;
+                    // if (teamIsLoading == false) {
+                    //     isLoading = false;
+                    // }
                     if (callback !== undefined) {
                         callback();
                     }
-                    //var deferred = $q.defer();
-                    //promises.push(deferred);
                     console.log(opponentDetails);
                 }
             });
@@ -386,7 +372,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $q, $cookieStore) {
         })
     }
 
-
+    // Gets all details needed for battle. Callback when both writeTeamDetails and getRandomOpponent are finished.
     this.getAllDetails = function(callback) {
       this.writeTeamDetails(function() {
         that.getRandomOpponent(function() {
@@ -509,6 +495,54 @@ pokeBattleApp.factory('PokeModel',function ($resource, $q, $cookieStore) {
         var temp = teamDetails[0];
         teamDetails[0] = teamDetails[index];
         teamDetails[index] = temp;
+    }
+
+    /************ Firebase **********/
+
+    // Loads gamedata for the username from Firebase. If game data exists, set model details to Firebase data.
+    // If game data does not exist, call APIs and set model details to API data.
+    this.loadFirebaseData = function(callback) {
+      var battleDataRef = firebase.database().ref('/gameData/'+username+'/');
+      var battleDataObj = $firebaseObject(battleDataRef);
+
+      battleDataObj.$loaded().then(function() {
+        if (battleDataObj.teamDetails == undefined || battleDataObj.teamDetails == null) {
+
+          that.setScore(0);
+
+          that.getAllDetails(function() {
+            battleDataRef.child("teamDetails").set(angular.fromJson(angular.toJson(teamDetails)));
+            battleDataRef.child("oppDetails").set(angular.fromJson(angular.toJson(opponentDetails)));
+            battleDataRef.child("score").set(angular.fromJson(angular.toJson(score)));
+
+            callback(false, battleDataObj);
+          })
+
+        } else {
+          that.setTeamDetails(battleDataObj.teamDetails);
+          that.setOppDetails(battleDataObj.oppDetails);
+          that.setScore(battleDataObj.score);
+
+          callback(true, battleDataObj);
+        }
+      })
+    }
+
+    // Resets game messages in Firebase
+    this.resetFirebaseMessages = function() {
+      var battleDataRef = firebase.database().ref('/gameData/'+username+'/');
+      battleDataRef.child("changeMsg").remove();
+      battleDataRef.child("attackMsg").remove();
+      battleDataRef.child("damageMsg").remove();
+      battleDataRef.child("faintedMsg").remove();
+      battleDataRef.child("effectivenessMsg").remove();
+      battleDataRef.child("promptMsg").remove();
+    }
+
+    // Updates values to Firebase
+    this.updateToFirebase = function(child, value) {
+      var battleDataRef = firebase.database().ref('/gameData/'+username+'/');
+      battleDataRef.child(child).set(value);
     }
 
     // Angular service needs to return an object that has all the

@@ -1,10 +1,11 @@
 pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObject, PokeModel) {
 
   // Booleans to check if loading has finished
-  $scope.isLoading = function() {
+  /*$scope.isLoading = function() {
     return PokeModel.getIsLoading();
-  }
-  //$scope.isLoading = true;
+  }*/
+
+  $scope.isLoading = true;
 
   // Booleans used to hide and show subviews
   $scope.mainOptions = false;
@@ -26,102 +27,68 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
     $scope.promptMsg = "";
 
     //Reset messages on Firebase
-    battleDataRef.child("changeMsg").remove();
-    battleDataRef.child("attackMsg").remove();
-    battleDataRef.child("damageMsg").remove();
-    battleDataRef.child("faintedMsg").remove();
-    battleDataRef.child("effectivenessMsg").remove();
-    battleDataRef.child("promptMsg").remove();
+    PokeModel.resetFirebaseMessages();
+
+    // battleDataRef.child("changeMsg").remove();
+    // battleDataRef.child("attackMsg").remove();
+    // battleDataRef.child("damageMsg").remove();
+    // battleDataRef.child("faintedMsg").remove();
+    // battleDataRef.child("effectivenessMsg").remove();
+    // battleDataRef.child("promptMsg").remove();
   }
 
   $scope.username = function() {
     return PokeModel.getUsername();
   }
-  console.log($scope.username());
 
   // Update user's health bar if user = true, else update opponent's health bar.
   $scope.updateHealthBar = function(user) {
 
-    var oppRatio = $scope.opponentDetails().battleStats.HP / $scope.opponentDetails().battleStats.maxHP;
-    var userRatio = $scope.teamDetails()[0].battleStats.HP / $scope.teamDetails()[0].battleStats.maxHP;
-    var fraction = user ? userRatio : oppRatio;
-
-    // How to do this without document.getElementById?
-    var healthBar = user ? document.getElementById("healthBarUser") : document.getElementById("healthBarOpp");
-
-    healthBar.style.width = (fraction * 250)+"px";
-
-    if (fraction > 0.5) {
-      healthBar.style["background-color"] = "green";
-    } else if (fraction < 0.5 && fraction > 0.2) {
-      healthBar.style["background-color"] = "orange";
-    } else if (fraction < 0.2) {
-      healthBar.style["background-color"] = "red";
-    }
+    // var oppRatio = $scope.opponentDetails().battleStats.HP / $scope.opponentDetails().battleStats.maxHP;
+    // var userRatio = $scope.teamDetails()[0].battleStats.HP / $scope.teamDetails()[0].battleStats.maxHP;
+    // var fraction = user ? userRatio : oppRatio;
+    //
+    // // How to do this without document.getElementById?
+    // var healthBar = user ? document.getElementById("healthBarUser") : document.getElementById("healthBarOpp");
+    //
+    // healthBar.style.width = (fraction * 250)+"px";
+    //
+    // if (fraction > 0.5) {
+    //   healthBar.style["background-color"] = "green";
+    // } else if (fraction < 0.5 && fraction > 0.2) {
+    //   healthBar.style["background-color"] = "orange";
+    // } else if (fraction < 0.2) {
+    //   healthBar.style["background-color"] = "red";
+    // }
 
   }
 
   // The user's turn if userTurn = true, else opponent's turn. The user's action was to change Pokémon if changedPokemon = true, else the user's action was to attack.
   $scope.updateHP = function(userTurn, changedPokemon) {
 
-    // 1. User's turn and user changes Pokémon
-    // 2. Opponent's turn and opponent attacks
-    if ((userTurn && changedPokemon) || (!userTurn && !changedPokemon)) {
-      $scope.updateHealthBar(true);
-    }
-
-    // 1. User's turn and user attacks
-    // 2. Opponent's turn and opponent changes Pokémon
-    else if ((userTurn && !changedPokemon) || (!userTurn && changedPokemon)) {
-      $scope.updateHealthBar(false);
-    }
+    // // 1. User's turn and user changes Pokémon
+    // // 2. Opponent's turn and opponent attacks
+    // if ((userTurn && changedPokemon) || (!userTurn && !changedPokemon)) {
+    //   $scope.updateHealthBar(true);
+    // }
+    //
+    // // 1. User's turn and user attacks
+    // // 2. Opponent's turn and opponent changes Pokémon
+    // else if ((userTurn && !changedPokemon) || (!userTurn && changedPokemon)) {
+    //   $scope.updateHealthBar(false);
+    // }
   }
 
-  // Firebase
-  var battleDataRef = firebase.database().ref('/gameData/'+$scope.username()+'/');
+  // Loads Firebase data to see if data exists or not, and set scope values accordingly.
+  PokeModel.loadFirebaseData(function(gamedataExists, battleDataObj) {
+    // For three-way data bindings, bind it to the scope instead
+    battleDataObj.$bindTo($scope, "battleDataObj");
+    $scope.isLoading = false;
 
-  var battleDataObj = $firebaseObject(battleDataRef);
-
-  // to take an action after the data loads, use the $loaded() promise
-  battleDataObj.$loaded().then(function() {
-    console.log("loaded record:", battleDataObj.$id, battleDataObj.teamDetails);
-
-    // To iterate the key/value pairs of the object, use angular.forEach()
-    angular.forEach(battleDataObj, function(value, key) {
-      console.log(key, value);
-    });
-
-    console.log(battleDataObj.teamDetails);
-
-    // If there is no saved data, get data from API, otherwise get saved data from Firebase.
-    if (battleDataObj.teamDetails == undefined || battleDataObj.teamDetails == null) {
-      console.log("hello");
-      // Get new data from API
-
-      // Call writeTeamDetails and getRandomOpponent upon page load
-      //PokeModel.writeTeamDetails();
-      //PokeModel.getRandomOpponent();
-
-      PokeModel.getAllDetails(function() {
-        battleDataRef.child("teamDetails").set(angular.fromJson(angular.toJson($scope.teamDetails())));
-        battleDataRef.child("oppDetails").set(angular.fromJson(angular.toJson($scope.opponentDetails())));
-        battleDataRef.child("score").set(angular.fromJson(angular.toJson($scope.score())));
-        //$scope.isLoading = false;
-      })
-
+    if (!gamedataExists) {
       $scope.mainOptions = true;
-
-      // Initiating messages
       $scope.resetMessages();
-      PokeModel.setScore(0);
     } else {
-      // Load saved data from Firebase and set to scope.
-      console.log($scope.battleDataObj.teamDetails);
-      PokeModel.setTeamDetails(battleDataObj.teamDetails);
-      PokeModel.setOppDetails(battleDataObj.oppDetails);
-      PokeModel.setScore(battleDataObj.score);
-      console.log($scope.changeOptions);
-
       switch (battleDataObj.currentMenu) {
         case "main":
           $scope.mainOptions = true;
@@ -153,16 +120,92 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
 
       $scope.updateHealthBar(true);
       $scope.updateHealthBar(false);
-
-      //$scope.isLoading = false;
     }
-  });
+  })
 
-  // To make the data available in the DOM, assign it to $scope
-  $scope.battleDataObj = battleDataObj;
-
-  // For three-way data bindings, bind it to the scope instead
-  battleDataObj.$bindTo($scope, "battleDataObj");
+  // // Firebase
+  // var battleDataRef = firebase.database().ref('/gameData/'+$scope.username()+'/');
+  //
+  // var battleDataObj = $firebaseObject(battleDataRef);
+  //
+  // // to take an action after the data loads, use the $loaded() promise
+  // battleDataObj.$loaded().then(function() {
+  //   console.log("loaded record:", battleDataObj.$id, battleDataObj.teamDetails);
+  //
+  //   // To iterate the key/value pairs of the object, use angular.forEach()
+  //   angular.forEach(battleDataObj, function(value, key) {
+  //     console.log(key, value);
+  //   });
+  //
+  //   console.log(battleDataObj.teamDetails);
+  //
+  //   // If there is no saved data, get data from API, otherwise get saved data from Firebase.
+  //   if (battleDataObj.teamDetails == undefined || battleDataObj.teamDetails == null) {
+  //     console.log("hello");
+  //     // Get new data from API
+  //
+  //     // Call writeTeamDetails and getRandomOpponent upon page load
+  //     //PokeModel.writeTeamDetails();
+  //     //PokeModel.getRandomOpponent();
+  //
+  //     PokeModel.getAllDetails(function() {
+  //       battleDataRef.child("teamDetails").set(angular.fromJson(angular.toJson($scope.teamDetails())));
+  //       battleDataRef.child("oppDetails").set(angular.fromJson(angular.toJson($scope.opponentDetails())));
+  //       battleDataRef.child("score").set(angular.fromJson(angular.toJson($scope.score())));
+  //       //$scope.isLoading = false;
+  //     })
+  //
+  //     $scope.mainOptions = true;
+  //
+  //     // Initiating messages
+  //     $scope.resetMessages();
+  //     PokeModel.setScore(0);
+  //   } else {
+  //     // Load saved data from Firebase and set to scope.
+  //     console.log($scope.battleDataObj.teamDetails);
+  //     PokeModel.setTeamDetails(battleDataObj.teamDetails);
+  //     PokeModel.setOppDetails(battleDataObj.oppDetails);
+  //     PokeModel.setScore(battleDataObj.score);
+  //     console.log($scope.changeOptions);
+  //
+  //     switch (battleDataObj.currentMenu) {
+  //       case "main":
+  //         $scope.mainOptions = true;
+  //         break;
+  //       case "nextOpp":
+  //         $scope.nextOppShow = true;
+  //         break;
+  //       case "next":
+  //         $scope.nextShow = true;
+  //         break;
+  //       case "change":
+  //         $scope.changeOptions = true;
+  //         break;
+  //     }
+  //     console.log($scope.changeOptions);
+  //
+  //     if (battleDataObj.changeMsg)
+  //       $scope.changeMsg = battleDataObj.changeMsg;
+  //     if (battleDataObj.attackMsg)
+  //       $scope.attackMsg = battleDataObj.attackMsg;
+  //     if (battleDataObj.damageMsg)
+  //       $scope.damageMsg = battleDataObj.damageMsg;
+  //     if (battleDataObj.faintedMsg)
+  //       $scope.faintedMsg = battleDataObj.faintedMsg;
+  //     if (battleDataObj.effectivenessMsg)
+  //       $scope.effectivenessMsg = battleDataObj.effectivenessMsg;
+  //     if (battleDataObj.changeMsg)
+  //       $scope.promptMsg = battleDataObj.promptMsg;
+  //
+  //     $scope.updateHealthBar(true);
+  //     $scope.updateHealthBar(false);
+  //
+  //     //$scope.isLoading = false;
+  //   }
+  // });
+  //
+  // // To make the data available in the DOM, assign it to $scope
+  // $scope.battleDataObj = battleDataObj;
 
   // Highscore Reference
   var highscoreRef = firebase.database().ref('/highscores/');
@@ -181,7 +224,6 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
     return PokeModel.getScore();
   }
 
-
   // Options menu showing and hiding, and executing user commands
   $scope.goToChange = function() {
     $scope.mainOptions = false;
@@ -195,7 +237,10 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
       $scope.resetMessages();
       $scope.changeMsg = "You cannot call out " + $scope.teamDetails()[index].name + " because it has no HP left.";
       //Update to Firebase
-      battleDataRef.child("changeMsg").set($scope.changeMsg);
+      //battleDataRef.child("changeMsg").set($scope.changeMsg);
+
+      PokeModel.updateToFirebase("changeMsg", $scope.changeMsg);
+
     } else {
       // Reset backDisabled
       $scope.backDisabled = false;
@@ -204,18 +249,30 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
       $scope.resetMessages();
       $scope.changeMsg = "You called out " + $scope.teamDetails()[0].name + "!";
 
+
+      // $scope.battleDataObj.changeMsg = $scope.changeMsg;
+      // $scope.battleDataObj.backDisabled = false;
+      // $scope.battleDataObj.currentMenu = "next";
+      // $scope.battleDataObj.teamDetails = angular.fromJson(angular.toJson($scope.teamDetails()));
+      // $scope.battleDataObj.$save()
+
       //Update to Firebase
-      battleDataRef.child("backDisabled").set(false);
-      battleDataRef.child("changeMsg").set($scope.changeMsg);
-      battleDataRef.child("currentMenu").set("next");
-      battleDataRef.child("teamDetails").set(angular.fromJson(angular.toJson($scope.teamDetails())));
+      PokeModel.updateToFirebase("backDisabled", false);
+      PokeModel.updateToFirebase("changeMsg", $scope.changeMsg);
+      PokeModel.updateToFirebase("currentMenu", "next");
+      PokeModel.updateToFirebase("teamDetails", angular.fromJson(angular.toJson($scope.teamDetails())));
+
+      //battleDataRef.child("backDisabled").set(false);
+      //battleDataRef.child("changeMsg").set($scope.changeMsg);
+      //battleDataRef.child("currentMenu").set("next");
+      //battleDataRef.child("teamDetails").set(angular.fromJson(angular.toJson($scope.teamDetails())));
 
       //show next button
       $scope.nextShow = true;
       $scope.changeOptions = false;
 
       //update HP bar
-      $scope.updateHP(true, true);
+      // $scope.updateHP(true, true);
     }
 
   }
@@ -242,23 +299,39 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
     $scope.attackMsg = $scope.opponentDetails().name + " used " + $scope.opponentDetails().movesUsed[randomNum].name + "!";
 
     // Use damage to hit user, changing their HP bar and HP value displayed. HP is under stats in Pokémon object
-    $scope.updateHP(false, false);
+    // $scope.updateHP(false, false);
 
     // Show main options
     $scope.nextShow = false;
     $scope.mainOptions = true;
 
     //Update to Firebase
-    battleDataRef.child("effectivenessMsg").set($scope.effectivenessMsg);
-    battleDataRef.child("attackMsg").set($scope.attackMsg);
-    battleDataRef.child("currentMenu").set("main");
-    battleDataRef.child("teamDetails").set(angular.fromJson(angular.toJson($scope.teamDetails())));
+
+    // $scope.battleDataObj.effectivenessMsg = $scope.effectivenessMsg;
+    // $scope.battleDataObj.attackMsg = $scope.attackMsg;
+    // $scope.battleDataObj.currentMenu = "main";
+    // $scope.battleDataObj.teamDetails = angular.fromJson(angular.toJson($scope.teamDetails()));
+    // $scope.battleDataObj.$save();
+
+    PokeModel.updateToFirebase("effectivenessMsg", $scope.effectivenessMsg);
+    PokeModel.updateToFirebase("attackMsg", $scope.attackMsg);
+    PokeModel.updateToFirebase("currentMenu", "main");
+    PokeModel.updateToFirebase("teamDetails", angular.fromJson(angular.toJson($scope.teamDetails())));
+
+    // battleDataRef.child("effectivenessMsg").set($scope.effectivenessMsg);
+    // battleDataRef.child("attackMsg").set($scope.attackMsg);
+    // battleDataRef.child("currentMenu").set("main");
+    // battleDataRef.child("teamDetails").set(angular.fromJson(angular.toJson($scope.teamDetails())));
 
     // if user's HP is zero, display fainted message, switch user Pokémon.
     if ($scope.teamDetails()[0].battleStats.HP === 0) {
       $scope.faintedMsg = $scope.teamDetails()[0].name + " fainted!";
       // Update to Firebase
-      battleDataRef.child("faintedMsg").set($scope.faintedMsg);
+      // $scope.battleDataObj.faintedMsg = $scope.faintedMsg;
+
+      PokeModel.updateToFirebase("faintedMsg", $scope.faintedMsg);
+
+      // battleDataRef.child("faintedMsg").set($scope.faintedMsg);
 
       var countFainted = 1;
       for (var i = 1; i < 4; i++) {
@@ -289,9 +362,19 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
         $scope.backDisabled = true;
 
         // Update to Firebase
-        battleDataRef.child("changeMsg").set($scope.changeMsg);
-        battleDataRef.child("currentMenu").set("change");
-        battleDataRef.child("backDisabled").set(true);
+        // $scope.battleDataObj.changeMsg = $scope.changeMsg;
+        // $scope.battleDataObj.currentMenu = "change";
+        // $scope.battleDataObj.backDisabled = true;
+        // $scope.battleDataObj.$save();
+
+        PokeModel.updateToFirebase("changeMsg", $scope.changeMsg);
+        PokeModel.updateToFirebase("currentMenu", "change");
+        PokeModel.updateToFirebase("backDisabled", true);
+
+        //
+        // battleDataRef.child("changeMsg").set($scope.changeMsg);
+        // battleDataRef.child("currentMenu").set("change");
+        // battleDataRef.child("backDisabled").set(true);
       }
     }
   }
@@ -301,15 +384,29 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
     $scope.promptMsg = "What will you do?"
     $scope.nextOppShow = false;
     $scope.mainOptions = true;
+
     //Update to Firebase
-    battleDataRef.child("promptMsg").set($scope.promptMsg);
-    battleDataRef.child("currentMenu").set("main");
+    // $scope.battleDataObj.promptMsg = $scope.promptMsg;
+    // $scope.battleDataObj.currentMenu = "main";
+    // $scope.battleDataObj.$save();
+
+    PokeModel.updateToFirebase("promptMsg", $scope.promptMsg);
+    PokeModel.updateToFirebase("currentMenu", "main");
+
+
+    // battleDataRef.child("promptMsg").set($scope.promptMsg);
+    // battleDataRef.child("currentMenu").set("main");
 
     PokeModel.getRandomOpponent(function() {
-      $scope.updateHP(true, false);
+      // $scope.updateHP(true, false);
 
       //Update to Firebase
-      battleDataRef.child("oppDetails").set(angular.fromJson(angular.toJson($scope.opponentDetails())));
+      // $scope.battleDataObj.oppDetails = angular.fromJson(angular.toJson($scope.opponentDetails()));
+      // $scope.battleDataObj.$save()
+
+      PokeModel.updateToFirebase("oppDetails", angular.fromJson(angular.toJson($scope.opponentDetails())));
+
+      // battleDataRef.child("oppDetails").set(angular.fromJson(angular.toJson($scope.opponentDetails())));
     });
   }
 
@@ -328,7 +425,7 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
     })
 
     // TODO: Use damage to hit opponent, changing their HP bar and HP value displayed. HP is under stats in Pokémon object
-    $scope.updateHP(true, false);
+    // $scope.updateHP(true, false);
 
     // Change status message
     $scope.attackMsg = $scope.teamDetails()[0].name + " used " + $scope.teamDetails()[0].movesUsed[index].name + "!";
@@ -338,10 +435,21 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
     $scope.attackOptions = false;
 
     //Update to Firebase
-    battleDataRef.child("effectivenessMsg").set($scope.effectivenessMsg);
-    battleDataRef.child("attackMsg").set($scope.attackMsg);
-    battleDataRef.child("currentMenu").set("next");
-    battleDataRef.child("oppDetails").set(angular.fromJson(angular.toJson($scope.opponentDetails())));
+    // $scope.battleDataObj.effectivenessMsg = $scope.effectivenessMsg;
+    // $scope.battleDataObj.attackMsg = $scope.attackMsg;
+    // $scope.battleDataObj.currentMenu = "next";
+    // $scope.battleDataObj.oppDetails = angular.fromJson(angular.toJson($scope.opponentDetails()));
+    // $scope.battleDataObj.$save();
+
+    PokeModel.updateToFirebase("oppDetails", angular.fromJson(angular.toJson($scope.opponentDetails())));
+    PokeModel.updateToFirebase("effectivenessMsg", $scope.effectivenessMsg);
+    PokeModel.updateToFirebase("currentMenu", "next");
+    PokeModel.updateToFirebase("attackMsg", $scope.attackMsg);
+
+    // battleDataRef.child("effectivenessMsg").set($scope.effectivenessMsg);
+    // battleDataRef.child("attackMsg").set($scope.attackMsg);
+    // battleDataRef.child("currentMenu").set("next");
+    // battleDataRef.child("oppDetails").set(angular.fromJson(angular.toJson($scope.opponentDetails())));
 
     // if opponent's HP is zero, display fainted message, increase score, switch opponent Pokémon.
     if ($scope.opponentDetails().battleStats.HP === 0) {
@@ -351,9 +459,18 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
       $scope.nextOppShow = true;
 
       //Update to Firebase
-      battleDataRef.child("currentMenu").set("nextOpp");
-      battleDataRef.child("faintedMsg").set($scope.faintedMsg);
-      battleDataRef.child("score").set(angular.fromJson(angular.toJson($scope.score())));
+      // $scope.battleDataObj.currentMenu = "nextOpp";
+      // $scope.battleDataObj.faintedMsg = $scope.faintedMsg;
+      // $scope.battleDataObj.score = angular.fromJson(angular.toJson($scope.score()));
+      // $scope.battleDataObj.$save()
+
+      PokeModel.updateToFirebase("score", angular.fromJson(angular.toJson($scope.score())));
+      PokeModel.updateToFirebase("faintedMsg", $scope.faintedMsg);
+      PokeModel.updateToFirebase("currentMenu", "nextOpp");
+      //
+      // battleDataRef.child("currentMenu").set("nextOpp");
+      // battleDataRef.child("faintedMsg").set($scope.faintedMsg);
+      // battleDataRef.child("score").set(angular.fromJson(angular.toJson($scope.score())));
     }
 
   }

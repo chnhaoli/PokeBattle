@@ -76,6 +76,33 @@ pokeBattleApp.controller('AudioController', function($scope) {
 
 // Testing with directives
 
+pokeBattleApp.directive('healthBar', function() {
+  return {
+    scope: {
+      hp: '=hp',
+      maxHp: '=maxHp'
+    },
+    link: function(scope, elem, attr) {
+      var update = function() {
+        var ratio = scope.hp / scope.maxHp;
+
+        elem[0].style.width = (ratio * 250)+"px";
+
+        if (ratio > 0.5) {
+          elem[0].style["background-color"] = "green";
+        } else if (ratio < 0.5 && ratio > 0.2) {
+          elem[0].style["background-color"] = "orange";
+        } else if (ratio < 0.2) {
+          elem[0].style["background-color"] = "red";
+        }
+      }
+
+      scope.$watch("hp", update);
+      update();
+    }
+  }
+})
+
 pokeBattleApp.directive('dndElement', function() {
   return {
     replace: 'true',
