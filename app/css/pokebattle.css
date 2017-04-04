@@ -158,6 +158,11 @@ p {
 .marginbottom100 {
   margin-bottom: 100px;
 }
+
+.noPadding {
+  padding: 0;
+  margin: 0;
+}
 /*.highscoreDiv {
   text-align: left;
 }

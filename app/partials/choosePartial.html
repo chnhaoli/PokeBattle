@@ -136,26 +136,29 @@
 
 <!-- List of all Pokémons that match search -->
 <div class="panel-body searchMatches">
-  <div class="row">
+    <div class="row">
         <!-- Where the search results locates. -->
         <div ng-repeat="pokemon in pokeByType" class="col-md-3 panel-body">
             <!-- <button class="panel"> -->
-            <a ng-click="getPokemonDetail(pokemon.pokemon.name)" class="btn btn-default hvr-float">
-                <div class="panel-body">
-                    <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemon.pokemon.name}}.png"
-                    onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'"
-                    alt="{{pokemon.pokemon.name}}"
-                    class="img-responsive"
-                    style="width: 210px ; height:210px;"/>
-                </div>
-                <div class="panel-heading">
-                    <h4>{{pokemon.pokemon.name}}</h4>
-                </div>
-            </a>
+            <div class="hvr-float" style="display: inline-block; height: fit-content;">
 
-            <!-- click icon to sdd and remove pokemon-->
-            <div class="mainViewSelect" style="position: relative; opacity: 0.3; bottom: 40px;" ng-if="!isInList(pokemon.pokemon.name)"><img src="images/select_v2.png" ng-click="addToTeam(pokemon.pokemon.name)"/></div>
-            <div class="mainViewSelect" style="position: relative; bottom: 40px;" ng-if="isInList(pokemon.pokemon.name)"><img src="images/selected_v2.png" ng-click="deleteFromTeam(pokemon.pokemon.name)"/></div>
+                <a ng-click="getPokemonDetail(pokemon.pokemon.name)" class="btn btn-default">
+                    <div class="panel-body">
+                        <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{pokemon.pokemon.name}}.png"
+                        onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'"
+                        alt="{{pokemon.pokemon.name}}"
+                        class="img-responsive"
+                        style="width: 210px ; height:210px;"/>
+                    </div>
+                    <div class="panel-heading">
+                        <h4>{{pokemon.pokemon.name}}</h4>
+                    </div>
+                </a>
+
+                <!-- click icon to sdd and remove pokemon-->
+                <div class="mainViewSelect" style="position: relative; opacity: 0.1; bottom: 40px;" ng-if="!isInList(pokemon.pokemon.name)"><img src="images/select_v6.png" ng-click="addToTeam(pokemon.pokemon.name)"/></div>
+                <div class="mainViewSelect" style="position: relative; bottom: 40px;" ng-if="isInList(pokemon.pokemon.name)"><img src="images/selected_v2.png" ng-click="deleteFromTeam(pokemon.pokemon.name)"/></div>
+            </div>
 
         </div>
     </div>

@@ -35,12 +35,14 @@
   <p>{{errorMsg}}</p>
 
   <div class="col-lg-6">
-    <div class="healthBarDiv">
-      <div id="healthBarUser" health-bar hp="teamDetails()[0].battleStats.HP" max-hp="teamDetails()[0].battleStats.maxHP">
+    <div class="">
+      <div class="healthBarDiv">
+        <div id="healthBarUser" health-bar hp="teamDetails()[0].battleStats.HP" max-hp="teamDetails()[0].battleStats.maxHP">
+        </div>
       </div>
+      <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{teamDetails()[0].name}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'" id="userPokemon"></img>
+      <p>{{teamDetails()[0].name}}</p>
     </div>
-    <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{teamDetails()[0].name}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'" id="userPokemon"></img>
-    <p>{{teamDetails()[0].name}}</p>
   </div>
 
   <div class="col-lg-6">
