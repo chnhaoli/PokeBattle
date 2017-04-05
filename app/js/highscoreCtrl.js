@@ -8,16 +8,16 @@ pokeBattleApp.controller('HighscoreCtrl', function ($scope, $uibModal, $firebase
   $scope.highscoreArray = [];
   highscoreObj.$loaded().then(function() {
 
-    $scope.highscoreArray.push(["Bob", 100]);
-    $scope.highscoreArray.push(["Pikachu", 5]);
-    $scope.highscoreArray.push(["Squirtle", 101]);
-    $scope.highscoreArray.push(["Bulbasaur", 1000]);
+    // $scope.highscoreArray.push(["Bob", 100]);
+    // $scope.highscoreArray.push(["Pikachu", 5]);
+    // $scope.highscoreArray.push(["Squirtle", 101]);
+    // $scope.highscoreArray.push(["Bulbasaur", 1000]);
 
     angular.forEach(highscoreObj, function(value, key) {
       $scope.highscoreArray.push([value.username, value.score]);
       //$scope.highscoreArray.push(['Charmander', 16])
     })
-    
+
     console.log($scope.highscoreArray);
     for (key in $scope.highscoreArray) {
       var value = $scope.highscoreArray[key];
