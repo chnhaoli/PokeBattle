@@ -35,6 +35,7 @@ pokeBattleApp.controller('PokeCtrl', function ($scope, $firebaseObject, PokeMode
   	for(key in $scope.accountsObj){
   		if($scope.username === key){
   		console.log("This name is taken, please try another one.");
+      $scope.message = "This name is taken, please try another one.";
   		$scope.startIO = false;
   		}
   	}
@@ -75,12 +76,14 @@ pokeBattleApp.controller('PokeCtrl', function ($scope, $firebaseObject, PokeMode
 
         } else {
           console.log("Your password was incorrect.");
+          $scope.message = "Your password was incorrect.";
         }
   		}
   	}
     if (!found) {
       // If no name found
       console.log("No account with that username was found.");
+      $scope.message = "No account with that username was found.";
     }
 
   }

@@ -9,19 +9,19 @@
 <!--     	<div class="col-md-3 col-md-offset-4 form-style-6" style=" width:21%; position: relative; top:480px; padding-left: 2.84%;">
         <input type="text" name="field1" id="username" ng-model="user_name" placeholder="Enter your name to enable save"/>
       </div> -->
-
       <div style="margin-top: 480px;">
+        <p>{{message}}</p>
         <input type="text" ng-model="username" placeholder="Username"/>
         <input type="text" ng-model="password" placeholder="Password"/>
       </div>
-    	<div class="col-md-3 col-md-offset-4 form-style-6" style="position: relative; top: 20px; left: 35px;">
+    	<div class="col-md-3 col-md-offset-4 form-style-6" style="position: relative; top: 20px; left: 35px; margin-bottom: 50px;">
         <input type="submit" id="startButton" value="Sign up" />
         <a ng-click="checkName()" style="position: relative; bottom: 3px; right: 114px; z-index: 2">
           <img src="images/brackets_s.png"  class="hvr-pulse" style="width: 116px;" />
         </a>
       </div>
 
-      <div class="col-md-3 form-style-6" style="position: relative; top: 20px; right: 138px;">
+      <div class="col-md-3 form-style-6" style="position: relative; top: 20px; right: 138px; margin-bottom: 50px;">
         <input type="submit" id="startButton" value="Log in"/>
         <a ng-click="checkPasswordAndGame()" style="position: relative; bottom: 3px; right: 114px; z-index: 2">
           <img src="images/brackets_s.png"  class="hvr-pulse" style="width: 116px;" />
