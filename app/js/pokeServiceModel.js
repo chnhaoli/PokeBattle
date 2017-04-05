@@ -91,9 +91,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
         }
     });
 
-    /*this.getIsLoading = function() {
-        return isLoading;
-    }*/
+    /*this.getIsLoading = function() {return isLoading;}*/
 
     //GET: pokemon for choosing;
     this.getAllPokemon = function(callback, errorCallback) {
@@ -126,13 +124,13 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
     })
 
     this.setUsername = function(usernameToSet) {
-      username = usernameToSet;
-      console.log(username);
+        username = usernameToSet;
+        console.log(username);
 
     }
 
     this.getUsername = function() {
-      return username;
+        return username;
     }
 
     this.increaseScore = function() {
@@ -144,7 +142,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
     }
 
     this.setScore = function(scoreToSet) {
-      score = scoreToSet;
+        score = scoreToSet;
     }
 
     //Get a randomized interger between 0 and max (default inclusive).
@@ -193,62 +191,96 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
 
     // Checks the moves array for duplicate moves and replaces them
     this.checkDuplicates = function(randomMoveIds, pokemon) {
-      var duplicateExists = true;
-      while (duplicateExists) {
-        console.log("enter while");
-        for (var i = 0; i < randomMoveIds.length; i++) {
-          var firstMoveId = randomMoveIds[i];
-          for (var j = 0; j < randomMoveIds.length; j++) {
-            if (j != i) {
-              var secondMoveId = randomMoveIds[j];
-              if (firstMoveId == secondMoveId) {
-                // Reassigning new random number as move id
-                randomMoveIds[i] = that.randomInt(pokemon.moves.length-1);
-              } else {
-                console.log("not same");
-                if (j == randomMoveIds.length-2 && i == randomMoveIds.length-1) {
-                  console.log("compared all");
-                  console.log(randomMoveIds);
-                  // Have compared all moves
-                  duplicateExists = false;
+        var duplicateExists = true;
+        while (duplicateExists) {
+            console.log("enter while");
+            for (var i = 0; i < randomMoveIds.length; i++) {
+                var firstMoveId = randomMoveIds[i];
+                for (var j = 0; j < randomMoveIds.length; j++) {
+                    if (j != i) {
+                        var secondMoveId = randomMoveIds[j];
+                        if (firstMoveId == secondMoveId) {
+                            // Reassigning new random number as move id
+                            randomMoveIds[i] = that.randomInt(pokemon.moves.length-1);
+                        } else {
+                            console.log("not same");
+                            if (j == randomMoveIds.length-2 && i == randomMoveIds.length-1) {
+                                console.log("compared all");
+                                console.log(randomMoveIds);
+                                // Have compared all moves
+                                duplicateExists = false;
+                            }
+                        }
+                    }
                 }
-              }
             }
-          }
         }
-      }
 
-      return randomMoveIds;
+        return randomMoveIds;
     }
     //GET: Get 4 random moves for a pokemon;
     this.getMoves = function(pokemon, callback, errorCallback){
         pokemon.movesUsed = [];
         var randomMoveIds = [];
         for (var i = 0; i < 4; i++) {
-          var randomNum = that.randomInt(pokemon.moves.length-1);
-          randomMoveIds.push(randomNum);
+            var randomNum = that.randomInt(pokemon.moves.length-1);
+            randomMoveIds.push(randomNum);
         }
-        randomMoveIds = that.checkDuplicates(randomMoveIds, pokemon);
-        for (var i = 0; i < 4; i++){
-            var moveId = randomMoveIds[i];
-            that.GetMove.get({moveId : pokemon.moves[moveId].move.name}, function(index) {
-                return function(data) {
-                    pokemon.movesUsed[index] = {};
-                    pokemon.movesUsed[index].name = data.name;
-                    pokemon.movesUsed[index].type = data.type.name;
-                    pokemon.movesUsed[index].power = data.power;
-                    pokemon.movesUsed[index].accuracy = data.accuracy;
-                    pokemon.movesUsed[index].damageClass = data.damage_class.name;
-                    if (index == 3)
-                    callback();
-                }
-            }(i), function(error) {
-              console.log(error);
-              errorCallback(error)
-            });
+        if(pokemon.name !== 'ditto'){
+            console.log(pokemon.name);
+            randomMoveIds = that.checkDuplicates(randomMoveIds, pokemon);
+            for (var i = 0; i < 4; i++){
+                var moveId = randomMoveIds[i];
+                that.GetMove.get({moveId : pokemon.moves[moveId].move.name}, function(index) {
+                    return function(data) {
+
+                        pokemon.movesUsed[index] = {};
+                        pokemon.movesUsed[index].name = data.name;
+                        pokemon.movesUsed[index].type = data.type.name;
+                        pokemon.movesUsed[index].power = data.power;
+                        pokemon.movesUsed[index].accuracy = data.accuracy;
+                        pokemon.movesUsed[index].damageClass = data.damage_class.name;
+                        if (index == 3)
+                        callback();
+                    }
+                }(i), function(error) {
+                    console.log(error);
+                    errorCallback(error)
+                });
+            }
+        }
+        else {
+            console.log('ditto' + pokemon.name);
+            //Give Ditto 4 random moves other than transform.
+            var moveSet = [];
+            for (i = 1; i <= 621; i++){
+                moveSet.push(i);
+            }
+            moveSet.splice(143, 1);
+            for (var j = 0; j < 4; j++){
+                var randomMoveId = that.randomInt(moveSet.length-1);
+                var moveId = moveSet[randomMoveId];
+                moveSet.splice(randomMoveId, 1);
+                console.log('moveID' + moveId);
+                that.GetMove.get({moveId : moveId}, function(index) {
+                    return function(data) {
+                        console.log(index + data.name);
+                        pokemon.movesUsed[index] = {};
+                        pokemon.movesUsed[index].name = data.name;
+                        pokemon.movesUsed[index].type = data.type.name;
+                        pokemon.movesUsed[index].power = data.power;
+                        pokemon.movesUsed[index].accuracy = data.accuracy;
+                        pokemon.movesUsed[index].damageClass = data.damage_class.name;
+                        if (index == 3)
+                        callback();
+                    }
+                }(j), function(error) {
+                    console.log(error);
+                    errorCallback(error)
+                });
+            }
         }
     }
-
     // GET: For all Pokémon names in team array, gets Pokémon details and passes that into an array teamDetails.
     // Special function in a function passing in key as index, called directly, ensuring the key gets updated from 0 to team.length-1.
     this.writeTeamDetails = function(callbackTeam, errorCallback) {
@@ -268,7 +300,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
                         var countFinished = 0;
                         for (var i = 0; i < 4; i++) {
                             if (teamDetails[i].movesUsed.length === 4){
-                              countFinished++;
+                                countFinished++;
                             }
                         }
                         if (countFinished == 4) {
@@ -280,8 +312,8 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
                             callbackTeam();
                         }
                     }, function(error) {
-                      //console.log("error with getting moves");
-                      errorCallback(error);
+                        //console.log("error with getting moves");
+                        errorCallback(error);
                     });
                 }
             }(key), function (error) {
@@ -292,7 +324,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
     }
 
     this.setTeamDetails = function(detailsToSet) {
-      teamDetails = detailsToSet;
+        teamDetails = detailsToSet;
     }
 
     //Returns the team details;
@@ -321,7 +353,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
     }
 
     this.setOppDetails = function(detailsToSet) {
-      opponentDetails = detailsToSet;
+        opponentDetails = detailsToSet;
     }
 
     this.addToTeam = function(pokemonName) {
@@ -329,12 +361,12 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
     }
 
     this.deleteFromTeam = function(pokemonName) {
-      for(key in team){
-        if(pokemonName == team[key]){
-            team.splice(key,1);
-            break;
+        for(key in team){
+            if(pokemonName == team[key]){
+                team.splice(key,1);
+                break;
+            }
         }
-      }
     }
 
     this.getIsInTeam = function(pokemonName){
@@ -372,7 +404,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
                     console.log(opponentDetails);
                 }
             }, function(error) {
-              errorCallback(error);
+                errorCallback(error);
             });
         }, function(error) {
             console.log("getRandomOpponent error");
@@ -382,15 +414,15 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
 
     // Gets all details needed for battle. Callback when both writeTeamDetails and getRandomOpponent are finished.
     this.getAllDetails = function(callback, errorCallback) {
-      this.writeTeamDetails(function() {
-        that.getRandomOpponent(function() {
-          callback();
+        this.writeTeamDetails(function() {
+            that.getRandomOpponent(function() {
+                callback();
+            }, function(error) {
+                errorCallback(error);
+            })
         }, function(error) {
-          errorCallback(error);
+            errorCallback(error);
         })
-      }, function(error) {
-        errorCallback(error);
-      })
     }
 
     /************ Battle damages **********/
@@ -476,9 +508,9 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
         console.log(damage);
         // Happens when power is null, then the key "power" won't even get updated to Firebase so accessing power will give nothing and damage is NaN.
         if (damage == undefined || isNaN(damage)) {
-          return 0;
+            return 0;
         } else {
-          return damage;
+            return damage;
         }
     }
     //Get the pokemon HP after the damages
@@ -514,54 +546,54 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
     // Loads gamedata for the username from Firebase. If game data exists, set model details to Firebase data.
     // If game data does not exist, call APIs and set model details to API data.
     this.loadFirebaseData = function(callback, errorCallback) {
-      var battleDataRef = firebase.database().ref('/gameData/'+username+'/');
-      var battleDataObj = $firebaseObject(battleDataRef);
+        var battleDataRef = firebase.database().ref('/gameData/'+username+'/');
+        var battleDataObj = $firebaseObject(battleDataRef);
 
-      battleDataObj.$loaded().then(function() {
-        if (battleDataObj.teamDetails == undefined || battleDataObj.teamDetails == null) {
+        battleDataObj.$loaded().then(function() {
+            if (battleDataObj.teamDetails == undefined || battleDataObj.teamDetails == null) {
 
-          that.setScore(0);
+                that.setScore(0);
 
-          that.getAllDetails(function() {
-            battleDataRef.child("teamDetails").set(angular.fromJson(angular.toJson(teamDetails)));
-            battleDataRef.child("oppDetails").set(angular.fromJson(angular.toJson(opponentDetails)));
-            battleDataRef.child("score").set(angular.fromJson(angular.toJson(score)));
-            battleDataRef.child("currentMenu").set("main");
-            callback(false, battleDataObj);
-          }, function(error) {
-            errorCallback(error);
-          })
+                that.getAllDetails(function() {
+                    battleDataRef.child("teamDetails").set(angular.fromJson(angular.toJson(teamDetails)));
+                    battleDataRef.child("oppDetails").set(angular.fromJson(angular.toJson(opponentDetails)));
+                    battleDataRef.child("score").set(angular.fromJson(angular.toJson(score)));
+                    battleDataRef.child("currentMenu").set("main");
+                    callback(false, battleDataObj);
+                }, function(error) {
+                    errorCallback(error);
+                })
 
-        } else {
-          that.setTeamDetails(battleDataObj.teamDetails);
-          that.setOppDetails(battleDataObj.oppDetails);
-          that.setScore(battleDataObj.score);
+            } else {
+                that.setTeamDetails(battleDataObj.teamDetails);
+                that.setOppDetails(battleDataObj.oppDetails);
+                that.setScore(battleDataObj.score);
 
-          callback(true, battleDataObj);
-        }
-      })
+                callback(true, battleDataObj);
+            }
+        })
     }
 
     // Resets game messages in Firebase
     this.resetFirebaseMessages = function() {
-      var battleDataRef = firebase.database().ref('/gameData/'+username+'/');
-      battleDataRef.child("changeMsg").remove();
-      battleDataRef.child("attackMsg").remove();
-      battleDataRef.child("damageMsg").remove();
-      battleDataRef.child("faintedMsg").remove();
-      battleDataRef.child("effectivenessMsg").remove();
-      battleDataRef.child("promptMsg").remove();
+        var battleDataRef = firebase.database().ref('/gameData/'+username+'/');
+        battleDataRef.child("changeMsg").remove();
+        battleDataRef.child("attackMsg").remove();
+        battleDataRef.child("damageMsg").remove();
+        battleDataRef.child("faintedMsg").remove();
+        battleDataRef.child("effectivenessMsg").remove();
+        battleDataRef.child("promptMsg").remove();
     }
 
     this.removeGameData = function() {
-      var battleDataRef = firebase.database().ref('/gameData/'+username+'/');
-      battleDataRef.remove();
+        var battleDataRef = firebase.database().ref('/gameData/'+username+'/');
+        battleDataRef.remove();
     }
 
     // Updates values to Firebase
     this.updateToFirebase = function(child, value) {
-      var battleDataRef = firebase.database().ref('/gameData/'+username+'/');
-      battleDataRef.child(child).set(value);
+        var battleDataRef = firebase.database().ref('/gameData/'+username+'/');
+        battleDataRef.child(child).set(value);
     }
 
     // Angular service needs to return an object that has all the
