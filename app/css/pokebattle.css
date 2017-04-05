@@ -243,7 +243,7 @@ p {
   height: 10px;
   width: 250px;
   margin-top: 40px;
-  margin-left: 200px;
+  margin-left: 31vh;
   transition: width 1s, background-color 0.5s;
 }
 
@@ -253,7 +253,7 @@ p {
   height: 10px;
   width: 250px;
   margin-top: 40px;
-  margin-left: 200px;
+  margin-left: 31vh;
   transition: width 1s, background-color 0.5s;
 }
 
