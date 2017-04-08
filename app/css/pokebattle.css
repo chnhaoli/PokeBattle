@@ -283,6 +283,18 @@ p {
 
 .popupinfo {
   text-align: right;
+  font-family: "Nunito";
+  font-size: 20px;
+  color: #a5a5a5;
+  margin-top: 10px;
+}
+
+.popupTitle{
+  text-align: left;
+  font-family: "Nunito";
+  font-size: 22px;
+  color: #a5a5a5;
+  margin-top: 25px;
 }
 
 
@@ -363,7 +375,6 @@ p {
 
 #userPokemon{
   margin-top: 20px;
-  transform: scale(-1, 1)
 }
 
 #healthBarUser {
@@ -490,16 +501,13 @@ p {
 }
 
 .label {
-  font-size: 16px;
-  margin-left:20px;
-  margin-bottom:30px;
-  margin-top:30px;
-  float: left;
-
+  font-size: 20px;
+  margin-left:25px;
+  margin-top: 25px;
 }
 
 .progress-striped{
-  margin-top: 10px;
+  margin-top: 2px;
 }
 
 .teamSelection {

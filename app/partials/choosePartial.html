@@ -2,44 +2,47 @@
 <div class="modal-demo">
     <script type="text/ng-template" id="myModalContent.html">
         <div class="modal-header">
-            <h3 class="modal-title" id="modal-title">Confirm Pokémon</h3>
+            <h3 class="modal-title" id="modal-title">Choose {{$ctrl.pokemon.name}} to be on your team?</h3>
         </div>
         <div class="modal-body" id="modal-body">
-            <h4>Choose {{$ctrl.pokemon.name}} to be on your team?</h4>
-
             <!-- showtype -->
-            <div ng-repeat = "type in $ctrl.getPokemonTypes($ctrl.pokemon.types)">
-                <div class="label label-success">{{type}}</div>
-            </div>
+            <form class="form-horizontal">
+                <div class="popupTitle col-md-2">Type</div>
+                <div ng-repeat = "type in $ctrl.getPokemonTypes($ctrl.pokemon.types)">
+                    <div class="label label-success col-md-2">{{type}}</div>
+                </div>
+            </form>
 
+            <!-- Base stats -->
+            <div class="popupTitle col-md-12">Base Stats</div>
             <div class="panel-body">
                 <div class="col-md-12 popupinfo">
-                    <div class="col-md-5"><h4>HP</h4></div>
-                    <div class="col-md-7"><uib-progressbar class="progress-striped" max="255" value="$ctrl.pokemon.stats[5].base_stat" type="danger"></uib-progressbar>
+                    <div class="col-md-5">HP</div>
+                    <div class="col-md-6"><uib-progressbar class="progress-striped" max="255" value="$ctrl.pokemon.stats[5].base_stat" type="danger"></uib-progressbar>
                     </div>
                 </div>
 
                 <div class="col-md-12 popupinfo">
-                    <div class="col-md-5"><h4>Attack</h4></div>
-                    <div class="col-md-7"><uib-progressbar class="progress-striped" max="190" value="$ctrl.pokemon.stats[4].base_stat" type="danger"></uib-progressbar>
+                    <div class="col-md-5">Attack</div>
+                    <div class="col-md-6"><uib-progressbar class="progress-striped" max="190" value="$ctrl.pokemon.stats[4].base_stat" type="danger"></uib-progressbar>
                     </div>
                 </div>
 
                 <div class="col-md-12 popupinfo">
-                    <div class="col-md-5"><h4>Defense</h4></div>
-                    <div class="col-md-7"><uib-progressbar class="progress-striped" max="230" value="$ctrl.pokemon.stats[3].base_stat" type="danger"></uib-progressbar>
+                    <div class="col-md-5">Defense</div>
+                    <div class="col-md-6"><uib-progressbar class="progress-striped" max="230" value="$ctrl.pokemon.stats[3].base_stat" type="danger"></uib-progressbar>
                     </div>
                 </div>
 
                 <div class="col-md-12 popupinfo">
-                    <div class="col-md-5"><h4>Special Attack</h4></div>
-                    <div class="col-md-7"><uib-progressbar class="progress-striped" max="194" value="$ctrl.pokemon.stats[2].base_stat" type="danger"></uib-progressbar>
+                    <div class="col-md-5">Special Attack</div>
+                    <div class="col-md-6"><uib-progressbar class="progress-striped" max="194" value="$ctrl.pokemon.stats[2].base_stat" type="danger"></uib-progressbar>
                     </div>
                 </div>
 
                 <div class="col-md-12 popupinfo" >
-                    <div class="col-md-5"><h4>Special Defense</h4></div>
-                    <div class="col-md-7"><uib-progressbar class="progress-striped" max="230" value="$ctrl.pokemon.stats[1].base_stat" type="danger"></uib-progressbar>
+                    <div class="col-md-5">Special Defense</div>
+                    <div class="col-md-6"><uib-progressbar class="progress-striped" max="230" value="$ctrl.pokemon.stats[1].base_stat" type="danger"></uib-progressbar>
                     </div>
                 </div>
             </div>
@@ -49,7 +52,7 @@
             <button ng-show="!$ctrl.isInListDialogue() && !$ctrl.isFourMem()" class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Add to Team</button>
             <button ng-show="!$ctrl.isInListDialogue() && $ctrl.isFourMem()" ng-disabled="$ctrl.isFourMem()" class="btn btn-primary" type="button" ng-click="$ctrl.ok()">You already have 4 Pokémons</button>
             <button ng-show="$ctrl.isInListDialogue()" class="btn btn-primary" type="button" ng-click="$ctrl.delete()">Delete from Team</button>
-            <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+            <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">Cancel</button>
         </div>
     </script>
 </div>
@@ -104,10 +107,10 @@
     <a ng-click="randomTeam()" type="button" class="btn btn-primary gradient">Random Team!</a>
 </div>
 <div ng-show = "isFourMem()" class="col-md-6 randomButtonR" >
-    <a ng-href="#!/battle" type="button" class="btn btn-primary gradient">Go!</a>
+    <a ng-href="#!/battle" type="button" class="btn btn-primary gradient">Go Battle!</a>
 </div>
 <div ng-show = "!isFourMem()" class="col-md-6 randomButtonR">
-    <button class="btn btn-primary gradient" ng-disabled = "true" >Go!</button>
+    <button class="btn btn-primary gradient" ng-disabled = "true" >Go Battle!</button>
 </div>
 
 <!-- type -->
