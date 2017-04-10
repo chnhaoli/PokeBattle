@@ -190,48 +190,51 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
     });
 
     // Checks the moves array for duplicate moves and replaces them
-    this.checkDuplicates = function(randomMoveIds, pokemon) {
-        var duplicateExists = true;
-        while (duplicateExists) {
-            console.log("enter while");
-            for (var i = 0; i < randomMoveIds.length; i++) {
-                var firstMoveId = randomMoveIds[i];
-                for (var j = 0; j < randomMoveIds.length; j++) {
-                    if (j != i) {
-                        var secondMoveId = randomMoveIds[j];
-                        if (firstMoveId == secondMoveId) {
-                            // Reassigning new random number as move id
-                            randomMoveIds[i] = that.randomInt(pokemon.moves.length-1);
-                        } else {
-                            console.log("not same");
-                            if (j == randomMoveIds.length-2 && i == randomMoveIds.length-1) {
-                                console.log("compared all");
-                                console.log(randomMoveIds);
-                                // Have compared all moves
-                                duplicateExists = false;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return randomMoveIds;
-    }
+    // this.checkDuplicates = function(randomMoveIds, pokemon) {
+    //     var duplicateExists = true;
+    //     while (duplicateExists) {
+    //         console.log("enter while");
+    //         for (var i = 0; i < randomMoveIds.length; i++) {
+    //             var firstMoveId = randomMoveIds[i];
+    //             for (var j = 0; j < randomMoveIds.length; j++) {
+    //                 if (j != i) {
+    //                     var secondMoveId = randomMoveIds[j];
+    //                     if (firstMoveId == secondMoveId) {
+    //                         // Reassigning new random number as move id
+    //                         randomMoveIds[i] = that.randomInt(pokemon.moves.length-1);
+    //                     } else {
+    //                         console.log("not same");
+    //                         if (j == randomMoveIds.length-2 && i == randomMoveIds.length-1) {
+    //                             console.log("compared all");
+    //                             console.log(randomMoveIds);
+    //                             // Have compared all moves
+    //                             duplicateExists = false;
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    //
+    //     return randomMoveIds;
+    // }
     //GET: Get 4 random moves for a pokemon;
     this.getMoves = function(pokemon, callback, errorCallback){
         pokemon.movesUsed = [];
-        var randomMoveIds = [];
-        for (var i = 0; i < 4; i++) {
-            var randomNum = that.randomInt(pokemon.moves.length-1);
-            randomMoveIds.push(randomNum);
-        }
+
         if(pokemon.name !== 'ditto'){
             console.log(pokemon.name);
-            randomMoveIds = that.checkDuplicates(randomMoveIds, pokemon);
+            // randomMoveIds = that.checkDuplicates(randomMoveIds, pokemon);
+            var movesTemp = pokemon.moves;
+            var randomMoves = [];
+            for (var i = 0; i < 4; i++) {
+                var randomNum = that.randomInt(pokemon.moves.length-1);
+                randomMoves.push(randomNum);
+                movesTemp.splice(randomNum, 1);
+            }
             for (var i = 0; i < 4; i++){
-                var moveId = randomMoveIds[i];
-                that.GetMove.get({moveId : pokemon.moves[moveId].move.name}, function(index) {
+                var moveNameTemp = randomMoves[i];
+                that.GetMove.get({moveId : pokemon.moves[moveNameTemp].move.name}, function(index) {
                     return function(data) {
 
                         pokemon.movesUsed[index] = {};
@@ -508,7 +511,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
         console.log(damage);
         // Happens when power is null, then the key "power" won't even get updated to Firebase so accessing power will give nothing and damage is NaN.
         if (damage == undefined || isNaN(damage)) {
-            return 0;
+            return 10 * stab * effectiveness; //Give a lower damage to non-damage moves.
         } else {
             return damage;
         }
