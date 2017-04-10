@@ -78,32 +78,33 @@
 </div>
 
 <!-- my team -->
-<div class="col-md-12 panel-body">
+<div class="col-md-12 panel-body choosepageteam">
+    <!-- Tips -->
+    <div class="choosepageteamH">
+        <h5> Tips: Choose 4 Pokémons to battle with. Drag and drop image to change battle order of your Pokémons.</h5>
+    </div>
 
-    <div class="col-md-12 panel-body" class="choosepageteam">
+    <!-- team -->
+    <div class="col-md-12 panel-body">
 
         <div class="col-md-3 teamSelection"><p>1</p></div>
         <div class="col-md-3 teamSelection"><p>2</p></div>
         <div class="col-md-3 teamSelection"><p>3</p></div>
         <div class="col-md-3 teamSelection"><p>4</p></div>
-        <div class="col-md-3 teamSelection" ng-repeat="pokemonName in team()" >
 
+        <div class="col-md-3 teamSelection" ng-repeat="pokemonName in team()" >
             <div class="teamSelectionIcon" ng-if="isInList(pokemonName)" ><img src="images/unselect.png" ng-click="deleteFromTeam(pokemonName)"/>
             </div>
             <div class="dndPokemon" dnd-element>
             </div>
             <p class="col-md-12 choosepageteamP">{{pokemonName}}</p>
         </div>
-
-    <p class="col-md-12 choosepageteamT">{{pokemonName}}</p>
+        <p class="col-md-12 choosepageteamT">{{pokemonName}}</p>
     </div>
-    <div class="choosepageteamH"></div>
-    <h5> Choose 4 Pokémons to battle with.</h5>
-    <h5>Drag and drop to choose order of your team.</h5>
 </div>
 
 
-<div class="col-md-6 randomButtonL" style="">
+<div class="col-md-6 randomButtonL">
     <a ng-click="randomTeam()" type="button" class="btn btn-primary gradient">Random Team!</a>
 </div>
 <div ng-show = "isFourMem()" class="col-md-6 randomButtonR" >
@@ -131,7 +132,7 @@
         <input class="form-control" id="searchBar" type="text" ng-keyup="checkIfEnter($event, filter, type)" placeholder="Enter Pokémon name to search" ng-model="filter">
     </form>
     <div class="col-md-1 panel-body searchButton">
-        <button type="button" class="btn btn-default" id="searchButton" ng-click="searchPoke(filter, type)">Search</button>
+        <button type="button" class="btn btn-primary" id="searchButton" ng-click="searchPoke(filter, type)">Search</button>
     </div>
 </div>
 
@@ -158,7 +159,7 @@
 
                 <!-- click icon to add and remove pokemon-->
                 <div class="mainViewSelect choosepageAdd" ng-if="!isInList(pokemon.pokemon.name)"><img src="images/select_v6.png" ng-click="addToTeam(pokemon.pokemon.name)"/></div>
-                <div class="mainViewSelect choosepageRemove" ng-if="isInList(pokemon.pokemon.name)"><img src="images/selected_v2.png" ng-click="deleteFromTeam(pokemon.pokemon.name)"/></div>
+                <div class="mainViewSelect" ng-if="isInList(pokemon.pokemon.name)"><img src="images/selected_v2.png" ng-click="deleteFromTeam(pokemon.pokemon.name)"/></div>
             </div>
 
         </div>

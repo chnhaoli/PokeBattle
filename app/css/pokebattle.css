@@ -69,6 +69,12 @@ p {
   color: #a5a5a5;
 }
 
+.footerP {
+  font-family: "Nunito";
+  font-size: 13px;
+  color: #a5a5a5;
+}
+
 .aboutText {
   margin-top: 100px;
   margin-left: 250px;
@@ -102,9 +108,7 @@ p {
 }
 
 .choosepageAdd {
-  position: relative; 
   opacity: 0.1; 
-  bottom: 40px;
 }
 
 .choosepageImageSize {
@@ -115,11 +119,6 @@ p {
 .choosepagefloat {
   display: inline-block; 
   height: fit-content;
-}
-
-.choosepageRemove {
-  position: relative; 
-  bottom: 40px;
 }
 
 .choosepagetitle {
@@ -136,12 +135,11 @@ p {
 }
 
 .choosepageteam {
-  height: 300px; 
-  margin-bottom: 40px;
+  height: 370px; 
 }
 
 .choosepageteamH {
-  height: 50px;
+  margin-bottom: 10px;
 }
 
 .choosepageteamP {
@@ -521,6 +519,9 @@ p {
 .mainViewSelect{
   margin-top:-10px;
   margin-left:210px;
+  position: relative; 
+  bottom: 28px;
+  left: 5px;
 }
 
 .tipButton{
