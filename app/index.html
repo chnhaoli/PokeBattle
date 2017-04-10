@@ -54,17 +54,20 @@
     </head>
 
 
-    <body ng-controller="AudioController">
-
-        <audio id="myTune" src="images/bg.mp3" autoplay loop ng-model="audio">
-            <p>If you are reading this, it is because your browser does not support the audio element.</p>
-        </audio>
-        <!-- backgroung play and stop icons -->
-        <div class="col-md-12" style="text-align: right;">
-            <img src="images/musicPlay.png" height="30" size="30" onclick="document.getElementById('myTune').pause()" ng-show="!show" ng-click="musicControl()">
-            <img src="images/musicPause.png" height="30" size="30" onclick="document.getElementById('myTune').play()" ng-show="show" ng-click="musicControl()">
-            <!-- <img id="musicStop" src="pics/musicStop.png" height="40" size="40" onclick="document.getElementById('myTune').pause()"> -->
+    <body>
+        <div class="col-md-11 bodyP"><p>Hi, {{getUsername()}}</p></div>
+        <div class="col-md-1 bodyIcon">
+            <audio id="myTune" src="images/bg.mp3" autoplay loop ng-model="audio">
+                <p>If you are reading this, it is because your browser does not support the audio element.</p>
+            </audio>
+            <!-- backgroung play and stop icons -->
+            <div>
+                <img src="images/musicPlay.png" height="30" size="30" onclick="document.getElementById('myTune').pause()" ng-show="!show" ng-click="musicControl()">
+                <img src="images/musicPause.png" height="30" size="30" onclick="document.getElementById('myTune').play()" ng-show="show" ng-click="musicControl()">
+                <!-- <img id="musicStop" src="pics/musicStop.png" height="40" size="40" onclick="document.getElementById('myTune').pause()"> -->
+            </div>
         </div>
+
 <!-- Here in index.html you should put only the layout that is shared among all the screens (e.g. header
 
     <!-- Header -->

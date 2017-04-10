@@ -624,3 +624,12 @@ p {
   transform: translateY(-15px);
 
 }
+
+.bodyP{
+  text-align: right;
+  margin-top: 5px;
+}
+
+.bodyIcon{
+  text-align: right;
+}

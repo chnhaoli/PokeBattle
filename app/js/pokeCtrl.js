@@ -2,6 +2,8 @@
 // display or modify the Poke menu
 pokeBattleApp.controller('PokeCtrl', function ($scope, $firebaseObject, PokeModel) {
 
+  $scope.login = false;
+
   // Firebase
   var accountsRef = firebase.database().ref('/accounts/');
   var accountsObj = $firebaseObject(accountsRef);
@@ -86,6 +88,32 @@ pokeBattleApp.controller('PokeCtrl', function ($scope, $firebaseObject, PokeMode
       $scope.message = "No account with that username was found.";
     }
 
+  }
+
+  //Show username
+  $scope.getUsername = function(){
+    if(PokeModel.getUsername()!== ""){
+      $scope.login = true;
+      return PokeModel.getUsername();
+    }
+    else{
+      $scope.login = false;
+      return "PokéBattler!";
+  }};
+
+  //show and hide view based on uer login status
+  $scope.isLogin = function(){
+    if(PokeModel.getUsername()!== ""){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+  // music control
+  $scope.musicControl = function(){
+    $scope.show ? $scope.show = false : $scope.show = true;
   }
 
 });
