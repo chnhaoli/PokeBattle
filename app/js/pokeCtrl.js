@@ -3,6 +3,7 @@
 pokeBattleApp.controller('PokeCtrl', function ($scope, $firebaseObject, PokeModel) {
 
   $scope.login = false;
+  $scope.path = "";
 
   // Firebase
   var accountsRef = firebase.database().ref('/accounts/');
@@ -109,6 +110,23 @@ pokeBattleApp.controller('PokeCtrl', function ($scope, $firebaseObject, PokeMode
     else{
       return false;
     }
+  }
+
+  //check teamdetail data in firebase and decide which page to go when clicking on Go Battle
+  $scope.checkLink = function(){
+    $scope.path = "";
+    var battleDataRef = firebase.database().ref('/gameData/'+PokeModel.getUsername()+'/');
+    var battleDataObj = $firebaseObject(battleDataRef);
+    $scope.battleDataObj = battleDataObj;
+
+    battleDataObj.$loaded().then(function() {
+      if ($scope.battleDataObj.teamDetails == undefined) {
+        $scope.path = "#!/choose";
+      } 
+      else {
+        $scope.path = "#!/battle";
+      }
+    });
   }
 
   // music control
