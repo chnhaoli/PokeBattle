@@ -1,9 +1,9 @@
-# [PokeBattle](https://pokebattle-5f78c.firebaseapp.com/)
+# [PokeBattle](http://obscure-oasis-61451.herokuapp.com/)
 Final Project @[DH2642 Interaction Programing and Dynamic Web](https://www.kth.se/social/course/DH2642/)
 
 =================================================
 
-##See [firebase deployment](https://pokebattle-5f78c.firebaseapp.com/)
+##See [Heroku deployment](http://obscure-oasis-61451.herokuapp.com/)
 
 ###Authors:
 
@@ -22,15 +22,15 @@ Final Project @[DH2642 Interaction Programing and Dynamic Web](https://www.kth.s
 3. Javascript
 4. [AngularJS](https://angularjs.org/)
 5. [Firebase](https://firebase.google.com/)
+6. [Heroku](https://www.heroku.com/platform)
 
 ###Views:
     homepage, choose team, battle, FAQ, highscore
 
 ###Setup:
-(Inspired by Filip Kis)
 
-1. Get and install node (if you do not already have it);
-2. Get the fresh copy of the [project code](https://github.com/chnhaoli/PokeBattle);
+1. Get and install node if you do not already have it yet;
+2. Get a fresh copy of the [project code](https://github.com/chnhaoli/PokeBattle);
 3. Navigate to the project repository in your command line;
 4. Run `npm install` which installs the web server and other need components;
 5. Run `npm start` which start a local http server on [port:8000](http://localhost:8000/);
