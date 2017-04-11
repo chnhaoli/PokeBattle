@@ -225,18 +225,18 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
         if(pokemon.name !== 'ditto'){
             console.log(pokemon.name);
             // randomMoveIds = that.checkDuplicates(randomMoveIds, pokemon);
-            var movesTemp = pokemon.moves;
+            var movesTemp = [];
+            movesTemp = pokemon.moves;
             var randomMoves = [];
             for (var i = 0; i < 4; i++) {
                 var randomNum = that.randomInt(pokemon.moves.length-1);
-                randomMoves.push(randomNum);
+                randomMoves.push(movesTemp[randomNum].move.name);
                 movesTemp.splice(randomNum, 1);
             }
             for (var i = 0; i < 4; i++){
                 var moveNameTemp = randomMoves[i];
-                that.GetMove.get({moveId : pokemon.moves[moveNameTemp].move.name}, function(index) {
+                that.GetMove.get({moveId : moveNameTemp}, function(index) {
                     return function(data) {
-
                         pokemon.movesUsed[index] = {};
                         pokemon.movesUsed[index].name = data.name;
                         pokemon.movesUsed[index].type = data.type.name;
