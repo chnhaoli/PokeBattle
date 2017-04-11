@@ -233,6 +233,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
                 randomMoves.push(movesTemp[randomNum].move.name);
                 movesTemp.splice(randomNum, 1);
             }
+            var moveIntegrity = 0;
             for (var i = 0; i < 4; i++){
                 var moveNameTemp = randomMoves[i];
                 that.GetMove.get({moveId : moveNameTemp}, function(index) {
@@ -243,7 +244,8 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
                         pokemon.movesUsed[index].power = data.power;
                         pokemon.movesUsed[index].accuracy = data.accuracy;
                         pokemon.movesUsed[index].damageClass = data.damage_class.name;
-                        if (index == 3)
+                        moveIntegrity++;
+                        if (moveIntegrity == 4)
                         callback();
                     }
                 }(i), function(error) {
