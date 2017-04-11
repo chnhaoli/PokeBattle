@@ -108,16 +108,16 @@ p {
 }
 
 .choosepageAdd {
-  opacity: 0.1; 
+  opacity: 0.1;
 }
 
 .choosepageImageSize {
-  width: 210px; 
+  width: 210px;
   height:210px;
 }
 
 .choosepagefloat {
-  display: inline-block; 
+  display: inline-block;
   height: fit-content;
 }
 
@@ -126,16 +126,16 @@ p {
 }
 
 .choosepagetitlepic {
-  display:block; 
-  margin: auto; 
-  position: relative; 
-  z-index: 2; 
+  display:block;
+  margin: auto;
+  position: relative;
+  z-index: 2;
   width: 30%;
   height: 30%;
 }
 
 .choosepageteam {
-  height: 370px; 
+  height: 370px;
 }
 
 .choosepageteamH {
@@ -182,20 +182,20 @@ p {
 }
 
 .homepageBG {
-  background-image: url('../images/bg_v2.gif');  
-  background-size: contain; 
-  background-position: top; 
-  height: 800px; 
-  position: relative; 
-  bottom: 30px; 
+  background-image: url('../images/bg_v2.gif');
+  background-size: contain;
+  background-position: top;
+  height: 800px;
+  position: relative;
+  bottom: 30px;
   z-index: -1;
 }
 
 .homepageTitle {
-  display:block; 
-  margin: auto; 
-  margin-top: 20px; 
-  position: relative; 
+  display:block;
+  margin: auto;
+  margin-top: 20px;
+  position: relative;
   z-index: 2;
 }
 
@@ -208,16 +208,16 @@ p {
 }
 
 .homepageButton {
-  position: relative; 
-  top: 20px; 
-  left: 35px; 
+  position: relative;
+  top: 20px;
+  left: 35px;
   margin-bottom: 50px;
 }
 
 .homepageBrackets {
-  position: relative; 
-  bottom: 3px; 
-  right: 114px; 
+  position: relative;
+  bottom: 3px;
+  right: 114px;
   z-index: 2;
 }
 
@@ -226,9 +226,9 @@ p {
 }
 
 .homelogin{
-  position: relative; 
-  top: 20px; 
-  right: 138px; 
+  position: relative;
+  top: 20px;
+  right: 138px;
   margin-bottom: 50px;
 }
 
@@ -305,12 +305,12 @@ p {
 }
 
 .randomButtonL {
-  text-align: right; 
+  text-align: right;
   margin-bottom: 30px;
 }
 
 .randomButtonR {
-  text-align: left; 
+  text-align: left;
   margin-bottom: 30px;
 }
 
@@ -357,9 +357,9 @@ p {
 }*/
 
 #homepagecheck_a {
-  position: relative; 
-  bottom: 3px; 
-  right: 114px; 
+  position: relative;
+  bottom: 3px;
+  right: 114px;
   z-index: 2;
 }
 
@@ -384,7 +384,7 @@ p {
   height: 10px;
   width: 250px;
   margin-top: 40px;
-  margin-left: 31vh;
+  margin-left: 200px;
   transition: width 1s, background-color 0.5s;
 }
 
@@ -394,7 +394,7 @@ p {
   height: 10px;
   width: 250px;
   margin-top: 40px;
-  margin-left: 31vh;
+  margin-left: 200px;
   transition: width 1s, background-color 0.5s;
 }
 
@@ -523,7 +523,7 @@ p {
 .mainViewSelect{
   margin-top:-10px;
   margin-left:210px;
-  position: relative; 
+  position: relative;
   bottom: 28px;
   left: 5px;
 }
