@@ -1,66 +1,59 @@
 # PokeBattle
-DH2642 Interaction Programing and Dynamic Web - Project - HTML & Javascript
+DH2642 Interaction Programing and Dynamic Web
+Final Project - HTML & Javascript
+
 =================================================
 
 [Course website](https://www.kth.se/social/course/DH2641).
 
 Authors:
+
     Beichen CHEN (beichen@kth.se)
     Hao LI (hao4@kth.se)
     Jingjing XIE (jxi@kth.se)
     Jinwei LIN (jinwei@kth.se)
 
 Brief:
-    A Pokemon battle game which users may choose their favourite Pokemons to fight against AIs.
-    Possible views: homepage, PM choice, battle, results, highscore
+
+A Pokemon battle game which users may choose their favourite Pokemons to fight against AIs.
+
+Views: homepage, choose team, battle, FAQ, highscore
+
+Setup (Inspired by Filip Kis):
+
+    1. Get and install node (if you do not already have it);
+    2. Get the fresh copy of the [project code](https://github.com/chnhaoli/PokeBattle);
+    3. Navigate to the project repository in your command line;
+    4. Run `npm install` which installs the web server and other need components;
+    5. Run `npm start` which start a local http server on [port:8000](http://localhost:8000/);
+    6. You should now be able to go to http://localhost:8000/  and see the project running
+
 
 Useful info:
-    API: https://pokeapi.co/docsv2/
-    Statics: http://bulbapedia.bulbagarden.net/wiki/Statistic
-    Damage: http://bulbapedia.bulbagarden.net/wiki/Damage
-    PNGs: http://www.pokestadium.com/assets/img/sprites/official-art/large/gengar.png <-- modifiable
 
-Data needed:
-    Pokedex,
-    Pokemon: id, name, type, base stats (health points, attack, defense, special attack, special defense), IV (0-31), skills (power, PP, type, normal/special, accuracy, effects),
+    1. API: [Pokeapi](https://pokeapi.co/docsv2/)
+    2. Statics: from [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Statistic)
+    3. Damage: from [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Damage)
+    4. PNGs: from [Pokestadium](http://www.pokestadium.com/tools/sprites)
+    5. Backend: [Firebase](https://firebase.google.com/)
+        Username: newpokebattle@gmail.com (Please contact team for password.)
 
-Battle flow: 就先用中文写了，因为英文名词还不很懂，仅根据个人回忆，有出入请指正
+Endpoints: data needed (function):
 
-    队首精灵出战
+    /type: list of pokemons whose types is in (search for pokemons by type)
+    /pokemon: name, type, base stats [health points, attack, defense, special attack, special defense~~, speed~~)], moves
+    /move: power, type, damage class, accuracy
 
-    *异常状态判断
-    *精灵特性效果
-    *所持有道具
-    *天气
-    行动
-        技能使用
-            ##行动阶段
-            *判断是否有前续技能（如【飞空术】等多回合技）
-            c选择技能
-            *PP检查
-            *自身异常状态判断（如沉睡、颓废使不能释放技能）
-            *精灵特性效果判断（如【潮气】使得【自爆】技能无法释放）
-            ##作用阶段
-            *自身异常状态判断（如麻痹、混乱等影响释放技能）
-            *技能优先度判断
-            *打击面判断
-            l命中判断（命中率）
-            l属性相克判断（如Ground技能不能对Flying精灵造成伤害）
-            *精灵特性效果判断（如飘浮特性精灵，如Haunter不能被Ground技能伤害）
-            l伤害计算 @公式
-            l判断是否濒死（是-->更换精灵页）
-            *异常状态触发
-            *技能效果触发（buff，debuff，天气，逃跑，使逃跑等）
-            *接触判断
-            *精灵特性效果判断（如【静电】特效使接触攻击者被麻痹）
-            *持有道具效果触发判断（是-->触发）
-        *道具使用
-            *道具选择
-            *道具作用判断
-            *道具效果触发（不清楚这里的优先度计算）
-        更换精灵
-            *判断是否能够进行更换（如【踩影】特性）
-            *判断是否有技能触发（如【追击】）
-            c精灵更换（不清楚这里的优先度计算）
-        回合结束
-    胜利/失败
+Battle flow:
+
+    0. First Pokemon in the team starts the battle.
+    1. Trainer's round:
+        1.1. attack (next opponent and +1 score if opponent is fainted);
+        1.2. use item ª;
+        1.3. change pokemon;
+        1.4. run away ª.
+    2. Opponent's round:
+        2.1. attack (forced to change Pokemon if trainer's is fainted; game over if all of trainer's are fainted).
+    3. Next round.
+
+    ª marks those which are not implemented yet.
