@@ -4,7 +4,7 @@
 - Choose 4 pokemon from a database of 150.
 - Select order for your team.
 - Battle against random Pokémons.
-- Levels of all Pokémon will be 99.
+- Levels of all Pokémon will be 100.
 - Moves of Pokémons will be randomly chosen at start of game (4 moves per Pokémon).
 - During battle, you can choose a command between: attack, use item, or change Pokémon.
 - After each battle you receive either: nothing (50%?), or a random item (potion, super potion, hyper potion, max potion, revive, max revive) (50%?).
