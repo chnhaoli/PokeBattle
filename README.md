@@ -1,4 +1,4 @@
-# [PokeBattle](http://obscure-oasis-61451.herokuapp.com/)
+# [PokéBattle](http://obscure-oasis-61451.herokuapp.com/)
 Final Project @[DH2642 Interaction Programing and Dynamic Web](https://www.kth.se/social/course/DH2642/)
 
 =================================================
@@ -14,7 +14,7 @@ Final Project @[DH2642 Interaction Programing and Dynamic Web](https://www.kth.s
 
 ###Brief:
 
-    A Pokemon battle game which users may choose their favourite Pokemons to fight against AIs.
+    A Pokémon battle game which users may choose their favourite Pokémons to fight against AIs.
 
 ###Technologies:
 1. HTML5
@@ -46,7 +46,7 @@ Final Project @[DH2642 Interaction Programing and Dynamic Web](https://www.kth.s
 
 ###Endpoints: data needed (function):
 
-    /type: list of pokemons whose types is in (search for pokemons by type)
+    /type: list of Pokémons whose types is in (search for Pokémons by type)
     /pokemon: name, type, base stats [health points, attack, defense, special attack, special defense)], moves
     /move: power, type, damage class, accuracy
 
@@ -62,18 +62,18 @@ Final Project @[DH2642 Interaction Programing and Dynamic Web](https://www.kth.s
     2. Choose team:
         2.1 Search by type (can randomize);
         2.2 Search by name with selected type;
-        2.3 Check Pokemon details;
+        2.3 Check Pokémon details;
         2.4 Add to/ remove from team;
-        2.5 Change the order of Pokemons (drag and drop);
+        2.5 Change the order of Pokémons (drag and drop);
         2.6 Go to battle.
-    3. First Pokemon in the team starts the battle.
+    3. First Pokémon in the team starts the battle.
     4. Trainer's round:
         4.1. attack (next opponent and +1 score if opponent is fainted);
         4.2. use item ª;
-        4.3. change pokemon;
+        4.3. change Pokémon;
         4.4. run away ª.
     5. Opponent's round:
-        5.1. attack (forced to change Pokemon if trainer's is fainted; game over if all of trainer's are fainted).
+        5.1. attack (forced to change Pokémon if trainer's is fainted; game over if all of trainer's are fainted).
     6. Next round, until game over.
     7. Highscores.
 
