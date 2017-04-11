@@ -126,12 +126,14 @@ p {
 }
 
 .choosepagetitlepic {
-  display:block;
+  /*display:block;*/
   margin: auto;
-  position: relative;
-  z-index: 2;
-  width: 30%;
-  height: 30%;
+  height: 85px;
+  width: 384px;
+  /*position: relative;*/
+  /*z-index: 2;*/
+  /*width: 30%;*/
+  /*height: 30%;*/
 }
 
 .choosepageteam {
