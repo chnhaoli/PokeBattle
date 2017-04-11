@@ -88,18 +88,25 @@ p {
 }
 
 .allButtons {
-  margin-bottom: 100px;
+  margin: auto;
+  margin-bottom: 120px;
+}
+
+.statusMsg {
+  margin: auto;
 }
 
 .answer {
 }
 
 .buttonsDiv {
+  margin: auto;
   margin-top: 30px;
   margin-bottom: 20px;
 }
 
 .btnRow2 {
+  margin: auto;
   margin-top: 4px;
 }
 
@@ -180,7 +187,7 @@ p {
 }
 
 .healthBarDiv {
-  text-align: left;
+  text-align: center;
 }
 
 .homepageBG {
@@ -638,4 +645,8 @@ p {
 
 .bodyIcon{
   text-align: right;
+}
+
+.battleImg{
+  margin: auto;
 }
