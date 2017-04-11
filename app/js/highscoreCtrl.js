@@ -14,8 +14,9 @@ pokeBattleApp.controller('HighscoreCtrl', function ($scope, $uibModal, $firebase
     // $scope.highscoreArray.push(["Bulbasaur", 1000]);
 
     angular.forEach(highscoreObj, function(value, key) {
-      $scope.highscoreArray.push([value.username, value.score]);
-      //$scope.highscoreArray.push(['Charmander', 16])
+        if (value.username !== undefined) {
+          $scope.highscoreArray.push([value.username, value.score]);
+        }//$scope.highscoreArray.push(['Charmander', 16])
     })
 
     console.log($scope.highscoreArray);
