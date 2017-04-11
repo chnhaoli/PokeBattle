@@ -392,8 +392,8 @@ p {
   background-color: green;
   height: 10px;
   width: 250px;
-  margin-top: 40px;
-  margin-left: 200px;
+  margin-top: 25px;
+  margin: auto;
   transition: width 1s, background-color 0.5s;
 }
 
@@ -402,8 +402,8 @@ p {
   background-color: green;
   height: 10px;
   width: 250px;
-  margin-top: 40px;
-  margin-left: 200px;
+  margin-top: 25px;
+  margin: auto;
   transition: width 1s, background-color 0.5s;
 }
 
