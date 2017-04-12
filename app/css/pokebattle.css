@@ -406,7 +406,6 @@ p {
   height: 10px;
   width: 260px;
   margin-top: 20px;
-  margin-left: 190px;
   text-align: left;
   transition: width 1s, background-color 0.5s;
 }
@@ -417,18 +416,17 @@ p {
   height: 10px;
   width: 260px;
   margin-top: 20px;
-  margin-left: 190px;
   text-align: left;
   transition: width 1s, background-color 0.5s;
 }
 
 @media all and (min-width: 1500px) {
   #healthBarUser {
-    margin-left: 280px;
+    margin-left: 36px;
   }
 
   #healthBarOpp {
-    margin-left: 280px;
+    margin-left: 36px;
   }
 }
 

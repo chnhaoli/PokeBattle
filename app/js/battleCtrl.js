@@ -5,7 +5,6 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
     return PokeModel.getIsLoading();
   }*/
 
-  PokeModel.setShowContinue(true);
 
 
   $scope.isLoading = true;
@@ -43,6 +42,9 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
   $scope.username = function() {
     return PokeModel.getUsername();
   }
+
+  PokeModel.setShowContinue(true);
+
 
   // Update user's health bar if user = true, else update opponent's health bar.
   $scope.updateHealthBar = function(user) {
@@ -132,6 +134,7 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
     if (error.config !== undefined) {
       $scope.errorMsg = "There was an error loading "+ error.config.url.substring(33) + " (problem with the API). Please go back and choose another Pokémon."
     } else {
+      PokeModel.setShowContinue(false);
       $scope.errorMsg = error;
     }
     $scope.isLoading = false;
