@@ -5,9 +5,8 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
     return PokeModel.getIsLoading();
   }*/
 
-  $scope.setShowContinue = function(bool) {
-    PokeModel.setShowContinue(bool);
-  }
+  PokeModel.setShowContinue(true);
+
 
   $scope.isLoading = true;
 

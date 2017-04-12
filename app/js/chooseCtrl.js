@@ -29,9 +29,7 @@ pokeBattleApp.controller('ChooseCtrl', function ($scope, $uibModal, PokeModel) {
   $scope.pokeByType = '';
   $scope.pokemonTypes = [];
 
-  $scope.setShowContinue = function(bool) {
-    PokeModel.setShowContinue(bool);
-  }
+  PokeModel.setShowContinue(bool);
 
   $scope.randomTeam = function(){
       PokeModel.getRandomTeam();
