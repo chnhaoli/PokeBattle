@@ -193,9 +193,9 @@ p {
 
 
 .homepageBG {
-  background: white url('../images/bg_v2.gif');
-  /*background-color: white;
-  background-image: url('../images/bg_v2.gif');*/
+  /*background: white url('../images/bg_v2.gif');*/
+  background-color: white;
+  /*background-image: url('../images/bg_v2.gif');*/
   background-size: contain;
   background-position: top;
   height: 800px;
@@ -203,6 +203,13 @@ p {
   /*bottom: 30px;*/
   z-index: -1;
 
+}
+
+.homepageInnerDiv {
+  background: white url('../images/bg_v2.gif');
+  background-size: contain;
+  background-position: top;
+  height: 850px;
 }
 
 .homepageTitle {

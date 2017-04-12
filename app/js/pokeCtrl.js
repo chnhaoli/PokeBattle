@@ -136,6 +136,7 @@ pokeBattleApp.controller('PokeCtrl', function ($scope, $firebaseObject, PokeMode
 
   $scope.logOut = function() {
     PokeModel.setUsername("");
+    PokeModel.setShowContinue(false);
   }
 
 
