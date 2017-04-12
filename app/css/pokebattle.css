@@ -187,7 +187,7 @@ p {
 }
 
 .healthBarDiv {
-  text-align: center;
+  text-align: left;
 }
 
 .homepageBG {
@@ -391,9 +391,9 @@ p {
 #healthBarUser {
   background-color: green;
   height: 10px;
-  width: 250px;
-  margin-top: 25px;
-  margin: auto;
+  width: 260px;
+  margin-top: 20px;
+  text-align: left;
   transition: width 1s, background-color 0.5s;
 }
 
@@ -401,9 +401,9 @@ p {
 #healthBarOpp {
   background-color: green;
   height: 10px;
-  width: 250px;
-  margin-top: 25px;
-  margin: auto;
+  width: 260px;
+  margin-top: 20px;
+  text-align: left;
   transition: width 1s, background-color 0.5s;
 }
 
@@ -648,5 +648,14 @@ p {
 }
 
 .battleImg{
-  margin: auto;
+  text-align: left;
+}
+
+.battlet{
+  text-align: center;
+}
+
+.battleErrImageSize {
+  width: 260px;
+  height:260px;
 }
