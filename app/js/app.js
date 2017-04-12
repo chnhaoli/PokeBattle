@@ -81,7 +81,7 @@ pokeBattleApp.directive('healthBar', function() {
       var update = function() {
         var ratio = scope.hp / scope.maxHp;
 
-        elem[0].style.width = (ratio * 260)+"px";
+        elem[0].style.width = (ratio * 230)+"px";
 
         if (ratio > 0.5) {
           elem[0].style["background-color"] = "green";

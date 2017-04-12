@@ -160,6 +160,7 @@ p {
   text-align: center;
 }
 
+
 .dragging {
   opacity: 0.4;
 }
@@ -391,6 +392,9 @@ p {
 
 #opponentPokemon{
   margin-top: 20px;
+
+  width: 230px;
+  height: 230px;
 }
 
 #startButton {
@@ -403,12 +407,14 @@ p {
 
 #userPokemon{
   margin-top: 20px;
+  width: 230px;
+  height: 230px;
 }
 
 #healthBarUser {
   background-color: green;
   height: 10px;
-  width: 260px;
+  width: 230px;
   margin-top: 20px;
   text-align: left;
   transition: width 1s, background-color 0.5s;
@@ -418,7 +424,7 @@ p {
 #healthBarOpp {
   background-color: green;
   height: 10px;
-  width: 260px;
+  width: 230px;
   margin-top: 20px;
   text-align: left;
   transition: width 1s, background-color 0.5s;
@@ -426,11 +432,21 @@ p {
 
 @media all and (min-width: 1500px) {
   #healthBarUser {
-    margin-left: 36px;
+    margin-left: 47px;
   }
 
   #healthBarOpp {
-    margin-left: 36px;
+    margin-left: 47px;
+  }
+}
+
+@media all and (min-width: 1300px) and (max-width: 1500px){
+  #healthBarUser {
+    margin-left: 17px;
+  }
+
+  #healthBarOpp {
+    margin-left: 17px;
   }
 }
 
