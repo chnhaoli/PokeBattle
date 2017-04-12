@@ -26,7 +26,10 @@
 
     </div>
 
-    <div ng-show="showContinue()" class="homepageGoButton"><a ng-click="checkLink()" type="button" class="btn btn-primary gradient">Continue</a></div>
+    <div ng-show="showContinue()" class="homepageGoButton">
+      <button class="btn btn-primary gradient" ng-click="logOut()">Log out</button>
+      <a ng-click="checkLink()" type="button" class="btn btn-primary gradient">Continue</a>
+    </div>
 
 
   <!--   <div style="margin-top: 500px; text-align: center;">

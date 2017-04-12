@@ -129,93 +129,14 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
   }, function(error) {
     //console.log(error);
     //console.log(error.config.url.substring(33));
-    $scope.errorMsg = "There was an error loading "+ error.config.url.substring(33) + " (problem with the API). Please go back and choose another Pokémon."
+    if (error.config !== undefined) {
+      $scope.errorMsg = "There was an error loading "+ error.config.url.substring(33) + " (problem with the API). Please go back and choose another Pokémon."
+    } else {
+      $scope.errorMsg = error;
+    }
     $scope.isLoading = false;
   })
 
-  // // Firebase
-  // var battleDataRef = firebase.database().ref('/gameData/'+$scope.username()+'/');
-  //
-  // var battleDataObj = $firebaseObject(battleDataRef);
-  //
-  // // to take an action after the data loads, use the $loaded() promise
-  // battleDataObj.$loaded().then(function() {
-  //   console.log("loaded record:", battleDataObj.$id, battleDataObj.teamDetails);
-  //
-  //   // To iterate the key/value pairs of the object, use angular.forEach()
-  //   angular.forEach(battleDataObj, function(value, key) {
-  //     console.log(key, value);
-  //   });
-  //
-  //   console.log(battleDataObj.teamDetails);
-  //
-  //   // If there is no saved data, get data from API, otherwise get saved data from Firebase.
-  //   if (battleDataObj.teamDetails == undefined || battleDataObj.teamDetails == null) {
-  //     console.log("hello");
-  //     // Get new data from API
-  //
-  //     // Call writeTeamDetails and getRandomOpponent upon page load
-  //     //PokeModel.writeTeamDetails();
-  //     //PokeModel.getRandomOpponent();
-  //
-  //     PokeModel.getAllDetails(function() {
-  //       battleDataRef.child("teamDetails").set(angular.fromJson(angular.toJson($scope.teamDetails())));
-  //       battleDataRef.child("oppDetails").set(angular.fromJson(angular.toJson($scope.opponentDetails())));
-  //       battleDataRef.child("score").set(angular.fromJson(angular.toJson($scope.score())));
-  //       //$scope.isLoading = false;
-  //     })
-  //
-  //     $scope.mainOptions = true;
-  //
-  //     // Initiating messages
-  //     $scope.resetMessages();
-  //     PokeModel.setScore(0);
-  //   } else {
-  //     // Load saved data from Firebase and set to scope.
-  //     console.log($scope.battleDataObj.teamDetails);
-  //     PokeModel.setTeamDetails(battleDataObj.teamDetails);
-  //     PokeModel.setOppDetails(battleDataObj.oppDetails);
-  //     PokeModel.setScore(battleDataObj.score);
-  //     console.log($scope.changeOptions);
-  //
-  //     switch (battleDataObj.currentMenu) {
-  //       case "main":
-  //         $scope.mainOptions = true;
-  //         break;
-  //       case "nextOpp":
-  //         $scope.nextOppShow = true;
-  //         break;
-  //       case "next":
-  //         $scope.nextShow = true;
-  //         break;
-  //       case "change":
-  //         $scope.changeOptions = true;
-  //         break;
-  //     }
-  //     console.log($scope.changeOptions);
-  //
-  //     if (battleDataObj.changeMsg)
-  //       $scope.changeMsg = battleDataObj.changeMsg;
-  //     if (battleDataObj.attackMsg)
-  //       $scope.attackMsg = battleDataObj.attackMsg;
-  //     if (battleDataObj.damageMsg)
-  //       $scope.damageMsg = battleDataObj.damageMsg;
-  //     if (battleDataObj.faintedMsg)
-  //       $scope.faintedMsg = battleDataObj.faintedMsg;
-  //     if (battleDataObj.effectivenessMsg)
-  //       $scope.effectivenessMsg = battleDataObj.effectivenessMsg;
-  //     if (battleDataObj.changeMsg)
-  //       $scope.promptMsg = battleDataObj.promptMsg;
-  //
-  //     $scope.updateHealthBar(true);
-  //     $scope.updateHealthBar(false);
-  //
-  //     //$scope.isLoading = false;
-  //   }
-  // });
-  //
-  // // To make the data available in the DOM, assign it to $scope
-  // $scope.battleDataObj = battleDataObj;
 
   // Highscore Reference
   var highscoreRef = firebase.database().ref('/highscores/');

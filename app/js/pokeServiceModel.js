@@ -100,7 +100,7 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
     this.setShowContinue = function(bool) {
       showContinue = bool;
     }
-    
+
     //GET: pokemon for choosing;
     this.getAllPokemon = function(callback, errorCallback) {
         //isLoading = true;
@@ -559,32 +559,36 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
     // Loads gamedata for the username from Firebase. If game data exists, set model details to Firebase data.
     // If game data does not exist, call APIs and set model details to API data.
     this.loadFirebaseData = function(callback, errorCallback) {
-        var battleDataRef = firebase.database().ref('/gameData/'+username+'/');
-        var battleDataObj = $firebaseObject(battleDataRef);
+        if (username !== "") {
+            var battleDataRef = firebase.database().ref('/gameData/'+username+'/');
+            var battleDataObj = $firebaseObject(battleDataRef);
 
-        battleDataObj.$loaded().then(function() {
-            if (battleDataObj.teamDetails == undefined || battleDataObj.teamDetails == null) {
+            battleDataObj.$loaded().then(function() {
+                if (battleDataObj.teamDetails == undefined || battleDataObj.teamDetails == null) {
 
-                that.setScore(0);
+                    that.setScore(0);
 
-                that.getAllDetails(function() {
-                    battleDataRef.child("teamDetails").set(angular.fromJson(angular.toJson(teamDetails)));
-                    battleDataRef.child("oppDetails").set(angular.fromJson(angular.toJson(opponentDetails)));
-                    battleDataRef.child("score").set(angular.fromJson(angular.toJson(score)));
-                    battleDataRef.child("currentMenu").set("main");
-                    callback(false, battleDataObj);
-                }, function(error) {
-                    errorCallback(error);
-                })
+                    that.getAllDetails(function() {
+                        battleDataRef.child("teamDetails").set(angular.fromJson(angular.toJson(teamDetails)));
+                        battleDataRef.child("oppDetails").set(angular.fromJson(angular.toJson(opponentDetails)));
+                        battleDataRef.child("score").set(angular.fromJson(angular.toJson(score)));
+                        battleDataRef.child("currentMenu").set("main");
+                        callback(false, battleDataObj);
+                    }, function(error) {
+                        errorCallback(error);
+                    })
 
-            } else {
-                that.setTeamDetails(battleDataObj.teamDetails);
-                that.setOppDetails(battleDataObj.oppDetails);
-                that.setScore(battleDataObj.score);
+                } else {
+                    that.setTeamDetails(battleDataObj.teamDetails);
+                    that.setOppDetails(battleDataObj.oppDetails);
+                    that.setScore(battleDataObj.score);
 
-                callback(true, battleDataObj);
-            }
-        })
+                    callback(true, battleDataObj);
+                }
+            })
+        } else {
+          errorCallback("Error: No data for that username. You are probably not logged in. Please go to the homepage and log in or sign up.");
+        }
     }
 
     // Resets game messages in Firebase
