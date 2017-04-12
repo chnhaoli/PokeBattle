@@ -11,6 +11,8 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
     // var isLoading = false;
     //1-721; 10001-10090;
     var pokemonAllName = [];
+    var showContinue = false;
+
     this.GetPokedex = $resource('http://pokeapi.co/api/v2/pokedex/:index', {}, {
         get: {
 
@@ -91,8 +93,14 @@ pokeBattleApp.factory('PokeModel',function ($resource, $firebaseObject, $cookieS
         }
     });
 
-    /*this.getIsLoading = function() {return isLoading;}*/
+    this.getShowContinue = function() {
+      return showContinue;
+    }
 
+    this.setShowContinue = function(bool) {
+      showContinue = bool;
+    }
+    
     //GET: pokemon for choosing;
     this.getAllPokemon = function(callback, errorCallback) {
         //isLoading = true;

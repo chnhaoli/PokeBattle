@@ -5,6 +5,10 @@ pokeBattleApp.controller('BattleCtrl', function ($scope, $uibModal, $firebaseObj
     return PokeModel.getIsLoading();
   }*/
 
+  $scope.setShowContinue = function(bool) {
+    PokeModel.setShowContinue(bool);
+  }
+
   $scope.isLoading = true;
 
   // Booleans used to hide and show subviews

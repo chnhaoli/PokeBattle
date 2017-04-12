@@ -27,7 +27,7 @@
 
 <div class="row">
   <a href="#!/home">
-  <img src="images/title1.png" class="choosepagetitlepic" />
+  <img src="images/title1.png" class="choosepagetitlepic" ng-click="setShowContinue(true)"/>
   </a>
   <h3>Score: {{score()}}
     <!--<input ng-model="battleDataObj.teamDetails[0].battleStats.HP"/>--></h3>
@@ -48,8 +48,8 @@
                     <p class="col-md-12 battlet">{{teamDetails()[0].name}}</p>
                 </div>
             </div>
-            <div class="col-md-3"></div>   
-        </div>     
+            <div class="col-md-3"></div>
+        </div>
     </div>
 
     <div class="col-md-6">
@@ -66,7 +66,7 @@
                 </div>
             </div>
             <div class="col-md-3"></div>
-        </div>  
+        </div>
     </div>
 </div>
 

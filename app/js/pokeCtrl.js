@@ -21,9 +21,9 @@ pokeBattleApp.controller('PokeCtrl', function ($scope, $firebaseObject, PokeMode
 
   // To make the data available in the DOM, assign it to $scope
   $scope.accountsObj = accountsObj;
-
-  // For three-way data bindings, bind it to the scope instead
-  accountsObj.$bindTo($scope, "accountsObj");
+  //
+  // // For three-way data bindings, bind it to the scope instead
+  // accountsObj.$bindTo($scope, "accountsObj");
 
   // End Firebase
 
@@ -32,8 +32,8 @@ pokeBattleApp.controller('PokeCtrl', function ($scope, $firebaseObject, PokeMode
   //Test for checking name;
   $scope.startIO = true;
   $scope.checkName = function(){
-    var amount = Object.keys($scope.accountsObj).length - 2;
-    console.log(amount);
+    // var amount = Object.keys($scope.accountsObj).length - 2;
+    // console.log(amount);
 
   	for(key in $scope.accountsObj){
   		if($scope.username === key){
@@ -54,6 +54,26 @@ pokeBattleApp.controller('PokeCtrl', function ($scope, $firebaseObject, PokeMode
     $scope.startIO = true;
   }
 
+  $scope.showContinue = function() {
+    return PokeModel.getShowContinue();
+  };
+
+  //check teamdetail data in firebase and decide which page to go when clicking on Go Battle
+  $scope.checkLink = function(){
+    var battleDataRef = firebase.database().ref('/gameData/'+PokeModel.getUsername()+'/');
+    var battleDataObj = $firebaseObject(battleDataRef);
+    $scope.battleDataObj = battleDataObj;
+
+    battleDataObj.$loaded().then(function() {
+      if ($scope.battleDataObj.teamDetails == undefined) {
+        window.location.href = "#!/choose";
+      }
+      else {
+        window.location.href = "#!/battle";
+      }
+    });
+  }
+
   $scope.checkPasswordAndGame = function() {
     var found = false;
     for(key in $scope.accountsObj){
@@ -64,17 +84,19 @@ pokeBattleApp.controller('PokeCtrl', function ($scope, $firebaseObject, PokeMode
           // Pass username to model and start game
           PokeModel.setUsername($scope.username);
 
-          var battleDataRef = firebase.database().ref('/gameData/'+$scope.username+'/');
-          var battleDataObj = $firebaseObject(battleDataRef);
-          $scope.battleDataObj = battleDataObj;
+          // var battleDataRef = firebase.database().ref('/gameData/'+$scope.username+'/');
+          // var battleDataObj = $firebaseObject(battleDataRef);
+          // $scope.battleDataObj = battleDataObj;
+          //
+          // battleDataObj.$loaded().then(function() {
+          //   if ($scope.battleDataObj.teamDetails == undefined) {
+          //     window.location.href = "#!/choose";
+          //   } else {
+          //     window.location.href = "#!/battle";
+          //   }
+          // });
 
-          battleDataObj.$loaded().then(function() {
-            if ($scope.battleDataObj.teamDetails == undefined) {
-              window.location.href = "#!/choose";
-            } else {
-              window.location.href = "#!/battle";
-            }
-          });
+          $scope.checkLink();
 
 
         } else {
@@ -112,22 +134,7 @@ pokeBattleApp.controller('PokeCtrl', function ($scope, $firebaseObject, PokeMode
     }
   }
 
-  //check teamdetail data in firebase and decide which page to go when clicking on Go Battle
-  $scope.checkLink = function(){
-    $scope.path = "";
-    var battleDataRef = firebase.database().ref('/gameData/'+PokeModel.getUsername()+'/');
-    var battleDataObj = $firebaseObject(battleDataRef);
-    $scope.battleDataObj = battleDataObj;
 
-    battleDataObj.$loaded().then(function() {
-      if ($scope.battleDataObj.teamDetails == undefined) {
-        $scope.path = "#!/choose";
-      } 
-      else {
-        $scope.path = "#!/battle";
-      }
-    });
-  }
 
   // music control
   $scope.musicControl = function(){
