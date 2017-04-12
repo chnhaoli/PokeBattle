@@ -180,7 +180,7 @@ p {
     padding-top: 10px;
     position: fixed;
     bottom: 0;
-    width: 100%;
+    /*width: 100%;*/
     /*border-top: 1px solid #5C5C5C;*/
     /*font-family: 'Baloo Bhaina', cursive;*/
 /*    margin-top: 100px;*/
@@ -342,6 +342,10 @@ p {
 
 .searchMatches {
   margin-bottom: 100px;
+}
+
+.textAlignCenter {
+  text-align: center
 }
 
 .width150 {
