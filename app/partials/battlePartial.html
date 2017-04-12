@@ -36,38 +36,27 @@
 
 <div class="col-md-12">
     <div class="col-md-6">
-        <div class="col-md-12"><h5>My Team</h5></div>
-        <div class="col-md-12">
-            <div class="col-md-3 col-lg-4"></div>
-            <div class="col-md-6 col-lg-4">
-                <div class="col-md-12 healthBarDiv">
-                    <div id="healthBarUser" health-bar hp="teamDetails()[0].battleStats.HP" max-hp="teamDetails()[0].battleStats.maxHP"></div>
-                </div>
-                <div class="col-md-12 battleImg">
-                    <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{teamDetails()[0].name}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'" id="userPokemon" class="battleErrImageSize"></img>
-                    <p class="col-md-12 battlet">{{teamDetails()[0].name}}</p>
-                </div>
-            </div>
-            <div class="col-md-3 col-lg-4"></div>
+        <h5>My Team</h5>
+        <div class="healthBarDiv">
+            <div id="healthBarUser" health-bar hp="teamDetails()[0].battleStats.HP" max-hp="teamDetails()[0].battleStats.maxHP"></div>
+        </div>
+        <div class="battleImg">
+            <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{teamDetails()[0].name}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'" id="userPokemon" class="battleErrImageSize"></img>
+            <p class="col-md-12 battlet">{{teamDetails()[0].name}}</p>
         </div>
     </div>
 
     <div class="col-md-6">
-        <div class="col-md-12"><h5>Opponent</h5></div>
-        <div class="col-md-12">
-            <div class="col-md-3 col-lg-4"></div>
-            <div class="col-md-6 col-lg-4">
-                <div class="col-md-12 healthBarDiv">
-                    <div id="healthBarOpp" health-bar hp="opponentDetails().battleStats.HP" max-hp="opponentDetails().battleStats.maxHP"></div>
-                </div>
-                <div class="col-md-12 battleImg">
-                    <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{opponentDetails().name}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'" id="opponentPokemon" class="battleErrImageSize"></img>
-                    <p class="col-md-12 battlet">{{opponentDetails().name}}</p>
-                </div>
-            </div>
-            <div class="col-md-3 col-lg-4"></div>
-        </div>
-    </div>
+      <h5>Opponent</h5>
+
+      <div class="healthBarDiv">
+          <div id="healthBarOpp" health-bar hp="opponentDetails().battleStats.HP" max-hp="opponentDetails().battleStats.maxHP"></div>
+      </div>
+      <div class="battleImg">
+          <img ng-src="http://www.pokestadium.com/assets/img/sprites/official-art/{{opponentDetails().name}}.png" onerror="this.src='https://uos.edu.pk/assets/backend/images/staff/imagenotfound.svg'" id="opponentPokemon" class="battleErrImageSize"></img>
+          <p class="col-md-12 battlet">{{opponentDetails().name}}</p>
+      </div>
+   </div>
 </div>
 
 <div class="col-md-12 statusMsg">
