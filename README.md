@@ -19,10 +19,11 @@ Final Project @[DH2642 Interaction Programing and Dynamic Web](https://www.kth.s
 ###Technologies:
 1. HTML5
 2. CSS3
-3. Javascript
-4. [AngularJS](https://angularjs.org/)
-5. [Firebase](https://firebase.google.com/)
-6. [Heroku](https://www.heroku.com/platform)
+3. [Bootstrap](http://getbootstrap.com/)
+4. Javascript
+5. [AngularJS](https://angularjs.org/)
+6. [Firebase](https://firebase.google.com/)
+7. [Heroku](https://www.heroku.com/platform)
 
 ###Views:
     homepage, choose team, battle, FAQ, highscore
